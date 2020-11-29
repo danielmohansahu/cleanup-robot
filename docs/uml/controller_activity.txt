@@ -1,0 +1,32 @@
+@startuml
+
+start
+	repeat :Navigate to Search Area;
+
+	repeat :Perform Search Routine;
+		:Get RGB frame from camera;
+
+		fork
+		:Search camera frame for obstacles to avoid;
+		:Update Navigation Stack (Obstacles);
+		fork again
+		:Search camera frame for targets to pick up;
+		:Update Navigation Stack (Targets);
+		fork again
+		:Search camera frame for localization data;
+		:Update Navigation Stack (Localization);
+		end fork
+		repeat while (Identify target?) is (No)
+		->Yes;
+
+	:Navigate to Target, Avoiding Obstacles, Using Localization Data;
+	:Grab Target;
+	:Return Target to Specified Area;
+
+	repeat while (Status is OK?) is (Yes)
+	->No;
+	:Return to Home;
+	stop
+
+
+@enduml
