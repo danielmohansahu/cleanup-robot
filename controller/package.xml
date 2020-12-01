@@ -1,16 +1,13 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>navigation</name>
+  <name>controller</name>
   <version>0.0.1</version>
-  <description>The Cleanup Robot navigation package</description>
+  <description>The Cleanup Robot controller package</description>
   <maintainer email="danielmohansahu@gmail.com">Daniel M. Sahu</maintainer>
 
   <license>MIT</license>
 
   <depend>roscpp</depend>
-  <depend>geometry_msgs</depend>
-
-  <exec_depend>turtlebot3_navigation</exec_depend>
 
   <buildtool_depend>catkin</buildtool_depend>
 
