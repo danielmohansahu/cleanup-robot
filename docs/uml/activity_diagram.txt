@@ -1,34 +1,44 @@
 @startuml
 
-participant "Simulated Robot"
-participant "openCV Vision"
-participant "Navigation Stack"
-participant "Command Stack"
-participant "Interaction Stack"
+participant "Simulated Robot\n(Gazebo)"
+participant "Vision Stack\n(openCV)"
+participant "Mapping Stack\n(gmapping)"
+participant "Navigation Stack\n(navigation)"
+participant "Command Stack\n(Custom)"
+participant "Interaction Stack\n(MoveIt)"
 
-activate "Simulated Robot"
+activate "Simulated Robot\n(Gazebo)"
 
-"Simulated Robot" -> "openCV Vision": 2x RGB Camera </camera>
-activate "openCV Vision"
+"Simulated Robot\n(Gazebo)" -> "Vision Stack\n(openCV)": 2x RGB Camera\n</camera>
+activate "Vision Stack\n(openCV)"
 
-"openCV Vision" -> "Navigation Stack": Obstacle locations in camera RF
-activate "Navigation Stack"
+"Vision Stack\n(openCV)" -> "Navigation Stack\n(navigation)": Target locations in camera RF\n</targets_camRF>
+deactivate "Vision Stack\n(openCV)"
+activate "Navigation Stack\n(navigation)"
 
-"openCV Vision" -> "Navigation Stack": Target locations in camera RF
-"openCV Vision" -> "Navigation Stack":  Localization Data
-deactivate "openCV Vision"
+"Navigation Stack\n(navigation)" -> "Command Stack\n(Custom)": Target locations in robot RF\n</targets_roverRF>
 
-"Navigation Stack" -> "Command Stack": Desired path
-deactivate "Navigation Stack"
-activate "Command Stack"
 
-"Command Stack" -> "Simulated Robot": Driving Commands </cmd_vel>
+activate "Command Stack\n(Custom)"
+"Simulated Robot\n(Gazebo)" -> "Mapping Stack\n(gmapping)": Scan Data\n</scan>
+activate "Mapping Stack\n(gmapping)"
+"Mapping Stack\n(gmapping)" -> "Navigation Stack\n(navigation)":  Localization Data\n</map>
+deactivate "Mapping Stack\n(gmapping)"
 
-"Command Stack" -> "Interaction Stack": Arm Commands
-activate "Interaction Stack"
-deactivate "Command Stack"
-deactivate "Interaction Stack"
+"Navigation Stack\n(navigation)" -> "Command Stack\n(Custom)": Desired path\n</nav_msgs>
+deactivate "Navigation Stack\n(navigation)"
 
-deactivate "Simulated Robot"
+"Command Stack\n(Custom)" -> "Interaction Stack\n(MoveIt)": Desired Arm Position\n</arm_pos_desired>
+activate "Interaction Stack\n(MoveIt)"
+
+
+"Command Stack\n(Custom)" -> "Simulated Robot\n(Gazebo)": Driving Commands\n</cmd_vel>
+
+deactivate "Command Stack\n(Custom)"
+
+"Interaction Stack\n(MoveIt)" -> "Simulated Robot\n(Gazebo)": Arm Commands\n</moveit_msgs>
+deactivate "Interaction Stack\n(MoveIt)"
+
+deactivate "Simulated Robot\n(Gazebo)"
 
 @enduml

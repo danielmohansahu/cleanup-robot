@@ -1,0 +1,54 @@
+@startuml
+
+package ProjectMaryPoppins {
+
+ class Command {
+    + sendRoverCmd()
+    + travelToPos(desired_location)
+    + getCurrentPos(current_location&)
+    + moveArmTo(desired_arm_location)
+    - current_location
+    - desired_location
+    - desired_arm_location
+  }
+
+  class vision_opencv {
+   + setFrames(camera_left, camera_right)
+   + runComputerVisionAlgo()
+   + getArrayObstacles(array_obstacles&)
+   + getArrayTargets(array_targets&)
+   - camera_left
+   - camera_right
+   - array_obstacles   
+   - array_targets
+  }
+
+  class gmapping {
+   + updateMap()
+   - stored_map
+  }
+
+  class navigation {
+   + updatePath()
+   + returnPath(stored_path&)
+   - stored_path
+  }
+    
+  class MoveIt {
+   + getArmPos(current_arm_pos&)
+   + setArmGoal(desired_arm_pos)
+   + moveArm()
+   - current_arm_pos
+   - desired_arm_pos
+  }
+
+}
+
+navigation <-- gmapping
+navigation <-- vision_opencv
+
+Command <-- MoveIt
+Command <-- navigation
+
+@enduml
+
