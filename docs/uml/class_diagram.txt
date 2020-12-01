@@ -2,53 +2,52 @@
 
 package ProjectMaryPoppins {
 
- class Command {
-    + sendRoverCmd()
-    + travelToPos(desired_location)
-    + getCurrentPos(current_location&)
-    + moveArmTo(desired_arm_location)
-    - current_location
-    - desired_location
-    - desired_arm_location
+  class Controller {
+    + void clean()
+    + void explore()
+    + void stop()
+    - void exploreThread()
+    - void cleanThread()
+    - Perception perception_
+    - Navigation navigation_
+    - Motion motion_
+    - vector<int> objects_
   }
 
-  class vision_opencv {
-   + setFrames(camera_left, camera_right)
-   + runComputerVisionAlgo()
-   + getArrayObstacles(array_obstacles&)
-   + getArrayTargets(array_targets&)
-   - camera_left
-   - camera_right
-   - array_obstacles   
-   - array_targets
+  class Perception {
+    + vector<int> detectObjects()
+    + Pose getObjectPose(int)
+    - void imageCallback(Image)
+    - void runComputerVisionAlgo()
+    - vector<pair<id,Pose>> objects_
   }
 
-  class gmapping {
-   + updateMap()
-   - stored_map
+  class Mapping {
+    - void scanCallback(LaserScan)
   }
 
-  class navigation {
-   + updatePath()
-   + returnPath(stored_path&)
-   - stored_path
+  class Navigation {
+    + void goTo(Pose)
+    + void explore()
+    - mapCallback(OccupancyGrid)
+    - planner_
   }
     
-  class MoveIt {
-   + getArmPos(current_arm_pos&)
-   + setArmGoal(desired_arm_pos)
-   + moveArm()
-   - current_arm_pos
-   - desired_arm_pos
+  class Motion {
+    + bool pickUpObject(Pose)
+    + void dropObject()
+    - void getArmPos(current_arm_pos&)
+    - void setArmGoal(desired_arm_pos)
+    - void moveArm()
+    - current_arm_pos
+    - desired_arm_pos
   }
 
 }
 
-navigation <-- gmapping
-navigation <-- vision_opencv
-
-Command <-- MoveIt
-Command <-- navigation
+Controller <-- Perception
+Controller <-- Motion
+Controller <-- Navigation
 
 @enduml
 
