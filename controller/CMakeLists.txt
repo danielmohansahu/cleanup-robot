@@ -12,17 +12,17 @@ find_package(
   ${BUILD_DEPS}
 )
 
-################################################
-## Declare ROS messages, services and actions ##
-################################################
-
 ###################################
 ## catkin specific configuration ##
 ###################################
 
+include_directories(
+  include
+  ${catkin_INCLUDE_DIRS}
+)
+
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES navigation
   CATKIN_DEPENDS ${BUILD_DEPS}
 #  DEPENDS system_lib
 )
@@ -31,7 +31,7 @@ catkin_package(
 ## Build ##
 ###########
 
-add_executable(${PROJECT_NAME}_node src/${PROJECT_NAME}_node.cpp)
+add_executable(${PROJECT_NAME}_node src/controller_node.cpp src/controller.cpp)
 add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME}_node
   ${catkin_LIBRARIES}
