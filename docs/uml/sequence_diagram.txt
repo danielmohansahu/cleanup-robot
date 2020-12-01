@@ -1,11 +1,59 @@
 @startuml
 
-participant "Simulated Robot\n(Gazebo)"
-participant "Vision Stack\n(openCV)"
-participant "Mapping Stack\n(gmapping)"
-participant "Navigation Stack\n(navigation)"
-participant "Command Stack\n(Custom)"
-participant "Interaction Stack\n(MoveIt)"
+participant "User"
+participant "Controller"
+participant "Simulation\n(Gazebo)" as Sim
+participant "Perception\n(openCV)" as Perception
+participant "Mapping\n(gmapping)" as Map
+participant "Navigation\n(navigation)" as Nav
+participant "Motion\n(MoveIt)" as Motion
+
+activate Map
+Map -> Map : updateMapping()
+Map -> Nav : "Localization Data\n</map>"
+
+activate Perception
+Perception -> Perception : processImages()
+
+Sim -> Perception : "2x RGB Camera\n</camera>"
+Sim -> Map : "Scan Data\n</scan>"
+Sim -> Motion : "Poses\n</tf>"
+
+activate User
+User -> Controller : explore() 
+
+activate Controller
+activate Nav
+activate Motion
+
+Controller -> Controller : "while (!stop)"
+activate Controller
+
+Controller -> Perception : "detectObects()"
+Perception -> Controller : "objects"
+Controller -> Controller : "storeObjects(objects)"
+
+Controller -> Controller : "for (object in objects)"
+activate Controller
+Controller -> Nav : "goTo(object.location)"
+Controller -> Motion : "pickUpObject()"
+Controller -> Nav : "goTo(home)"
+Controller -> Motion : "dropObject()"
+Controller -> Nav : "goTo(object.location)"
+deactivate "Controller"
+
+Controller -> Nav : "explore()"
+
+"User" -> "Controller" : stop()
+"Controller" -> "User"
+
+deactivate Controller
+deactivate Nav
+deactivate Motion
+
+@enduml
+
+
 
 activate "Simulated Robot\n(Gazebo)"
 
@@ -41,4 +89,3 @@ deactivate "Interaction Stack\n(MoveIt)"
 
 deactivate "Simulated Robot\n(Gazebo)"
 
-@enduml
