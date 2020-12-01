@@ -13,13 +13,6 @@ find_package(
   ${BUILD_DEPS}
 )
 
-## System dependencies are found with CMake's conventions
-# find_package(Boost REQUIRED COMPONENTS system)
-
-################################################
-## Declare ROS messages, services and actions ##
-################################################
-
 ###################################
 ## catkin specific configuration ##
 ###################################
