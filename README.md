@@ -1,5 +1,7 @@
 # Cleanup Robot - Project Mary Poppins
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://travis-ci.org/danielmohansahu/cleanup-robot.svg?branch=main)](https://travis-ci.org/danielmohansahu/cleanup-robot)
+[![Coverage Status](https://coveralls.io/repos/github/danielmohansahu/cleanup-robot/badge.svg?branch=main)](https://coveralls.io/github/danielmohansahu/cleanup-robot?branch=main)
 ---
 
 ## Overview
