@@ -1,0 +1,91 @@
+@startuml
+
+participant "User"
+participant "Controller"
+participant "Simulation\n(Gazebo)" as Sim
+participant "Perception\n(openCV)" as Perception
+participant "Mapping\n(gmapping)" as Map
+participant "Navigation\n(navigation)" as Nav
+participant "Motion\n(MoveIt)" as Motion
+
+activate Map
+Map -> Map : updateMapping()
+Map -> Nav : "Localization Data\n</map>"
+
+activate Perception
+Perception -> Perception : processImages()
+
+Sim -> Perception : "2x RGB Camera\n</camera>"
+Sim -> Map : "Scan Data\n</scan>"
+Sim -> Motion : "Poses\n</tf>"
+
+activate User
+User -> Controller : explore() 
+
+activate Controller
+activate Nav
+activate Motion
+
+Controller -> Controller : "while (!stop)"
+activate Controller
+
+Controller -> Perception : "detectObects()"
+Perception -> Controller : "objects"
+Controller -> Controller : "storeObjects(objects)"
+
+Controller -> Controller : "for (object in objects)"
+activate Controller
+Controller -> Nav : "goTo(object.location)"
+Controller -> Motion : "pickUpObject()"
+Controller -> Nav : "goTo(home)"
+Controller -> Motion : "dropObject()"
+Controller -> Nav : "goTo(object.location)"
+deactivate "Controller"
+
+Controller -> Nav : "explore()"
+
+"User" -> "Controller" : stop()
+"Controller" -> "User"
+
+deactivate Controller
+deactivate Nav
+deactivate Motion
+
+@enduml
+
+
+
+activate "Simulated Robot\n(Gazebo)"
+
+"Simulated Robot\n(Gazebo)" -> "Vision Stack\n(openCV)": 2x RGB Camera\n</camera>
+activate "Vision Stack\n(openCV)"
+
+"Vision Stack\n(openCV)" -> "Navigation Stack\n(navigation)": Target locations in camera RF\n</targets_camRF>
+deactivate "Vision Stack\n(openCV)"
+activate "Navigation Stack\n(navigation)"
+
+"Navigation Stack\n(navigation)" -> "Command Stack\n(Custom)": Target locations in robot RF\n</targets_roverRF>
+
+
+activate "Command Stack\n(Custom)"
+"Simulated Robot\n(Gazebo)" -> "Mapping Stack\n(gmapping)": Scan Data\n</scan>
+activate "Mapping Stack\n(gmapping)"
+"Mapping Stack\n(gmapping)" -> "Navigation Stack\n(navigation)":  Localization Data\n</map>
+deactivate "Mapping Stack\n(gmapping)"
+
+"Navigation Stack\n(navigation)" -> "Command Stack\n(Custom)": Desired path\n</nav_msgs>
+deactivate "Navigation Stack\n(navigation)"
+
+"Command Stack\n(Custom)" -> "Interaction Stack\n(MoveIt)": Desired Arm Position\n</arm_pos_desired>
+activate "Interaction Stack\n(MoveIt)"
+
+
+"Command Stack\n(Custom)" -> "Simulated Robot\n(Gazebo)": Driving Commands\n</cmd_vel>
+
+deactivate "Command Stack\n(Custom)"
+
+"Interaction Stack\n(MoveIt)" -> "Simulated Robot\n(Gazebo)": Arm Commands\n</moveit_msgs>
+deactivate "Interaction Stack\n(MoveIt)"
+
+deactivate "Simulated Robot\n(Gazebo)"
+

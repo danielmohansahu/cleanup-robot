@@ -1,0 +1,53 @@
+@startuml
+
+package ProjectMaryPoppins {
+
+  class Controller {
+    + void clean()
+    + void explore()
+    + void stop()
+    - void exploreThread()
+    - void cleanThread()
+    - Perception perception_
+    - Navigation navigation_
+    - Motion motion_
+    - vector<int> objects_
+  }
+
+  class Perception {
+    + vector<int> detectObjects()
+    + Pose getObjectPose(int)
+    - void imageCallback(Image)
+    - void runComputerVisionAlgo()
+    - vector<pair<id,Pose>> objects_
+  }
+
+  class Mapping {
+    - void scanCallback(LaserScan)
+  }
+
+  class Navigation {
+    + void goTo(Pose)
+    + void explore()
+    - mapCallback(OccupancyGrid)
+    - planner_
+  }
+    
+  class Motion {
+    + bool pickUpObject(Pose)
+    + void dropObject()
+    - void getArmPos(current_arm_pos&)
+    - void setArmGoal(desired_arm_pos)
+    - void moveArm()
+    - current_arm_pos
+    - desired_arm_pos
+  }
+
+}
+
+Controller <-- Perception
+Controller <-- Motion
+Controller <-- Navigation
+
+@enduml
+

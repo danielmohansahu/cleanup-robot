@@ -1,0 +1,35 @@
+@startuml
+
+(*) --> [clean] "checkForStop()"
+--> if [stop?]; then
+	-->[true] (*)
+else
+  -->[false] ===B1===
+	--> "perception->detectObjects()"
+	--> if "object found?"; then
+	  -->[true] "storeObject()"
+		--> "navigation->approachObject()"
+		--> "motion->pickUpObject()"
+		--> "navigation->goTo(start_pose)"
+		--> "motion->dropObject()"
+		--> "navigation->goTo(object_pose)"
+		--> "perception->checkForObstacles()"
+	else
+	  -->[false] "perception->checkForObstacles()"
+	endif
+	
+	--> if "obstacle?"; then
+	  --> [true] "navigation->turnInPlace()"
+		--> ===B2===
+	else
+	  --> [false] "navigation->goForward()"
+  	--> ===B2===
+	endif
+
+  ===B1=== --> "updateMapping()"
+	--> ===B2===
+	
+	===B2=== --> "checkForStop()"
+endif
+
+@enduml
