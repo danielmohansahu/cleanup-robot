@@ -26,7 +26,6 @@ find_package(
 
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES navigation
   CATKIN_DEPENDS ${BUILD_DEPS}
 #  DEPENDS system_lib
 )
@@ -40,7 +39,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(${PROJECT_NAME}_node src/navigation_node.cpp)
+add_executable(${PROJECT_NAME}_node src/navigation_node.cpp src/navigation.cpp)
 add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME}_node
   ${catkin_LIBRARIES}
