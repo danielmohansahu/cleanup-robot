@@ -7,10 +7,23 @@
 
   <license>MIT</license>
 
+  <!-- build dependencies -->
   <depend>roscpp</depend>
   <depend>geometry_msgs</depend>
 
-  <exec_depend>turtlebot3_navigation</exec_depend>
+  <!-- execution dependencies -->
+  <depend>turtlebot3_navigation</depend>
+  <depend>gmapping</depend>
+  <depend>move_base</depend>
+  <depend>dwa_local_planner</depend>
+
+  <!-- test dependencies -->
+  <test_depend>turtlebot3_description</test_depend>
+  <test_depend>turtlebot3_gazebo</test_depend>
+  <test_depend>gazebo</test_depend>
+  <test_depend>xacro</test_depend>
+  <test_depend>robot_state_publisher</test_depend>
+  <test_depend>rviz</test_depend>
 
   <buildtool_depend>catkin</buildtool_depend>
 

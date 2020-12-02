@@ -6,6 +6,20 @@ set(CMAKE_CXX_STANDARD 14)
 set(BUILD_DEPS
   roscpp
   geometry_msgs
+  turtlebot3_navigation
+  gmapping
+  move_base
+  dwa_local_planner
+)
+
+set(TEST_DEPS
+  ${PACKAGE_DEPS}
+  turtlebot3_description
+  turtlebot3_gazebo
+  gazebo
+  xacro
+  robot_state_publisher
+  rviz
 )
 
 find_package(
@@ -20,7 +34,6 @@ find_package(
 catkin_package(
   INCLUDE_DIRS include
   CATKIN_DEPENDS ${BUILD_DEPS}
-#  DEPENDS system_lib
 )
 
 ###########
