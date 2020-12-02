@@ -8,6 +8,8 @@
   <license>MIT</license>
 
   <depend>roscpp</depend>
+  <depend>navigation</depend>
+  <depend>perception</depend>
 
   <buildtool_depend>catkin</buildtool_depend>
 
