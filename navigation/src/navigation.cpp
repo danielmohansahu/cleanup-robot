@@ -10,11 +10,7 @@ void Navigation::goTo(const geometry_msgs::PoseStamped& pose) {
 
 }
 
-void Navigation::explore() {
-
-}
-
-void Navigation::stop() {
+void Navigation::exploreLoop() {
 
 }
 
