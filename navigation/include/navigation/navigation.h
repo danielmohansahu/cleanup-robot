@@ -18,6 +18,9 @@ class Navigation {
   /* @brief Constructor */
   Navigation();
 
+  /* @brief Destructor */
+  ~Navigation();
+
  private:
   /* @brief Send a move base goal to the desired pose.
    * 
@@ -36,13 +39,16 @@ class Navigation {
    */
   void exploreLoop();
 
+  /* @brief Stop any running threads and navigation goals. */
+  void stop();
+
   // action client to move_base navigation manager
   std::unique_ptr<actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>> goto_client_;
 
   // service handles
-  std::unique_ptr<ros::ServiceServer> stop_service_;
-  std::unique_ptr<ros::ServiceServer> explore_service_;
-  std::unique_ptr<ros::ServiceServer> goto_service_;
+  ros::ServiceServer stop_service_;
+  ros::ServiceServer explore_service_;
+  ros::ServiceServer goto_service_;
 
   // thread handling
   std::atomic<bool> stop_;
