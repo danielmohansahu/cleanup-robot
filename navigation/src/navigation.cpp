@@ -8,7 +8,7 @@ Navigation::Navigation() : stop_ {false} {
   ros::NodeHandle pnh("navigation");
 
   // Construct actionlib client (to send navigation goals)
-  const std::string server_name = "WHATSMYREALNAME";
+  const std::string server_name = "move_base";
   goto_client_ = std::make_unique<actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>>(server_name, true);
   while (!goto_client_->waitForServer(ros::Duration(5.0)))
     ROS_WARN_STREAM("Waiting for action server " << server_name);
@@ -22,6 +22,7 @@ Navigation::Navigation() : stop_ {false} {
     "stop",
     TriggerCallback([this] (const auto& req, const auto& res) {
       this->stop();
+      res.success = true;
       return true; 
     }));
 
@@ -37,12 +38,13 @@ Navigation::Navigation() : stop_ {false} {
         std::launch::async,
         [this]()->void {this->exploreLoop();});
 
+      res.success = true;
       return true; 
     }));
 
   // construct goto service
   goto_service_ = pnh.advertiseService(
-    "explore",
+    "goto",
     SetPoseCallback([this] (const auto& req, const auto& res) {
       // sanity check that this is in the right frame
       if (req.pose.header.frame_id != "map") {
