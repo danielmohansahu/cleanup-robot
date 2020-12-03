@@ -10,6 +10,8 @@
   <!-- build dependencies -->
   <depend>roscpp</depend>
   <depend>geometry_msgs</depend>
+  <depend>message_generation</depend>
+  <depend>message_runtime</depend>
 
   <!-- execution dependencies -->
   <depend>turtlebot3_navigation</depend>
@@ -26,7 +28,7 @@
   <test_depend>rviz</test_depend>
 
   <buildtool_depend>catkin</buildtool_depend>
-
+  
   <export>
   </export>
 </package>

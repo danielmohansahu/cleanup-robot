@@ -10,6 +10,8 @@ set(BUILD_DEPS
   gmapping
   move_base
   dwa_local_planner
+  message_generation
+  message_runtime
 )
 
 set(TEST_DEPS
@@ -25,6 +27,20 @@ set(TEST_DEPS
 find_package(
   catkin REQUIRED
   ${BUILD_DEPS}
+)
+
+########################
+## message generation ##
+########################
+
+add_service_files(
+  FILES
+  SetPoseStamped.srv
+)
+
+generate_messages(
+  DEPENDENCIES
+  geometry_msgs
 )
 
 ###################################
