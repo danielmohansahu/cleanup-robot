@@ -7,8 +7,15 @@ Navigation::Navigation() : stop_ {false} {
   // get core node handle
   ros::NodeHandle pnh("navigation");
 
+  // Construct actionlib client (to send navigation goals)
+  const std::string server_name = "WHATSMYREALNAME";
+  goto_client_ = std::make_unique<actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>>(server_name, true);
+  while (!goto_client_->waitForServer(ros::Duration(5.0)))
+    ROS_WARN_STREAM("Waiting for action server " << server_name);
+
   // a handy type for constructing services
   using TriggerCallback = boost::function<bool(std_srvs::Trigger::Request&, std_srvs::Trigger::Response&)>;
+  using SetPoseCallback = boost::function<bool(navigation::SetPoseStamped::Request&, navigation::SetPoseStamped::Response&)>;
 
   // construct stop service
   stop_service_ = pnh.advertiseService(
@@ -33,19 +40,31 @@ Navigation::Navigation() : stop_ {false} {
       return true; 
     }));
 
-  // @TODO create goto service
+  // construct goto service
+  goto_service_ = pnh.advertiseService(
+    "explore",
+    SetPoseCallback([this] (const auto& req, const auto& res) {
+      // sanity check that this is in the right frame
+      if (req.pose.header.frame_id != "map") {
+        ROS_ERROR("Given a goTo pose in the wrong frame.");
+        return false;
+      }
 
-  // Construct actionlib client (to send navigation goals)
-  goto_client_ = std::make_unique<actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>>("WHATSMYREALNAME", true);
+      // first stop any execution
+      this->stop();
+
+      // then send this as a goal to the action server
+      move_base_msgs::MoveBaseGoal goal;
+      goal.target_pose = req.pose;
+      goto_client_->sendGoal(goal);
+
+      return true; 
+    }));
 }
 
 Navigation::~Navigation() {
   // make sure we've rejoined any running threads.
   stop();
-}
-
-void Navigation::goTo(const geometry_msgs::PoseStamped& pose) {
-  // @TODO
 }
 
 void Navigation::stop() {
@@ -61,7 +80,7 @@ void Navigation::stop() {
 }
 
 void Navigation::exploreLoop() {
-
+  // @TODO...
 }
 
 } // namespace cleanup

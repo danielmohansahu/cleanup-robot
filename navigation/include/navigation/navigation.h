@@ -9,6 +9,7 @@
 #include <move_base_msgs/MoveBaseAction.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <std_srvs/Trigger.h>
+#include <navigation/SetPoseStamped.h>
 
 namespace cleanup {
 
@@ -22,12 +23,6 @@ class Navigation {
   ~Navigation();
 
  private:
-  /* @brief Send a move base goal to the desired pose.
-   * 
-   * @TODO consider getting rid of this layer; could just
-   * have a client at the Controller level...
-   */
-  void goTo(const geometry_msgs::PoseStamped& pose);
 
   /* @brief Explore the given area, avoiding obstacles.
    * 
