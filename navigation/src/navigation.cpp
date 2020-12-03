@@ -121,7 +121,7 @@ geometry_msgs::Pose Navigation::getRobotPose() {
   tf2::toMsg(tf2::Transform::getIdentity(), pose);
 
   // poll TF for the latest transform
-  auto transform = tfb_->lookupTransform(base_frame_, map_frame_, ros::Time(0), ros::Duration(0));
+  auto transform = tfb_->lookupTransform(map_frame_, base_frame_, ros::Time(0), ros::Duration(0));
 
   // apply transform
   tf2::doTransform(pose, pose, transform);

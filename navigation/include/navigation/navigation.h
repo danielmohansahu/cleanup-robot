@@ -65,7 +65,7 @@ class Navigation {
   const std::string base_frame_ {"base_link"};
   const std::string map_frame_ {"map"};
   const std::string server_name_ {"move_base"};
-  const double explore_step_ {0.25};
+  const double explore_step_ {2.0};
 };
 
 } // namespace cleanup
