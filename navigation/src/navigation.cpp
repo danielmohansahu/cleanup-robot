@@ -7,11 +7,14 @@ Navigation::Navigation() : stop_ {false} {
   // get core node handle
   ros::NodeHandle pnh("navigation");
 
+  // set up transform listener / buffer
+  tfb_ = std::make_unique<tf2_ros::Buffer>();
+  tfl_ = std::make_unique<tf2_ros::TransformListener>(*tfb_);
+
   // Construct actionlib client (to send navigation goals)
-  const std::string server_name = "move_base";
-  goto_client_ = std::make_unique<actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>>(server_name, true);
+  goto_client_ = std::make_unique<actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>>(server_name_, true);
   while (!goto_client_->waitForServer(ros::Duration(5.0)))
-    ROS_WARN_STREAM("Waiting for action server " << server_name);
+    ROS_WARN_STREAM("Waiting for action server " << server_name_);
 
   // a handy type for constructing services
   using TriggerCallback = boost::function<bool(std_srvs::Trigger::Request&, std_srvs::Trigger::Response&)>;
@@ -20,7 +23,7 @@ Navigation::Navigation() : stop_ {false} {
   // construct stop service
   stop_service_ = pnh.advertiseService(
     "stop",
-    TriggerCallback([this] (const auto& req, const auto& res) {
+    TriggerCallback([this] (const auto& req, auto& res) {
       this->stop();
       res.success = true;
       return true; 
@@ -29,7 +32,7 @@ Navigation::Navigation() : stop_ {false} {
   // construct explore service
   explore_service_ = pnh.advertiseService(
     "explore",
-    TriggerCallback([this] (const auto& req, const auto& res) {
+    TriggerCallback([this] (const auto& req, auto& res) {
       // first stop any execution
       this->stop();
 
@@ -45,9 +48,9 @@ Navigation::Navigation() : stop_ {false} {
   // construct goto service
   goto_service_ = pnh.advertiseService(
     "goto",
-    SetPoseCallback([this] (const auto& req, const auto& res) {
+    SetPoseCallback([this] (const auto& req, auto& res) {
       // sanity check that this is in the right frame
-      if (req.pose.header.frame_id != "map") {
+      if (req.pose.header.frame_id != map_frame_) {
         ROS_ERROR("Given a goTo pose in the wrong frame.");
         return false;
       }
@@ -82,7 +85,48 @@ void Navigation::stop() {
 }
 
 void Navigation::exploreLoop() {
-  // @TODO...
+  // basic explore behavior is to send random goals a fixed distance away in a random direction
+
+  // initialize loop variables
+  
+  // execute until stopped or shutdown
+  while (!stop_ && ros::ok()) {
+    // sleep at the top of the loop; this also ensures we 
+    //  don't interrupt running goals.
+    if (goto_client_->getState().isDone()
+        || goto_client_->waitForResult(ros::Duration(0.1))) {
+      // we're done, find another spot to explore
+
+      // get current robot state
+      auto pose = getRobotPose();
+
+      // get a random pose a little distance away from the current position
+      double theta = 2 * M_PI * rand() / static_cast<double>(RAND_MAX);
+      pose.position.x += explore_step_ * std::cos(theta);
+      pose.position.y += explore_step_ * std::sin(theta);
+
+      // send goal
+      move_base_msgs::MoveBaseGoal goal;
+      goal.target_pose.pose = pose;
+      goal.target_pose.header.frame_id = map_frame_;
+      goal.target_pose.header.stamp = ros::Time::now();
+      goto_client_->sendGoal(goal);
+    }
+  }
+}
+
+geometry_msgs::Pose Navigation::getRobotPose() {
+  // initialize results
+  geometry_msgs::Pose pose;
+  tf2::toMsg(tf2::Transform::getIdentity(), pose);
+
+  // poll TF for the latest transform
+  auto transform = tfb_->lookupTransform(base_frame_, map_frame_, ros::Time(0), ros::Duration(0));
+
+  // apply transform
+  tf2::doTransform(pose, pose, transform);
+
+  return pose;
 }
 
 } // namespace cleanup
