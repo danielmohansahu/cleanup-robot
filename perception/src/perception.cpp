@@ -27,9 +27,9 @@ Perception::Perception() {
 
 	/* Laserscan initialization*/
 	obstacle_dis = 0.5;
-    obstacle_ahead = false;
-    //  Publish velocity data into the node.
-    velocity = nh.advertise<geometry_msgs::Twist>("cmd_vel", 1);
+	obstacle_ahead = false;
+	//  Publish velocity data into the node.
+	velocity = nh.advertise<geometry_msgs::Twist>("cmd_vel", 1);
     // Subscribe to the laser scan message.
     laser = nh.subscribe <sensor_msgs::LaserScan> \
             ("scan", 1, &walker::laserCallback, this);
@@ -56,7 +56,7 @@ std::vector<cv::Rect> Perception::predict(cv::Mat frame) {
 	}
 	cv::Mat blob;
 	cv::dnn::blobFromImage(frame, blob, 1/255.0, cv::Size(inputWidth, inputHeight),\
-											 cv::Scalar(0,0,0), true, false);
+							cv::Scalar(0,0,0), true, false);
 	net.setInput(blob);
 	std::vector<cv::Mat> preds;
 	net.forward(preds, getOutputsNames(net));
@@ -68,8 +68,8 @@ std::vector<cv::Rect> Perception::predict(cv::Mat frame) {
 }
 
 void Perception::postProcess(cv::Mat& frame, const std::vector<cv::Mat>& preds, \
-					std::vector<int> class_ids, std::vector<float> confidences,\
-													 std::vector<int> indices) {
+	                std::vector<int> class_ids, std::vector<float> confidences,\
+	                std::vector<int> indices) {
 	for (size_t i = 0; i < preds.size(); ++i) {
 		float* data = (float*)preds[i].data;
 		for (int j = 0; j < preds[i].rows; ++j, data += preds[i].cols) {
@@ -94,12 +94,12 @@ void Perception::postProcess(cv::Mat& frame, const std::vector<cv::Mat>& preds, 
 		}
 	}
 	cv::dnn::NMSBoxes(prediction_boxes, confidences, confidenceThreshold, nmsThreshold,\
-																		 indices);
+		             indices);
 	for (size_t i = 0; i < indices.size(); ++i) {
 		int idx = indices[i];
 		cv::Rect box = prediction_boxes[idx];
 		std::cout << "Box " << idx << ":" <<  box.x << " " << box.y << " " << box.x \
-								+ box.width << " " << box.y + box.height << std::endl;
+		             + box.width << " " << box.y + box.height << std::endl;
 	
 	}
 }

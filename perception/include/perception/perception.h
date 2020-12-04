@@ -21,7 +21,7 @@ class Perception {
 
   void Perception::postProcess(cv::Mat& frame, const std::vector<cv::Mat>& preds, \
           std::vector<int> class_ids, std::vector<float> confidences,\
-                           std::vector<int> indices);
+          std::vector<int> indices);
 
   std::vector<int> detectObjects();
   /**
