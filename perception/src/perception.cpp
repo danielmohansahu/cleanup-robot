@@ -36,6 +36,20 @@ Perception::Perception() {
 
 }
 
+std::vector<cv::String> Perception::getOutputsNames(const cv::dnn::Net& net) {
+	static std::vector<cv::String> labels;
+	if (labels.empty()) {
+		std::vector<int> out_layers = net.getUnconnectedOutLayers();
+		std::vector<cv::String> layer_names = net.getLayerNames();
+		labels.resize(out_layers.size());
+		for (size_t i = 0; i < out_layers.size(); ++i) {
+			labels[i] = layer_names[out_layers[i] - 1];
+		}
+	}
+	std::cout<<labels.size()<<std::endl;
+	return labels;
+}
+
 std::vector<cv::Rect> Perception::predict(cv::Mat frame) {
 	if (frame.empty()) {
 		std::cout << "Error reading frame!!!" << std::endl;
