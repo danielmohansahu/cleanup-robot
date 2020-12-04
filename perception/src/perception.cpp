@@ -36,6 +36,23 @@ Perception::Perception() {
 
 }
 
+std::vector<cv::Rect> Perception::predict(cv::Mat frame) {
+	if (frame.empty()) {
+		std::cout << "Error reading frame!!!" << std::endl;
+	}
+	cv::Mat blob;
+	cv::dnn::blobFromImage(frame, blob, 1/255.0, cv::Size(inputWidth, inputHeight),\
+											 cv::Scalar(0,0,0), true, false);
+	net.setInput(blob);
+	std::vector<cv::Mat> preds;
+	net.forward(preds, getOutputsNames(net));
+	std::vector<int> class_ids;
+	std::vector<float> confidences;
+	std::vector<int> indices;
+	postProcess(frame, preds, class_ids, confidences, indices);
+	return prediction_boxes;
+}
+
 std::vector<int> Perception::detectObjects() {
 
 }
