@@ -53,6 +53,43 @@ std::vector<cv::Rect> Perception::predict(cv::Mat frame) {
 	return prediction_boxes;
 }
 
+void Perception::postProcess(cv::Mat& frame, const std::vector<cv::Mat>& preds, \
+					std::vector<int> class_ids, std::vector<float> confidences,\
+													 std::vector<int> indices) {
+	for (size_t i = 0; i < preds.size(); ++i) {
+		float* data = (float*)preds[i].data;
+		for (int j = 0; j < preds[i].rows; ++j, data += preds[i].cols) {
+			cv::Mat scores = preds[i].row(j).colRange(5, preds[i].cols);
+			cv::Point class_id_point;
+			double confidence;
+			// Get the value and location of the maximum score
+			cv::minMaxLoc(scores, 0, &confidence, 0, &class_id_point);
+			if (confidence > confidenceThreshold) {
+				int centerX = (int)(data[0] * frame.cols);
+				int centerY = (int)(data[1] * frame.rows);
+				int width = (int)(data[2] * frame.cols);
+				int height = (int)(data[3] * frame.rows);
+				int left = centerX - width / 2;
+				int top = centerY - height / 2;
+				if(class_id_point.x == 0){
+				class_ids.push_back(class_id_point.x);
+				confidences.push_back((float)confidence);
+				prediction_boxes.push_back(cv::Rect(left, top, width, height));
+				}
+			}
+		}
+	}
+	cv::dnn::NMSBoxes(prediction_boxes, confidences, confidenceThreshold, nmsThreshold,\
+																		 indices);
+	for (size_t i = 0; i < indices.size(); ++i) {
+		int idx = indices[i];
+		cv::Rect box = prediction_boxes[idx];
+		std::cout << "Box " << idx << ":" <<  box.x << " " << box.y << " " << box.x \
+								+ box.width << " " << box.y + box.height << std::endl;
+	
+	}
+}
+
 std::vector<int> Perception::detectObjects() {
 
 }
