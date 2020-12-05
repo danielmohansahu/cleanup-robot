@@ -2,6 +2,9 @@
 <launch>
   <arg name="model" default="waffle" doc="Turtlebot3 model type [waffle, waffle_pi]" />
 
+  <!-- launch controller -->
+  <node name="controller" pkg="controller" type="controller_node" output="screen" required="true" />
+
   <!-- launch navigation -->
   <include file="$(find navigation)/launch/navigation.launch">
     <arg name="model" value="$(arg model)" />
@@ -9,7 +12,7 @@
 
   <!-- launch turtlebot3 in gazebo world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find turtlebot3_gazebo)/worlds/turtlebot3_world.world"/>
+    <arg name="world_name" value="$(find turtlebot3_gazebo)/worlds/turtlebot3_house.world"/>
     <arg name="paused" value="false"/>
     <arg name="use_sim_time" value="true"/>
     <arg name="gui" value="true"/>
@@ -18,7 +21,7 @@
   </include>
 
   <!-- launch robot description and process URDF -->
-  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf"  args="-urdf -model turtlebot3_$(arg model) -x -2.0 -y -0.5 -z 0.0 -param robot_description" />
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf"  args="-urdf -model turtlebot3_$(arg model) -x -2.0 -y 5 -z 0.0 -param robot_description" />
   <param name="robot_description" command="$(find xacro)/xacro $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
 
   <!-- launch robot state publisher -->
