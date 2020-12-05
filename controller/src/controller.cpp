@@ -36,7 +36,8 @@ Controller::Controller() {
   as_ = std::make_unique<actionlib::SimpleActionServer<controller::SetModeAction>>(
     pnh,
     "set_mode",
-    [this](const auto& goal) {this->executeGoal(goal);}
+    [this](const auto& goal) {this->executeGoal(goal);},
+    false
   );
   as_->start();
 
