@@ -21,7 +21,7 @@
   </include>
 
   <!-- launch robot description and process URDF -->
-  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf"  args="-urdf -model turtlebot3_$(arg model) -x -2.0 -y 5 -z 0.0 -param robot_description" />
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf"  args="-urdf -model turtlebot3_$(arg model) -x -2.0 -y 4 -z 0.0 -param robot_description" />
   <param name="robot_description" command="$(find xacro)/xacro $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
 
   <!-- launch robot state publisher -->
