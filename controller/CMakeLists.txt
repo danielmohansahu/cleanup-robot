@@ -5,12 +5,24 @@ set(CMAKE_CXX_STANDARD 14)
 
 set(BUILD_DEPS
   roscpp
+  genmsg
+  actionlib_msgs
+  actionlib
+  navigation
+  perception
 )
 
 find_package(
   catkin REQUIRED
   ${BUILD_DEPS}
 )
+
+#######################
+## action generation ##
+#######################
+
+add_action_files(DIRECTORY action FILES SetMode.action)
+generate_messages(DEPENDENCIES actionlib_msgs)
 
 ###################################
 ## catkin specific configuration ##
