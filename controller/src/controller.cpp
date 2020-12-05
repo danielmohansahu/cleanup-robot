@@ -44,7 +44,44 @@ Controller::Controller() {
 }
 
 void Controller::executeGoal(const controller::SetModeGoal::ConstPtr& goal) {
-  // @TODO
+
+  // sanity check goal type
+  if (goal->mode != "clean" && goal->mode != "explore") {
+    ROS_ERROR_STREAM("Invalid goal mode " << goal->mode << ", accepted values are ['clean', 'explore']");
+    as_->setAborted();
+    return;
+  }
+  
+  // initialize loop variables
+  ros::Rate r(10);
+  controller::SetModeFeedback feedback;
+
+  // tell navigation to begin exploring
+  std_srvs::Trigger srv;
+  explore_client_.call(srv);
+
+  // loop until we're canceled, preempted, or ros shuts down
+  while (ros::ok() && as_->isActive()) {
+    // check if we're preempted; if so, exit
+    if (as_->isPreemptRequested()) {
+      as_->setPreempted();
+      break;
+    }
+
+    // otherwise continue performing desired execution mode
+    // @TODO poll perception
+
+    // perform actual cleanup operations
+    if (goal->mode == "clean") {
+      // @TODO implement interface w / moveit
+    }
+
+    // publish feedback
+    as_->publishFeedback(feedback);
+  }
+
+  // perform cleanup / shutdown
+  stop_client_.call(srv);
 }
 
 } // namespace cleanup
