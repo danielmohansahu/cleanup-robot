@@ -1,3 +1,9 @@
+/* @file navigation.h
+ * @brief Header of the Navigation class for basic navigation.
+ * 
+ * @copyright [2020] <Daniel Sahu, Spencer Elyard, Santosh Kesani>
+ */
+
 #pragma once
 
 #include <atomic>

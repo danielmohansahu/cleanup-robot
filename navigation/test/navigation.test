@@ -1,4 +1,3 @@
-<?xml version='2.0' encoding='utf-8' ?>
 <!-- Navigation launch file: loads all navigation nodes as well as Gazebo and RVIZ -->
 <launch>
   <arg name="model" default="burger" doc="Turtlebot3 model type [burger, waffle, waffle_pi]" />

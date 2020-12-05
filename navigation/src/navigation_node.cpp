@@ -1,3 +1,9 @@
+/* @file navigation_node.cpp
+ * @brief ROS Node instantiation fo Navigation
+ * 
+ * @copyright [2020] <Daniel Sahu, Spencer Elyard, Santosh Kesani>
+ */
+
 #include <ros/ros.h>
 
 #include <navigation/navigation.h>
