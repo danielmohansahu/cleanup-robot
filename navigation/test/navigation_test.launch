@@ -1,0 +1,4 @@
+<launch>
+  <node pkg="navigation" name="navigation_node_totest"  type="navigation_node" />
+  <test pkg="navigation" test-name="navigation_test_function" type="navigation_test" />
+</launch>
