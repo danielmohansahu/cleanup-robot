@@ -1,0 +1,10 @@
+# goal
+string mode
+
+---
+# result
+uint32[] objects
+
+---
+# feedback
+uint32[] objects

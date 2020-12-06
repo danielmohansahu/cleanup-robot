@@ -9,5 +9,12 @@
 #include <controller/controller.h>
 
 int main(int argc, char** argv) {
-  return 0;
+  // initialize ros node
+  ros::init(argc, argv, "controller");
+
+  // construct controller
+  cleanup::Controller controller;
+
+  // process callbacks until shutdown
+  ros::spin();
 }
