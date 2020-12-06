@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+
+  <!-- launch perception node -->
+  <!-- @TODO -->
+
+  <!-- launch darknet -->
+  <include file="$(find perception)/launch/darknet.launch" />
+
+</launch>
