@@ -1,0 +1,4 @@
+<launch>
+  <node pkg="controller" name="controller_node_totest"  type="controller_node" />
+  <test pkg="controller" test-name="controller_test_function" type="controller_test" />
+</launch>
