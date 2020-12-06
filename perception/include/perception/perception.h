@@ -1,3 +1,9 @@
+/* @file perception.h
+ * @brief Header of the Perception class for object detection/localization.
+ * 
+ * @copyright [2020] <Daniel Sahu, Spencer Elyard, Santosh Kesani>
+ */
+
 #include <ros/ros.h>
 
 #include <geometry_msgs/PoseStamped.h>

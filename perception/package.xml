@@ -8,7 +8,7 @@
   <license>MIT</license>
 
   <depend>roscpp</depend>
-  <depend>opencv</depend>
+  <depend>libopencv-dev</depend>
 
   <buildtool_depend>catkin</buildtool_depend>
 
