@@ -10,6 +10,9 @@
     <arg name="model" value="$(arg model)" />
   </include>
 
+  <!-- launch perception -->
+  <include file="$(find perception)/launch/perception.launch" />
+
   <!-- launch turtlebot3 in gazebo world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find turtlebot3_gazebo)/worlds/turtlebot3_house.world"/>
