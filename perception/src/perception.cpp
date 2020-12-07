@@ -1,123 +1,133 @@
 #include <perception/perception.h>
+#include <ros/ros.h>
+#include <image_transport/image_transport.h>
+#include <cv_bridge/cv_bridge.h>
+#include <sensor_msgs/image_encodings.h>
+#include <sensor_msgs/Image.h>
+#include <geometry_msgs/Point.h>
+#include <vector>
+#include <iostream>
+#include <pthread.h>
+#include <std_msgs/Int8.h>
+#include <math.h>
+#include <darknet_ros/bbox_array.h>
+#include <darknet_ros/bbox.h>
 
 namespace cleanup {
 
-Perception::Perception() {
+Perception::Perception() : it_(nh) {
+	numClasses = od.getnumClasses();
+	int count = floor(255/numClasses);
+	frameWidth = 320;
+	frameHeight = 320;
+	classLabels = od.getclassLabels;
 
-	/* YOLO initialization */
-	confidenceThreshold = 0.5;  // Confidence threshold
-	nmsThreshold = 0.4;  // Non-maximum suppression threshold
-	inputWidth = 320;  // Width of network's input image
-	inputHeight = 320;  // Height of network's input image
-
-	modelCofig = "";  // Add path to the config file
-	modelWeight = "";  //Add path to the weight file
-
-	//  Store class labels in the session memory
-	classLabelsFile = "";
-	std::ifstream ifs(classLabelsFile.c_str());
-	std::string line;
-	while (ifs >> line) {
-		classLabels.push_back(line);
+	for (int i=0; i < numClasses; i++) {
+		bboxColors[i] = cv::Scalar(255 - count*i, 0 + count*i, 255 - count*i);
 	}
-	// Load the network
-	net = cv::dnn::readNetFromDarknet(modelConfig, modelWeight);
-	net.setPreferableBackend(cv::dnn::DNN_BACKEND_OPENCV);
-	net.setPreferableTarget(cv::dnn::DNN_TARGET_CPU);
 
-	/* Laserscan initialization*/
-	obstacle_dis = 0.5;
-	obstacle_ahead = false;
-	//  Publish velocity data into the node.
-	velocity = nh.advertise<geometry_msgs::Twist>("cmd_vel", 1);
-    // Subscribe to the laser scan message.
-    laser = nh.subscribe <sensor_msgs::LaserScan> \
-            ("scan", 1, &walker::laserCallback, this);
+	image_sub = it_.subscribe("/camera/rgb/image_raw", 1,  &Perception::imageCallback, this);
+	objectFound = nh.advertise<std_msgs::Int8>("found_object", 1);
+    bboxes = nh.advertise<darknet_ros::bbox_array>("YOLO_bboxes", 1);
 
-}
-
-std::vector<cv::String> Perception::getOutputsNames(const cv::dnn::Net& net) {
-	static std::vector<cv::String> labels;
-	if (labels.empty()) {
-		std::vector<int> out_layers = net.getUnconnectedOutLayers();
-		std::vector<cv::String> layer_names = net.getLayerNames();
-		labels.resize(out_layers.size());
-		for (size_t i = 0; i < out_layers.size(); ++i) {
-			labels[i] = layer_names[out_layers[i] - 1];
-		}
-	}
-	std::cout<<labels.size()<<std::endl;
-	return labels;
-}
-
-std::vector<cv::Rect> Perception::predict(cv::Mat frame) {
-	if (frame.empty()) {
-		std::cout << "Error reading frame!!!" << std::endl;
-	}
-	cv::Mat blob;
-	cv::dnn::blobFromImage(frame, blob, 1/255.0, cv::Size(inputWidth, inputHeight),\
-							cv::Scalar(0,0,0), true, false);
-	net.setInput(blob);
-	std::vector<cv::Mat> preds;
-	net.forward(preds, getOutputsNames(net));
-	std::vector<int> class_ids;
-	std::vector<float> confidences;
-	std::vector<int> indices;
-	postProcess(frame, preds, class_ids, confidences, indices);
-	return prediction_boxes;
-}
-
-void Perception::postProcess(cv::Mat& frame, const std::vector<cv::Mat>& preds, \
-	                std::vector<int> class_ids, std::vector<float> confidences,\
-	                std::vector<int> indices) {
-	for (size_t i = 0; i < preds.size(); ++i) {
-		float* data = (float*)preds[i].data;
-		for (int j = 0; j < preds[i].rows; ++j, data += preds[i].cols) {
-			cv::Mat scores = preds[i].row(j).colRange(5, preds[i].cols);
-			cv::Point class_id_point;
-			double confidence;
-			// Get the value and location of the maximum score
-			cv::minMaxLoc(scores, 0, &confidence, 0, &class_id_point);
-			if (confidence > confidenceThreshold) {
-				int centerX = (int)(data[0] * frame.cols);
-				int centerY = (int)(data[1] * frame.rows);
-				int width = (int)(data[2] * frame.cols);
-				int height = (int)(data[3] * frame.rows);
-				int left = centerX - width / 2;
-				int top = centerY - height / 2;
-				if(class_id_point.x == 0){
-				class_ids.push_back(class_id_point.x);
-				confidences.push_back((float)confidence);
-				prediction_boxes.push_back(cv::Rect(left, top, width, height));
-				}
-			}
-		}
-	}
-	cv::dnn::NMSBoxes(prediction_boxes, confidences, confidenceThreshold, nmsThreshold,\
-		             indices);
-	for (size_t i = 0; i < indices.size(); ++i) {
-		int idx = indices[i];
-		cv::Rect box = prediction_boxes[idx];
-		std::cout << "Box " << idx << ":" <<  box.x << " " << box.y << " " << box.x \
-		             + box.width << " " << box.y + box.height << std::endl;
-	
-	}
-}
-
-std::vector<int> Perception::detectObjects() {
-
+	cv::namedWindow(OPENCV_WINDOW, cv::WINDOW_NORMAL);
 }
 
 geometry_msgs::PoseStamped Perception::getObjectPose() {
 
 }
 
-void Perception::imageCallback() {
-
+Perception::~Perception() {
+	cv::destroyWindow(OPENCV_WINDOW);
 }
 
-void Perception::runVisionAlgo() {
+void Perception::imageCallback(const sensor_msgs::ImageConstPtr& msg) {
+	cv_bridge::CvImagePtr camImage;
+    try
+    {
+      camImage = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
+    }
+    catch (cv_bridge::Exception& e)
+    {
+      ROS_ERROR("cv_bridge exception: %s", e.what());
+      return;
+    }
+    if (cam_image) {
+    	image_to_detect = camImage->image.clone();
+    	runVisionAlgo(image_to_detect);
+    }
+    return;
+}
 
+void Perception::drawBBoxes(cv::Mat &input_frame, std::vector<cv::Rect> &classBboxes,\
+        int &classObjCount, cv::Scalar &bboxColor, const std::string &classLabels) {
+	darknet_ros::bbox bbox_result;
+
+    for (int i = 0; i < classObjCount; i++) {
+    	int xmin = (classBboxes[i].x - classBboxes[i].width/2)*frameWidth;
+    	int ymin = (classBboxes[i].y - classBboxes[i].height/2)*frameHeight;
+    	int xmax = (classBboxes[i].x + classBboxes[i].width/2)*frameWidth;
+    	int ymax = (classBboxes[i].y + classBboxes[i].height/2)*frameHeight;
+
+    	bbox_result.Class = classLabels;
+    	bbox_result.xmin = xmin;
+        bbox_result.ymin = ymin;
+        bbox_result.xmax = xmax;
+        bbox_result.ymax = ymax;
+        bboxResults.bboxes.push_back(bbox_result);
+
+        // draw bounding box of first object found
+        cv::Point topLeftCorner = cv::Point(xmin, ymin);
+        cv::Point botRightCorner = cv::Point(xmax, ymax);
+	    cv::rectangle(input_frame, topLeftCorner, botRightCorner, bboxColor, 2);
+        cv::putText(input_frame, classLabels, cv::Point(xmin, ymax+15), cv::FONT_HERSHEY_PLAIN,\
+        	1.0, bboxColor, 2.0);
+      }
+}
+
+void Perception::runVisionAlgo(cv::Mat &frame) {
+	cv::Mat inputFrame = frame.clone();
+	std::vector< std::vector<cv::Rect> > classBboxes(numClasses);
+    std::vector<int> classObjCount(numClasses, 0);
+
+	// Run Yolo and get prediction boxes
+    auto pred_boxes = od.predict(inputFrame);
+
+    int num = od.getObjectCount();
+
+	// Draw the boxes
+	if (num > 0  && num <= 100) {
+		ROS_INFO_STREAM("objects:"<< num);
+
+		// split bounding boxes by class
+		for (int i = 0; i < num; i++) {
+			for (int j = 0; j < numClasses; j++) {
+				//
+				classBboxes[j].push_back(_boxes[i]);
+				classObjCount[j]++;
+            }
+        }
+
+	    // Send message that an object has been detected
+        std_msgs::Int8 outMsg;
+        outMsg.data = 1;
+        objectFound.publish(outMsg);
+
+        for (int i = 0; i < numClasses; i++) {
+        	if (classObjCount[i] > 0) drawBBoxes(input_frame, classBboxes[i],
+				      classObjCount[i], bboxColors[i], classLabels[i]);
+        }
+        bboxes.publish(bboxResults);
+        bboxResults.bboxes.clear();
+    }
+    else {
+    	std_msgs::Int8 outMsg;
+        outMsg.data = 0;
+        objectFound.publish(outMsg);
+    }
+
+    cv::imshow(OPENCV_WINDOW, input_frame);
+    cv::waitKey(3);
 }
 
 } // namespace cleanup
