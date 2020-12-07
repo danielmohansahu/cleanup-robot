@@ -3,5 +3,11 @@
 #include <perception/perception.h>
 
 int main(int argc, char** argv) {
-  return 0;
+
+    ros::init(argc, argv, "Perception Module");
+
+    Perception detect;
+    ros::spin();
+
+	return 0;
 }
