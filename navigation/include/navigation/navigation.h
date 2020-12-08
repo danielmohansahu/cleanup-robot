@@ -32,8 +32,6 @@ class Navigation {
   /* @brief Destructor */
   ~Navigation();
 
- private:
-
   /* @brief Explore the given area, avoiding obstacles.
    * 
    * The basic implementation is just to move in straight lines
@@ -50,6 +48,7 @@ class Navigation {
   /* @brief Get current robot position. */
   geometry_msgs::Pose getRobotPose();
 
+  private:
 
   // action client to move_base navigation manager
   std::unique_ptr<actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>> goto_client_;

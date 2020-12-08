@@ -17,10 +17,10 @@ class Controller {
  public:
   Controller();
 
- private: 
   /* @brief Callback for action server to set a cleanup mode. */
   void executeGoal(const controller::SetModeGoal::ConstPtr& goal);
 
+  private: 
   // navigation service clients
   ros::ServiceClient goto_client_;
   ros::ServiceClient stop_client_;
