@@ -55,6 +55,7 @@ if(CATKIN_ENABLE_TESTING)
   perception_test
   test/perception_test.launch
   test/perception_test.cpp
+  src/perception.cpp
   )
   target_link_libraries(
   perception_test
