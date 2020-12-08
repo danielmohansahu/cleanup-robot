@@ -1,8 +1,9 @@
+#include <ros/ros.h>
 #include <navigation/navigation.h>
 #include <gtest/gtest.h>
 #include <cmath>
 
-//cleanup::Navigation nav;
+cleanup::Navigation nav;
 
 TEST(NavigationTest_GetPose, should_pass) {
     /*
