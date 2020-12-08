@@ -32,6 +32,7 @@ To build the package on Ubuntu 18.04, run the following from a terminal. This wi
 ```bash
 mkdir catkin_ws/src -p && cd catkin_ws/src
 git clone https://github.com/danielmohansahu/cleanup-robot.git --recursive
+git submodule init && git submodule update --init --recursive
 cd .. && catkin_make
 ```
 
