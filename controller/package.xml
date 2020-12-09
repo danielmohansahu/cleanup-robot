@@ -7,6 +7,14 @@
 
   <license>MIT</license>
 
+  <build_depend>qtbase5-dev</build_depend>
+  <build_depend>rviz</build_depend>
+
+  <exec_depend>libqt5-core</exec_depend>
+  <exec_depend>libqt5-gui</exec_depend>
+  <exec_depend>libqt5-widgets</exec_depend>
+  <exec_depend>rviz</exec_depend>
+
   <depend>roscpp</depend>
   <depend>navigation</depend>
   <depend>perception</depend>
@@ -17,5 +25,6 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <export>
+      <rviz plugin="${prefix}/plugin_description.xml"/>
   </export>
 </package>
