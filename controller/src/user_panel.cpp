@@ -38,10 +38,9 @@
 
 #include <geometry_msgs/Twist.h>
 
-#include "drive_widget.h"
-#include "teleop_panel.h"
+#include <controller/user_panel.h>
 
-namespace rviz_plugin_tutorials
+namespace cleanup
 {
 
 // BEGIN_TUTORIAL
@@ -56,7 +55,7 @@ namespace rviz_plugin_tutorials
 // passing the optional *parent* argument on to the superclass
 // constructor, and also zero-ing the velocities we will be
 // publishing.
-TeleopPanel::TeleopPanel( QWidget* parent )
+UserPanel::UserPanel( QWidget* parent )
   : rviz::Panel( parent )
   , linear_velocity_( 0 )
   , angular_velocity_( 0 )
@@ -68,13 +67,9 @@ TeleopPanel::TeleopPanel( QWidget* parent )
   output_topic_editor_ = new QLineEdit;
   topic_layout->addWidget( output_topic_editor_ );
 
-  // Then create the control widget.
-  drive_widget_ = new DriveWidget;
-
   // Lay out the topic field above the control widget.
   QVBoxLayout* layout = new QVBoxLayout;
   layout->addLayout( topic_layout );
-  layout->addWidget( drive_widget_ );
   setLayout( layout );
 
   // Create a timer for sending the output.  Motor controllers want to
@@ -89,22 +84,18 @@ TeleopPanel::TeleopPanel( QWidget* parent )
   QTimer* output_timer = new QTimer( this );
 
   // Next we make signal/slot connections.
-  connect( drive_widget_, SIGNAL( outputVelocity( float, float )), this, SLOT( setVel( float, float )));
   connect( output_topic_editor_, SIGNAL( editingFinished() ), this, SLOT( updateTopic() ));
   connect( output_timer, SIGNAL( timeout() ), this, SLOT( sendVel() ));
 
   // Start the timer.
   output_timer->start( 100 );
-
-  // Make the control widget start disabled, since we don't start with an output topic.
-  drive_widget_->setEnabled( false );
 }
 
 // setVel() is connected to the DriveWidget's output, which is sent
 // whenever it changes due to a mouse event.  This just records the
 // values it is given.  The data doesn't actually get sent until the
 // next timer callback.
-void TeleopPanel::setVel( float lin, float ang )
+void UserPanel::setVel( float lin, float ang )
 {
   linear_velocity_ = lin;
   angular_velocity_ = ang;
@@ -114,13 +105,13 @@ void TeleopPanel::setVel( float lin, float ang )
 // results.  This is connected to QLineEdit::editingFinished() which
 // fires when the user presses Enter or Tab or otherwise moves focus
 // away.
-void TeleopPanel::updateTopic()
+void UserPanel::updateTopic()
 {
   setTopic( output_topic_editor_->text() );
 }
 
 // Set the topic name we are publishing to.
-void TeleopPanel::setTopic( const QString& new_topic )
+void UserPanel::setTopic( const QString& new_topic )
 {
   // Only take action if the name has changed.
   if( new_topic != output_topic_ )
@@ -147,14 +138,11 @@ void TeleopPanel::setTopic( const QString& new_topic )
     // to show in the window's title bar indicating unsaved changes.
     Q_EMIT configChanged();
   }
-
-  // Gray out the control widget when the output topic is empty.
-  drive_widget_->setEnabled( output_topic_ != "" );
 }
 
 // Publish the control velocities if ROS is not shutting down and the
 // publisher is ready with a valid topic name.
-void TeleopPanel::sendVel()
+void UserPanel::sendVel()
 {
   if( ros::ok() && velocity_publisher_ )
   {
@@ -172,14 +160,14 @@ void TeleopPanel::sendVel()
 // Save all configuration data from this panel to the given
 // Config object.  It is important here that you call save()
 // on the parent class so the class id and panel name get saved.
-void TeleopPanel::save( rviz::Config config ) const
+void UserPanel::save( rviz::Config config ) const
 {
   rviz::Panel::save( config );
   config.mapSetValue( "Topic", output_topic_ );
 }
 
 // Load all configuration data for this panel from the given Config object.
-void TeleopPanel::load( const rviz::Config& config )
+void UserPanel::load( const rviz::Config& config )
 {
   rviz::Panel::load( config );
   QString topic;
@@ -190,11 +178,10 @@ void TeleopPanel::load( const rviz::Config& config )
   }
 }
 
-} // end namespace rviz_plugin_tutorials
+} // end namespace cleanup
 
 // Tell pluginlib about this class.  Every class which should be
 // loadable by pluginlib::ClassLoader must have these two lines
 // compiled in its .cpp file, outside of any namespace scope.
 #include <pluginlib/class_list_macros.h>
-PLUGINLIB_EXPORT_CLASS(rviz_plugin_tutorials::TeleopPanel,rviz::Panel )
-// END_TUTORIAL
+PLUGINLIB_EXPORT_CLASS(cleanup::UserPanel,rviz::Panel )

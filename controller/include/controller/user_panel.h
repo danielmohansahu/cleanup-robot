@@ -26,8 +26,8 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef TELEOP_PANEL_H
-#define TELEOP_PANEL_H
+#ifndef USER_PANEL_H
+#define USER_PANEL_H
 
 #ifndef Q_MOC_RUN
 # include <ros/ros.h>
@@ -37,10 +37,8 @@
 
 class QLineEdit;
 
-namespace rviz_plugin_tutorials
+namespace cleanup
 {
-
-class DriveWidget;
 
 // BEGIN_TUTORIAL
 // Here we declare our new subclass of rviz::Panel.  Every panel which
@@ -50,7 +48,7 @@ class DriveWidget;
 // TeleopPanel will show a text-entry field to set the output topic
 // and a 2D control area.  The 2D control area is implemented by the
 // DriveWidget class, and is described there.
-class TeleopPanel: public rviz::Panel
+class UserPanel: public rviz::Panel
 {
 // This class uses Qt slots and is a subclass of QObject, so it needs
 // the Q_OBJECT macro.
@@ -63,7 +61,7 @@ public:
   // a default of 0 lets the default constructor work and also lets
   // someone using the class for something else to pass in a parent
   // widget as they normally would with Qt.
-  TeleopPanel( QWidget* parent = 0 );
+  UserPanel( QWidget* parent = 0 );
 
   // Now we declare overrides of rviz::Panel functions for saving and
   // loading data from the config file.  Here the data is the
@@ -96,9 +94,6 @@ protected Q_SLOTS:
 
   // Then we finish up with protected member variables.
 protected:
-  // The control-area widget which turns mouse events into command
-  // velocities.
-  DriveWidget* drive_widget_;
 
   // One-line text editor for entering the outgoing ROS topic name.
   QLineEdit* output_topic_editor_;
@@ -118,6 +113,6 @@ protected:
   // END_TUTORIAL
 };
 
-} // end namespace rviz_plugin_tutorials
+} // end namespace cleanup
 
-#endif // TELEOP_PANEL_H
+#endif // USER_PANEL_H
