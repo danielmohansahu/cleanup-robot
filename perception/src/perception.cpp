@@ -1,3 +1,9 @@
+/* @file perception.cpp
+ * @brief Implementation of the Perception class for object detection/localization.
+ * 
+ * @copyright [2020] <Daniel Sahu, Spencer Elyard, Santosh Kesani>
+ */
+
 #include <perception/perception.h>
 
 namespace cleanup {

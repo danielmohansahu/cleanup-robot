@@ -48,8 +48,22 @@ target_link_libraries(${PROJECT_NAME}_node
 ## Testing ##
 #############
 
-## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_navigation.cpp)
-# if(TARGET ${PROJECT_NAME}-test)
-#   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
-# endif()
+if(CATKIN_ENABLE_TESTING)
+  find_package(rostest REQUIRED)
+
+  add_rostest_gtest(
+  perception_test
+  test/perception_test.launch
+  test/perception_test.cpp
+  )
+  target_link_libraries(
+  perception_test
+  ${catkin_LIBRARIES}
+  )
+  add_dependencies(
+  perception_test
+  perception_node
+  ${catkin_EXPORTED_TARGETS}
+  )
+endif()
+

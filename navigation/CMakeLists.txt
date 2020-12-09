@@ -6,11 +6,41 @@ set(CMAKE_CXX_STANDARD 14)
 set(BUILD_DEPS
   roscpp
   geometry_msgs
+  turtlebot3_navigation
+  gmapping
+  move_base
+  dwa_local_planner
+  message_generation
+  message_runtime
+)
+
+set(TEST_DEPS
+  ${PACKAGE_DEPS}
+  turtlebot3_description
+  turtlebot3_gazebo
+  gazebo
+  xacro
+  robot_state_publisher
+  rviz
 )
 
 find_package(
   catkin REQUIRED
   ${BUILD_DEPS}
+)
+
+########################
+## message generation ##
+########################
+
+add_service_files(
+  FILES
+  SetPoseStamped.srv
+)
+
+generate_messages(
+  DEPENDENCIES
+  geometry_msgs
 )
 
 ###################################
@@ -20,7 +50,6 @@ find_package(
 catkin_package(
   INCLUDE_DIRS include
   CATKIN_DEPENDS ${BUILD_DEPS}
-#  DEPENDS system_lib
 )
 
 ###########
@@ -42,8 +71,21 @@ target_link_libraries(${PROJECT_NAME}_node
 ## Testing ##
 #############
 
-## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_navigation.cpp)
-# if(TARGET ${PROJECT_NAME}-test)
-#   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
-# endif()
+if(CATKIN_ENABLE_TESTING)
+  find_package(rostest REQUIRED)
+
+  add_rostest_gtest(
+  navigation_test
+  test/navigation_test.launch
+  test/navigation_test.cpp
+  )
+  target_link_libraries(
+  navigation_test
+  ${catkin_LIBRARIES}
+  )
+  add_dependencies(
+  navigation_test
+  navigation_node
+  ${catkin_EXPORTED_TARGETS}
+  )
+endif()

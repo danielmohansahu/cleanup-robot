@@ -27,13 +27,12 @@ In addition to these, you may also require Turtlebot3, Gazebo, RViz, gmapping an
 
 ### Build Instructions
 
-To build the package on Ubuntu 18.04, run the following from a terminal.
+To build the package on Ubuntu 18.04, run the following from a terminal. This will create a catkin worskpace in your current directory and clone our repository into it.
 
 ```bash
-mkdir ~/catkin_ws/src && cd catkin_ws/src
-git clone https://github.com/danielmohansahu/cleanup-robot.git
-cd ../..
-catkin_make
+mkdir catkin_ws/src -p && cd catkin_ws/src
+git clone https://github.com/danielmohansahu/cleanup-robot.git --recursive
+cd .. && catkin_make
 ```
 
 ### Demonstration Instructions

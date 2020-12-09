@@ -5,12 +5,24 @@ set(CMAKE_CXX_STANDARD 14)
 
 set(BUILD_DEPS
   roscpp
+  genmsg
+  actionlib_msgs
+  actionlib
+  navigation
+  perception
 )
 
 find_package(
   catkin REQUIRED
   ${BUILD_DEPS}
 )
+
+#######################
+## action generation ##
+#######################
+
+add_action_files(DIRECTORY action FILES SetMode.action)
+generate_messages(DEPENDENCIES actionlib_msgs)
 
 ###################################
 ## catkin specific configuration ##
@@ -41,8 +53,23 @@ target_link_libraries(${PROJECT_NAME}_node
 ## Testing ##
 #############
 
-## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_navigation.cpp)
-# if(TARGET ${PROJECT_NAME}-test)
-#   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
-# endif()
+if(CATKIN_ENABLE_TESTING)
+  find_package(rostest REQUIRED)
+
+  add_rostest_gtest(
+  controller_test
+  test/controller_test.launch
+  test/controller_test.cpp
+  )
+
+  target_link_libraries(
+  controller_test
+  ${catkin_LIBRARIES}
+  )
+
+  add_dependencies(
+  controller_test
+  controller_node
+  ${catkin_EXPORTED_TARGETS}
+  )
+endif()
