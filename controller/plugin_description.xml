@@ -1,6 +1,5 @@
 <library path="lib/libcontroller">
-  <class name="cleanup/UserPanel"
-         type="cleanup::UserPanel"
+  <class type="cleanup::UserPanel"
          base_class_type="rviz::Panel">
     <description>
       A panel widget allowing behavior setting by the user.
