@@ -35,7 +35,7 @@
 # include <rviz/panel.h>
 #endif
 
-class QLineEdit;
+class QPushButton;
 
 namespace cleanup
 {
@@ -53,7 +53,7 @@ class UserPanel: public rviz::Panel
 // This class uses Qt slots and is a subclass of QObject, so it needs
 // the Q_OBJECT macro.
 Q_OBJECT
-public:
+ public:
   // QWidget subclass constructors usually take a parent widget
   // parameter (which usually defaults to 0).  At the same time,
   // pluginlib::ClassLoader creates instances by calling the default
@@ -63,54 +63,20 @@ public:
   // widget as they normally would with Qt.
   UserPanel( QWidget* parent = 0 );
 
-  // Now we declare overrides of rviz::Panel functions for saving and
-  // loading data from the config file.  Here the data is the
-  // topic name.
-  virtual void load( const rviz::Config& config );
-  virtual void save( rviz::Config config ) const;
-
   // Next come a couple of public Qt slots.
 public Q_SLOTS:
-  // The control area, DriveWidget, sends its output to a Qt signal
-  // for ease of re-use, so here we declare a Qt slot to receive it.
-  void setVel( float linear_velocity_, float angular_velocity_ );
 
-  // In this example setTopic() does not get connected to any signal
-  // (it is called directly), but it is easy to define it as a public
-  // slot instead of a private function in case it would be useful to
-  // some other user.
-  void setTopic( const QString& topic );
+ protected:
 
-  // Here we declare some internal slots.
-protected Q_SLOTS:
-  // sendvel() publishes the current velocity values to a ROS
-  // topic.  Internally this is connected to a timer which calls it 10
-  // times per second.
-  void sendVel();
+  void sendGoal(const std::string& mode);
 
-  // updateTopic() reads the topic name from the QLineEdit and calls
-  // setTopic() with the result.
-  void updateTopic();
-
-  // Then we finish up with protected member variables.
-protected:
-
-  // One-line text editor for entering the outgoing ROS topic name.
-  QLineEdit* output_topic_editor_;
-
-  // The current name of the output topic.
-  QString output_topic_;
-
-  // The ROS publisher for the command velocity.
-  ros::Publisher velocity_publisher_;
+  QPushButton* explore_button_;
+  QPushButton* clean_button_;
+  QPushButton* stop_button_;
 
   // The ROS node handle.
   ros::NodeHandle nh_;
 
-  // The latest velocity values from the drive widget.
-  float linear_velocity_;
-  float angular_velocity_;
-  // END_TUTORIAL
 };
 
 } // end namespace cleanup
