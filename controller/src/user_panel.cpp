@@ -82,13 +82,33 @@ UserPanel::UserPanel( QWidget* parent )
   setLayout( layout );
 
   // Next we make signal/slot connections.
-  // connect( output_topic_editor_, SIGNAL( editingFinished() ), this, SLOT( updateTopic() ));
+  connect(explore_button_, SIGNAL(clicked()), this, SLOT(explore()));
+  connect(clean_button_, SIGNAL(clicked()), this, SLOT(clean()));
+  connect(stop_button_, SIGNAL(clicked()), this, SLOT(stop()));
+}
+
+void UserPanel::explore()
+{
+  sendGoal("explore");
+}
+
+void UserPanel::clean()
+{
+  sendGoal("clean");
+}
+
+void UserPanel::stop()
+{
+  client_.cancelAllGoals();
 }
 
 // Send a navigation goal.
 void UserPanel::sendGoal(const std::string& mode)
 {
-  // @TODO
+  // construct goal object
+  controller::SetModeGoal goal;
+  goal.mode = mode;
+  client_.sendGoal(goal);
 }
 
 } // end namespace cleanup

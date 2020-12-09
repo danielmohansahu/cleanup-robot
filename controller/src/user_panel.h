@@ -56,7 +56,7 @@ class UserPanel: public rviz::Panel
 // This class uses Qt slots and is a subclass of QObject, so it needs
 // the Q_OBJECT macro.
 Q_OBJECT
- public:
+public:
   // QWidget subclass constructors usually take a parent widget
   // parameter (which usually defaults to 0).  At the same time,
   // pluginlib::ClassLoader creates instances by calling the default
@@ -66,11 +66,12 @@ Q_OBJECT
   // widget as they normally would with Qt.
   UserPanel( QWidget* parent = 0 );
 
-  // Next come a couple of public Qt slots.
 public Q_SLOTS:
+  void explore();
+  void clean();
+  void stop();
 
- protected:
-
+protected:
   void sendGoal(const std::string& mode);
 
   QPushButton* explore_button_;
