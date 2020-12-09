@@ -38,7 +38,7 @@
 
 #include <geometry_msgs/Twist.h>
 
-#include <controller/user_panel.h>
+#include "user_panel.h"
 
 namespace cleanup
 {
@@ -184,4 +184,4 @@ void UserPanel::load( const rviz::Config& config )
 // loadable by pluginlib::ClassLoader must have these two lines
 // compiled in its .cpp file, outside of any namespace scope.
 #include <pluginlib/class_list_macros.h>
-PLUGINLIB_EXPORT_CLASS(cleanup::UserPanel,rviz::Panel )
+PLUGINLIB_EXPORT_CLASS(cleanup::UserPanel, rviz::Panel)

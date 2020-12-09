@@ -24,6 +24,7 @@ find_package(
 
 ## This setting causes Qt's "MOC" generation to happen automatically.
 set(CMAKE_AUTOMOC ON)
+set(CMAKE_CXX_FLAGS "-Wl,--no-undefined")
 
 ## This plugin includes Qt widgets, so we must include Qt.
 ## We'll use the version that rviz used so they are compatible.
@@ -42,14 +43,6 @@ endif()
 ## I prefer the Qt signals and slots to avoid defining "emit", "slots",
 ## etc because they can conflict with boost signals, so define QT_NO_KEYWORDS here.
 add_definitions(-DQT_NO_KEYWORDS)
-
-## Here we specify the list of source files.
-## The generated MOC files are included automatically as headers.
-set(SRC_FILES
-  src/user_panel.cpp
-)
-add_library(${PROJECT_NAME} ${SRC_FILES})
-target_link_libraries(${PROJECT_NAME} ${QT_LIBRARIES} ${catkin_LIBRARIES})
 
 #######################
 ## action generation ##
@@ -76,6 +69,14 @@ catkin_package(
 ###########
 ## Build ##
 ###########
+
+## Here we specify the list of source files.
+## The generated MOC files are included automatically as headers.
+set(SRC_FILES
+  src/user_panel.cpp
+)
+add_library(${PROJECT_NAME} ${SRC_FILES})
+target_link_libraries(${PROJECT_NAME} ${QT_LIBRARIES} ${catkin_LIBRARIES})
 
 add_executable(${PROJECT_NAME}_node src/controller_node.cpp src/controller.cpp)
 add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
