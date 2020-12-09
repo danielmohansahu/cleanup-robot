@@ -31,8 +31,11 @@
 
 #ifndef Q_MOC_RUN
 # include <ros/ros.h>
+# include <actionlib/client/simple_action_client.h>
 
 # include <rviz/panel.h>
+
+# include <controller/SetModeAction.h>
 #endif
 
 class QPushButton;
@@ -77,6 +80,8 @@ public Q_SLOTS:
   // The ROS node handle.
   ros::NodeHandle nh_;
 
+  // service clients for various behaviors
+  actionlib::SimpleActionClient<controller::SetModeAction> client_;
 };
 
 } // end namespace cleanup

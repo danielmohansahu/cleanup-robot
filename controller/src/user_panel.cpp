@@ -57,25 +57,23 @@ namespace cleanup
 // constructor, and also zero-ing the velocities we will be
 // publishing.
 UserPanel::UserPanel( QWidget* parent )
-  : rviz::Panel( parent )
+  : rviz::Panel( parent ),
+    client_("controller/set_mode")
 {
-  // create actionlib client to send goals
-
-
   // add buttons to send specific goals
   QHBoxLayout* button_layout = new QHBoxLayout;
   button_layout->addWidget( new QLabel( "Behaviors:" ));
 
   // explore behavior
-  explore_button_ = new QPushButton;
+  explore_button_ = new QPushButton("Explore");
   button_layout->addWidget( explore_button_ );
 
   // clean behavior
-  clean_button_ = new QPushButton;
+  clean_button_ = new QPushButton("Clean");
   button_layout->addWidget( clean_button_ );
 
   // stop behavior
-  stop_button_ = new QPushButton;
+  stop_button_ = new QPushButton("Stop");
   button_layout->addWidget( stop_button_ );
 
   // Lay out the topic field above the control widget.
