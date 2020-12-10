@@ -1,5 +1,5 @@
 #include <ros/ros.h>
-#include <navigation/navigation.h>
+#include <navigation/navigation.h>so i've been working on the tests for the navigation and controller, but i'm having just general issues with a
 #include <gtest/gtest.h>
 #include <cmath>
 
@@ -57,5 +57,6 @@ TEST(NavigationTest_TestStop, should_pass) {
 
 int main(int argc, char **argv){
    testing::InitGoogleTest(&argc, argv);
+   ros::init(argc, argv, "navigation_test");
    return RUN_ALL_TESTS();
 }
