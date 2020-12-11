@@ -123,8 +123,8 @@ void Navigation::exploreLoop() {
   }
 }
 
-int curNavMode() {
-
+int Navigation::getCurrNavMode() {
+  return currNavMode;
 }
 
 geometry_msgs::Pose Navigation::getRobotPose() {

@@ -1,9 +1,12 @@
 #include <ros/ros.h>
+#include <ros/service_client.h>
 #include <navigation/navigation.h>
 #include <gtest/gtest.h>
-#include <cmath>
 
 #include <std_srvs/Trigger.h>
+
+#include <cmath>
+
 #include <navigation/SetPoseStamped.h>
 
 cleanup::Navigation nav;
@@ -41,6 +44,7 @@ TEST(NavigationTest_gotoServiceStarts, should_pass) {
 
 int main(int argc, char **argv){
    ros::init(argc,argv, "navigation_test");
+   nh.reset(new ros::NodeHandle);
    testing::InitGoogleTest(&argc, argv);
    return RUN_ALL_TESTS();
 }
