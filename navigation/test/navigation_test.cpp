@@ -3,6 +3,9 @@
 #include <gtest/gtest.h>
 #include <cmath>
 
+#include <std_srvs/Trigger.h>
+#include <navigation/SetPoseStamped.h>
+
 cleanup::Navigation nav;
 std::shared_ptr<ros::NodeHandle> nh;
 
@@ -22,17 +25,17 @@ TEST(NavigationTest_GetPose, should_pass) {
 }
 
 TEST(NavigationTest_stopServiceStarts, should_pass) {
-  ros::ServiceClient client = nh->serviceClient<cleanup::Navigation>("/navigation/stop");
+  ros::ServiceClient client = nh->serviceClient<std_srvs::Trigger>("/navigation/stop");
   EXPECT_EQ(nav.getCurrNavMode(),0);
 }
 
 TEST(NavigationTest_exploreServiceStarts, should_pass) {
-  ros::ServiceClient client = nh->serviceClient<cleanup::Navigation>("/navigation/explore");
+  ros::ServiceClient client = nh->serviceClient<std_srvs::Trigger>("/navigation/explore");
   EXPECT_EQ(nav.getCurrNavMode(),1);
 }
 
 TEST(NavigationTest_gotoServiceStarts, should_pass) {
-  ros::ServiceClient client = nh->serviceClient<cleanup::Navigation>("/navigation/goto");
+  ros::ServiceClient client = nh->serviceClient<navigation::SetPoseStamped>("/navigation/goto");
   EXPECT_EQ(nav.getCurrNavMode(),2);
 }
 
