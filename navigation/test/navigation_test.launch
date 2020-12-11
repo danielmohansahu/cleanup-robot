@@ -24,4 +24,5 @@
 
   <!-- launch tests -->
   <test pkg="navigation" test-name="navigation_test_function" type="navigation_test" />
+
 </launch>

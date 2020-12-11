@@ -31,7 +31,7 @@ TEST(NavigationTest_stopServiceStarts, should_pass) {
   ros::ServiceClient client = nh->serviceClient<std_srvs::Trigger>("/navigation/stop");
   std_srvs::Trigger srv;
   client.call(srv);
-  ros::Duration(1.0).sleep();
+  //ros::Duration(1.0).sleep();
   EXPECT_EQ(nav->getCurrNavMode(),0);
 }
 
@@ -39,7 +39,7 @@ TEST(NavigationTest_exploreServiceStarts, should_pass) {
   ros::ServiceClient client = nh->serviceClient<std_srvs::Trigger>("/navigation/explore");
   std_srvs::Trigger srv;
   client.call(srv);
-  ros::Duration(1.0).sleep();
+  //ros::Duration(1.0).sleep();
   EXPECT_EQ(nav->getCurrNavMode(),1);
 }
 
@@ -47,7 +47,7 @@ TEST(NavigationTest_gotoServiceStarts, should_pass) {
   ros::ServiceClient client = nh->serviceClient<navigation::SetPoseStamped>("/navigation/goto");
   std_srvs::Trigger srv;
   client.call(srv);
-  ros::Duration(1.0).sleep();
+  //ros::Duration(1.0).sleep();
   EXPECT_EQ(nav->getCurrNavMode(),2);
 }
 
