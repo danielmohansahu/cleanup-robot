@@ -30,8 +30,8 @@ Navigation::Navigation() : stop_ {false} {
   stop_service_ = pnh.advertiseService(
     "stop",
     TriggerCallback([this] (const auto& req, auto& res) {
+      this->currNavMode_ = 0;
       this->stop();
-      currNavMode = 0;
       res.success = true;
       return true;
     }));
@@ -40,15 +40,19 @@ Navigation::Navigation() : stop_ {false} {
   explore_service_ = pnh.advertiseService(
     "explore",
     TriggerCallback([this] (const auto& req, auto& res) {
+
+      std::cout << "EXPLORE" << std::endl;
+
       // first stop any execution
       this->stop();
 
+      this->currNavMode_ = 1;
       // then spin off exploration thread
       thread_handle_ = std::async(
         std::launch::async,
         [this]()->void {this->exploreLoop();});
 
-      currNavMode = 1;
+
       res.success = true;
       return true;
     }));
@@ -57,6 +61,7 @@ Navigation::Navigation() : stop_ {false} {
   goto_service_ = pnh.advertiseService(
     "goto",
     SetPoseCallback([this] (const auto& req, auto& res) {
+
       // sanity check that this is in the right frame
       if (req.pose.header.frame_id != map_frame_) {
         ROS_ERROR("Given a goTo pose in the wrong frame.");
@@ -69,8 +74,11 @@ Navigation::Navigation() : stop_ {false} {
       // then send this as a goal to the action server
       move_base_msgs::MoveBaseGoal goal;
       goal.target_pose = req.pose;
+
+      this->currNavMode_ = 2;
       goto_client_->sendGoal(goal);
-      currNavMode = 2;
+
+
       return true;
     }));
 }
@@ -124,7 +132,7 @@ void Navigation::exploreLoop() {
 }
 
 int Navigation::getCurrNavMode() {
-  return currNavMode;
+  return this->currNavMode_;
 }
 
 geometry_msgs::Pose Navigation::getRobotPose() {

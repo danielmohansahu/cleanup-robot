@@ -53,7 +53,7 @@ class Navigation {
 
   private:
 
-  int currNavMode = 0;
+  int currNavMode_ {0};
 
   // action client to move_base navigation manager
   std::unique_ptr<actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>> goto_client_;
