@@ -35,7 +35,7 @@ Controller::Controller() {
   // start action server to process mode callbacks
   as_ = std::make_unique<actionlib::SimpleActionServer<controller::SetModeAction>>(
     pnh,
-    "set_mode",
+    "controller/set_mode",
     [this](const auto& goal) {this->executeGoal(goal);},
     false
   );
