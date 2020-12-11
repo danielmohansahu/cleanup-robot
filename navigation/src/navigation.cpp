@@ -1,6 +1,6 @@
 /* @file navigation.cpp
  * @brief Implementation of the Navigation class for basic navigation.
- * 
+ *
  * @copyright [2020] <Daniel Sahu, Spencer Elyard, Santosh Kesani>
  */
 
@@ -31,8 +31,9 @@ Navigation::Navigation() : stop_ {false} {
     "stop",
     TriggerCallback([this] (const auto& req, auto& res) {
       this->stop();
+      currNavMode = 0;
       res.success = true;
-      return true; 
+      return true;
     }));
 
   // construct explore service
@@ -47,8 +48,9 @@ Navigation::Navigation() : stop_ {false} {
         std::launch::async,
         [this]()->void {this->exploreLoop();});
 
+      currNavMode = 1;
       res.success = true;
-      return true; 
+      return true;
     }));
 
   // construct goto service
@@ -68,8 +70,8 @@ Navigation::Navigation() : stop_ {false} {
       move_base_msgs::MoveBaseGoal goal;
       goal.target_pose = req.pose;
       goto_client_->sendGoal(goal);
-
-      return true; 
+      currNavMode = 2;
+      return true;
     }));
 }
 
@@ -94,10 +96,10 @@ void Navigation::exploreLoop() {
   // basic explore behavior is to send random goals a fixed distance away in a random direction
 
   // initialize loop variables
-  
+
   // execute until stopped or shutdown
   while (!stop_ && ros::ok()) {
-    // sleep at the top of the loop; this also ensures we 
+    // sleep at the top of the loop; this also ensures we
     //  don't interrupt running goals.
     if (goto_client_->getState().isDone()
         || goto_client_->waitForResult(ros::Duration(0.1))) {
@@ -119,6 +121,10 @@ void Navigation::exploreLoop() {
       goto_client_->sendGoal(goal);
     }
   }
+}
+
+int curNavMode() {
+
 }
 
 geometry_msgs::Pose Navigation::getRobotPose() {

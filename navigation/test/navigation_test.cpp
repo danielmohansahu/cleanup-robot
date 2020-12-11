@@ -1,62 +1,43 @@
 #include <ros/ros.h>
-#include <navigation/navigation.h>so i've been working on the tests for the navigation and controller, but i'm having just general issues with a
+#include <navigation/navigation.h>
 #include <gtest/gtest.h>
 #include <cmath>
 
 cleanup::Navigation nav;
+std::shared_ptr<ros::NodeHandle> nh;
+
+TEST(NavigationTest_getNavModeDefault, should_pass) {;
+  EXPECT_EQ(nav.getCurrNavMode(),0);
+}
 
 TEST(NavigationTest_GetPose, should_pass) {
-    // expect to initialize to initial position, initial orientation
-    geometry_msgs::Pose curr_pose = nav.getRobotPose();
-    EXPECT_FLOAT_EQ(curr_pose.position.x,0);
-    EXPECT_FLOAT_EQ(curr_pose.position.y,0);
-    EXPECT_FLOAT_EQ(curr_pose.position.z,0);
-    EXPECT_FLOAT_EQ(curr_pose.orientation.x,0);
-    EXPECT_FLOAT_EQ(curr_pose.orientation.y,0);
-    EXPECT_FLOAT_EQ(curr_pose.orientation.z,0);
-    EXPECT_FLOAT_EQ(curr_pose.orientation.w,1);
+   geometry_msgs::Pose curr_pose = nav.getRobotPose();
+   EXPECT_FLOAT_EQ(curr_pose.position.x,0);
+   EXPECT_FLOAT_EQ(curr_pose.position.y,0);
+   EXPECT_FLOAT_EQ(curr_pose.position.z,0);
+   EXPECT_FLOAT_EQ(curr_pose.orientation.x,0);
+   EXPECT_FLOAT_EQ(curr_pose.orientation.y,0);
+   EXPECT_FLOAT_EQ(curr_pose.orientation.z,0);
+   EXPECT_FLOAT_EQ(curr_pose.orientation.w,1);
 }
 
-TEST(NavigationTest_TestExplore, should_pass) {
-
-    // expect move in straight line; in empty world will continue indefinitely
-    geometry_msgs::Pose init_pose = nav.getRobotPose();
-    // command to explore
-    nav.exploreLoop();
-    // let move
-    ros::Duration(2.0).sleep();
-
-    // expect to be in a different position than before
-    float new_pos_dist_travel = sqrt(
-      pow(init_pose.position.x - nav.getRobotPose().position.x,2) +
-      pow(init_pose.position.y - nav.getRobotPose().position.y,2));
-    // should have moved
-    EXPECT_TRUE(new_pos_dist_travel > 0);
+TEST(NavigationTest_stopServiceStarts, should_pass) {
+  ros::ServiceClient client = nh->serviceClient<cleanup::Navigation>("/navigation/stop");
+  EXPECT_EQ(nav.getCurrNavMode(),0);
 }
 
-
-TEST(NavigationTest_TestStop, should_pass) {
-  nav.exploreLoop();
-  // let move
-  ros::Duration(2.0).sleep();
-  // record current position
-  geometry_msgs::Pose init_pose = nav.getRobotPose();
-  // command to stop
-  nav.stop();
-  // sleep to ensure robot stopped
-  ros::Duration(1.0).sleep();
-  /// compare new position to old position
-  float new_pos_dist_travel = sqrt(
-    pow((init_pose.position.x - nav.getRobotPose().position.x),2) +
-    pow((init_pose.position.y - nav.getRobotPose().position.y),2));
-  // should not have moved
-  EXPECT_FLOAT_EQ(new_pos_dist_travel,0);
-
+TEST(NavigationTest_exploreServiceStarts, should_pass) {
+  ros::ServiceClient client = nh->serviceClient<cleanup::Navigation>("/navigation/explore");
+  EXPECT_EQ(nav.getCurrNavMode(),1);
 }
 
+TEST(NavigationTest_gotoServiceStarts, should_pass) {
+  ros::ServiceClient client = nh->serviceClient<cleanup::Navigation>("/navigation/goto");
+  EXPECT_EQ(nav.getCurrNavMode(),2);
+}
 
 int main(int argc, char **argv){
+   ros::init(argc,argv, "navigation_test");
    testing::InitGoogleTest(&argc, argv);
-   ros::init(argc, argv, "navigation_test");
    return RUN_ALL_TESTS();
 }

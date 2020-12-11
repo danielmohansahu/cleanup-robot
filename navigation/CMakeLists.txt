@@ -76,7 +76,7 @@ if(CATKIN_ENABLE_TESTING)
 
   add_rostest_gtest(
   navigation_test
-  test/navigation_test2.launch
+  test/navigation_test.launch
   test/navigation_test.cpp
   src/navigation.cpp
   )

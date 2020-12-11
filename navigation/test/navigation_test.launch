@@ -1,16 +1,9 @@
 <!-- Navigation launch file: loads mapping and move_base -->
 <launch>
   <!-- launch controller -->
-  <node name="controller" pkg="controller" type="controller_node" output="screen" required="true" />
-
   <arg name="model" default="burger" doc="Turtlebot3 model type [burger, waffle, waffle_pi]" />
   <arg name="cmd_vel_topic" default="/cmd_vel" />
   <arg name="odom_topic" default="odom" />
-
-  <!-- launch mapping node -->
-  <node name="mapping" pkg="gmapping" type="slam_gmapping" output="screen" required="true" >
-    <param name="scan" value="scan" />
-  </node>
 
   <!-- launch move_base node (navigation) -->
   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" required="true" >
@@ -28,26 +21,6 @@
   <!-- launch our navigation node -->
   <node name="navigation_node" pkg="navigation" type="navigation_node" output="screen" required="true" />
   <test pkg="navigation" test-name="navigation_test_function" type="navigation_test" />
-
-  <!-- launch turtlebot3 in gazebo world -->
-  <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find turtlebot3_gazebo)/worlds/turtlebot3_house.world"/>
-    <arg name="paused" value="false"/>
-    <arg name="use_sim_time" value="true"/>
-    <arg name="gui" value="true"/>
-    <arg name="headless" value="false"/>
-    <arg name="debug" value="false"/>
-  </include>
-
-  <!-- launch robot description and process URDF -->
-  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf"  args="-urdf -model turtlebot3_$(arg model) -x -2.0 -y 4 -z 0.0 -param robot_description" />
-  <param name="robot_description" command="$(find xacro)/xacro $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
-
-  <!-- launch robot state publisher -->
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" required="true" />
-
-  <!-- launch rviz -->
-  <node name="rviz" type="rviz" pkg="rviz" args="-d $(find turtlebot3_navigation)/rviz/turtlebot3_navigation.rviz" />
 
 
 </launch>
