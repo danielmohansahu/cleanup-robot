@@ -1,26 +1,27 @@
 <!-- Navigation launch file: loads mapping and move_base -->
 <launch>
-  <!-- launch controller -->
+
   <arg name="model" default="burger" doc="Turtlebot3 model type [burger, waffle, waffle_pi]" />
-  <arg name="cmd_vel_topic" default="/cmd_vel" />
-  <arg name="odom_topic" default="odom" />
+  <param name="use_sim_time" value="true" />
 
-  <!-- launch move_base node (navigation) -->
-  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" required="true" >
-    <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
-    <rosparam file="$(find turtlebot3_navigation)/param/costmap_common_params_$(arg model).yaml" command="load" ns="global_costmap" />
-    <rosparam file="$(find turtlebot3_navigation)/param/costmap_common_params_$(arg model).yaml" command="load" ns="local_costmap" />
-    <rosparam file="$(find turtlebot3_navigation)/param/local_costmap_params.yaml" command="load" />
-    <rosparam file="$(find turtlebot3_navigation)/param/global_costmap_params.yaml" command="load" />
-    <rosparam file="$(find turtlebot3_navigation)/param/move_base_params.yaml" command="load" />
-    <rosparam file="$(find turtlebot3_navigation)/param/dwa_local_planner_params_$(arg model).yaml" command="load" />
-    <remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
-    <remap from="odom" to="$(arg odom_topic)"/>
-  </node>
+  <!-- launch navigation -->
+  <include file="$(find navigation)/launch/navigation.launch">
+    <arg name="model" value="$(arg model)" />
+  </include>
 
-  <!-- launch our navigation node -->
-  <node name="navigation_node" pkg="navigation" type="navigation_node" output="screen" required="true" />
+  <!-- launch robot description and process URDF -->
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf"  args="-urdf -model turtlebot3_$(arg model) -x -2.0 -y -0.5 -z 0.0 -param robot_description" />
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
+
+  <!-- launch robot state publisher -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" required="true" />
+
+  <!-- publish dummy (bagged) scan -->
+  <node name="mock_scan" type="play" pkg="rosbag" args="$(find navigation)/test/navigation_test.bag -l --clock" />
+
+  <!-- publish dummy odometry -->
+  <node name="mock_odometry" type="static_transform_publisher" pkg="tf" args="0 0 0 0 0 0 /odom /base_footprint 100" />
+
+  <!-- launch tests -->
   <test pkg="navigation" test-name="navigation_test_function" type="navigation_test" />
-
-
 </launch>
