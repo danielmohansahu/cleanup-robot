@@ -9,6 +9,8 @@
 #include <navigation/navigation.h>
 
 int main(int argc, char** argv) {
+  // seed random numbers
+  srand( time( NULL ) );
 
   // start ros node
   ros::init(argc, argv, "navigation_node");
