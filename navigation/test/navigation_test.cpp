@@ -1,3 +1,4 @@
+#include <thread>
 #include <ros/ros.h>
 #include <ros/service_client.h>
 #include <navigation/navigation.h>
@@ -29,32 +30,52 @@ TEST(NavigationTest_GetPose, should_pass) {
 
 TEST(NavigationTest_stopServiceStarts, should_pass) {
   ros::ServiceClient client = nh->serviceClient<std_srvs::Trigger>("/navigation/stop");
+
+  // wait for service to become available
+  ASSERT_TRUE(client.waitForExistence(ros::Duration(5.0)));
+
   std_srvs::Trigger srv;
-  client.call(srv);
+  ASSERT_TRUE(client.call(srv));
   //ros::Duration(1.0).sleep();
   EXPECT_EQ(nav->getCurrNavMode(),0);
 }
 
 TEST(NavigationTest_exploreServiceStarts, should_pass) {
   ros::ServiceClient client = nh->serviceClient<std_srvs::Trigger>("/navigation/explore");
+
+  // wait for service to become available
+  ASSERT_TRUE(client.waitForExistence(ros::Duration(5.0)));
+
   std_srvs::Trigger srv;
-  client.call(srv);
+  ASSERT_TRUE(client.call(srv));
   //ros::Duration(1.0).sleep();
   EXPECT_EQ(nav->getCurrNavMode(),1);
 }
 
 TEST(NavigationTest_gotoServiceStarts, should_pass) {
   ros::ServiceClient client = nh->serviceClient<navigation::SetPoseStamped>("/navigation/goto");
-  std_srvs::Trigger srv;
-  client.call(srv);
+
+  // wait for service to become available
+  ASSERT_TRUE(client.waitForExistence(ros::Duration(5.0)));
+
+  navigation::SetPoseStamped srv;
+  ASSERT_TRUE(client.call(srv));
   //ros::Duration(1.0).sleep();
   EXPECT_EQ(nav->getCurrNavMode(),2);
 }
 
 int main(int argc, char **argv){
-   ros::init(argc,argv, "navigation_test");
-   nh.reset(new ros::NodeHandle);
-   nav.reset(new cleanup::Navigation);
-   testing::InitGoogleTest(&argc, argv);
-   return RUN_ALL_TESTS();
+  ros::init(argc,argv, "navigation_test");
+  nh.reset(new ros::NodeHandle);
+  nav.reset(new cleanup::Navigation);
+  testing::InitGoogleTest(&argc, argv);
+
+  // spin of thread to process callbacks
+  auto spin_thread = std::thread([](){ros::spin();});
+
+  auto result = RUN_ALL_TESTS();
+  ros::shutdown();
+  spin_thread.join();
+
+  return result;
 }
