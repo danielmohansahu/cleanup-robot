@@ -32,6 +32,7 @@ class Controller {
 
   // action server handle
   std::unique_ptr<actionlib::SimpleActionServer<controller::SetModeAction>> as_;
+  controller::SetModeFeedback feedback_;
 };
 
 } // namespace cleanup

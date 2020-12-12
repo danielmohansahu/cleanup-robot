@@ -4,9 +4,9 @@
 #include <controller/SetModeAction.h>
 #include <actionlib/client/simple_action_client.h>
 
-std::shared_ptr<ros::NodeHandle> nh;
 std::unique_ptr<cleanup::Controller> ctrl;
-actionlib::SimpleActionClient<controller::SetModeAction> client_;
+std::shared_ptr<ros::NodeHandle> nh;
+actionlib::SimpleActionClient<controller::SetModeAction> client_("controller/set_mode",true);
 
 TEST(Controller_TestServicesExist, should_pass) {
    //EXPECT_TRUE(ros::service::exists("navigation/goto",true));
@@ -20,13 +20,11 @@ TEST(Controller_TestActionClient_BadGoal, should_fail) {
    //ctrl.executeGoal(controller::SetModeGoal::ConstPtr& goal);
 
    // construct goal object
-   cleanup::controller::SetModeGoal goal;
+   controller::SetModeGoal goal;
    goal.mode = "fail";
    client_.sendGoal(goal);
-   //actionlib::SimpleActionClient<cleanup::Controller> ac("controller/set_mode",true);
-   //controller::SetModeGoal test_goal;
-   //test_goal.mode = "errormode";
-   //ac.sendGoal(test_goal);
+
+
 }
 
 TEST(Controller_TestExecute_CleanGoal, should_pass) {
