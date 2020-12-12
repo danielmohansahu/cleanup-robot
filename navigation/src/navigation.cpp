@@ -41,8 +41,6 @@ Navigation::Navigation() : stop_ {false} {
     "explore",
     TriggerCallback([this] (const auto& req, auto& res) {
 
-      std::cout << "EXPLORE" << std::endl;
-
       // first stop any execution
       this->stop();
 

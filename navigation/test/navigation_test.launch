@@ -16,13 +16,13 @@
   <!-- launch robot state publisher -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" required="true" />
 
-  <!-- publish dummy (bagged) scan -->
-  <node name="mock_scan" type="play" pkg="rosbag" args="$(find navigation)/test/navigation_test.bag -l --clock" />
-
   <!-- publish dummy odometry -->
   <node name="mock_odometry" type="static_transform_publisher" pkg="tf" args="0 0 0 0 0 0 /odom /base_footprint 100" />
 
   <!-- launch tests -->
   <test pkg="navigation" test-name="navigation_test_function" type="navigation_test" />
+
+  <!-- publish dummy (bagged) scan -->
+  <node name="mock_scan" type="play" pkg="rosbag" args="$(find navigation)/test/navigation_test.bag -l --clock" />
 
 </launch>
