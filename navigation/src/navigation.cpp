@@ -40,11 +40,11 @@ Navigation::Navigation() : stop_ {false} {
   explore_service_ = pnh.advertiseService(
     "explore",
     TriggerCallback([this] (const auto& req, auto& res) {
-
+      this->currNavMode_ = 1;
       // first stop any execution
       this->stop();
 
-      this->currNavMode_ = 1;
+
       // then spin off exploration thread
       thread_handle_ = std::async(
         std::launch::async,
@@ -66,6 +66,7 @@ Navigation::Navigation() : stop_ {false} {
         return false;
       }
 
+      this->currNavMode_ = 2;
       // first stop any execution
       this->stop();
 
@@ -73,7 +74,6 @@ Navigation::Navigation() : stop_ {false} {
       move_base_msgs::MoveBaseGoal goal;
       goal.target_pose = req.pose;
 
-      this->currNavMode_ = 2;
       goto_client_->sendGoal(goal);
 
 

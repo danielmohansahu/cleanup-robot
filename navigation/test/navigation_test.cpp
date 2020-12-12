@@ -33,10 +33,10 @@ TEST(NavigationTest_stopServiceStarts, should_pass) {
   ros::ServiceClient client = nh->serviceClient<std_srvs::Trigger>("/navigation/stop");
 
   // wait for service to become available
-  ASSERT_TRUE(client.waitForExistence(ros::Duration(5.0)));
+  EXPECT_TRUE(client.waitForExistence(ros::Duration(5.0)));
 
   std_srvs::Trigger srv;
-  ASSERT_TRUE(client.call(srv));
+  EXPECT_TRUE(client.call(srv));
   //ros::Duration(1.0).sleep();
   EXPECT_EQ(nav->getCurrNavMode(),0);
 }
@@ -45,10 +45,10 @@ TEST(NavigationTest_exploreServiceStarts, should_pass) {
   ros::ServiceClient client = nh->serviceClient<std_srvs::Trigger>("/navigation/explore");
 
   // wait for service to become available
-  ASSERT_TRUE(client.waitForExistence(ros::Duration(5.0)));
+  EXPECT_TRUE(client.waitForExistence(ros::Duration(5.0)));
 
   std_srvs::Trigger srv;
-  ASSERT_TRUE(client.call(srv));
+  EXPECT_TRUE(client.call(srv));
   //ros::Duration(1.0).sleep();
   EXPECT_EQ(nav->getCurrNavMode(),1);
 }
@@ -57,18 +57,22 @@ TEST(NavigationTest_gotoServiceStarts, should_pass) {
 
   ros::ServiceClient client = nh->serviceClient<navigation::SetPoseStamped>("/navigation/goto");
   // wait for service to become available
-  ASSERT_TRUE(client.waitForExistence(ros::Duration(5.0)));
+  EXPECT_TRUE(client.waitForExistence(ros::Duration(5.0)));
 
   navigation::SetPoseStamped srv;
-  // send goal
-  auto pose = nav->getRobotPose();
-  move_base_msgs::MoveBaseGoal goal;
-  goal.target_pose.pose = pose;
-  goal.target_pose.header.frame_id = "map";
-  goal.target_pose.header.stamp = ros::Time::now();
-  client->sendGoal(goal);
 
-  ASSERT_TRUE(client.call(srv));
+  // send goal
+  geometry_msgs::Pose pose = nav->getRobotPose();
+
+  //move_base_msgs::MoveBaseGoal goal;
+  //goal.target_pose.pose = pose;
+  //goal.target_pose.header.frame_id = "map";
+  //goal.target_pose.header.stamp = ros::Time::now();
+
+  //srv.request.pose = goal;
+
+  EXPECT_TRUE(client.call(srv));
+  client.call(srv);
   //ros::Duration(1.0).sleep();
   EXPECT_EQ(nav->getCurrNavMode(),2);
 }
