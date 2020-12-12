@@ -9,6 +9,7 @@
 #include <cmath>
 
 #include <navigation/SetPoseStamped.h>
+#include <move_base_msgs/MoveBaseAction.h>
 
 std::unique_ptr<cleanup::Navigation> nav;
 std::shared_ptr<ros::NodeHandle> nh;
@@ -53,12 +54,20 @@ TEST(NavigationTest_exploreServiceStarts, should_pass) {
 }
 
 TEST(NavigationTest_gotoServiceStarts, should_pass) {
-  ros::ServiceClient client = nh->serviceClient<navigation::SetPoseStamped>("/navigation/goto");
 
+  ros::ServiceClient client = nh->serviceClient<navigation::SetPoseStamped>("/navigation/goto");
   // wait for service to become available
   ASSERT_TRUE(client.waitForExistence(ros::Duration(5.0)));
 
   navigation::SetPoseStamped srv;
+  // send goal
+  auto pose = nav->getRobotPose();
+  move_base_msgs::MoveBaseGoal goal;
+  goal.target_pose.pose = pose;
+  goal.target_pose.header.frame_id = "map";
+  goal.target_pose.header.stamp = ros::Time::now();
+  client->sendGoal(goal);
+
   ASSERT_TRUE(client.call(srv));
   //ros::Duration(1.0).sleep();
   EXPECT_EQ(nav->getCurrNavMode(),2);
