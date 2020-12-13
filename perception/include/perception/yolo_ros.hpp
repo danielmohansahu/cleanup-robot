@@ -8,6 +8,11 @@
 
 namespace cleanup {
 
+typedef struct {
+  float x, y, w, h;
+  int Class;
+} PredBox;
+
 class Yolo {
  public:
 
@@ -23,6 +28,10 @@ class Yolo {
           std::vector<int> indices);
 
   int getObjectCount();
+
+  int getnumClasses();
+
+  std::vector<std::string> getclassLabels();
 
 private:
   double confidenceThreshold;

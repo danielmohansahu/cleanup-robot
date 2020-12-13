@@ -7,7 +7,7 @@
 
 namespace cleanup {
 
-Yolo::Yolo() {
+cleanup::Yolo::Yolo() {
 
 	/* YOLO initialization */
 	confidenceThreshold = 0.5;  // Confidence threshold
@@ -27,12 +27,12 @@ Yolo::Yolo() {
 		classLabels.push_back(line);
 	}
 	// Load the network
-	net = cv::dnn::readNetFromDarknet(modelConfig, modelWeight);
+	net = cv::dnn::readNetFromDarknet(configPath, weightsPath);
 	net.setPreferableBackend(cv::dnn::DNN_BACKEND_OPENCV);
 	net.setPreferableTarget(cv::dnn::DNN_TARGET_CPU);
 }
 
-std::vector<cv::String> Yolo::getOutputsNames(const cv::dnn::Net& net) {
+std::vector<cv::String> cleanup::Yolo::getOutputsNames(const cv::dnn::Net& net) {
 	static std::vector<cv::String> labels;
 	if (labels.empty()) {
 		std::vector<int> out_layers = net.getUnconnectedOutLayers();
@@ -46,12 +46,12 @@ std::vector<cv::String> Yolo::getOutputsNames(const cv::dnn::Net& net) {
 	return labels;
 }
 
-std::vector<cv::Rect> Yolo::predict(cv::Mat frame) {
+std::vector<cv::Rect> cleanup::Yolo::predict(cv::Mat frame) {
 	if (frame.empty()) {
 		std::cout << "Error reading frame!!!" << std::endl;
 	}
 	cv::Mat blob;
-	cv::dnn::blobFromImage(frame, blob, 1/255.0, cv::Size(inputWidth, inputHeight),\
+	cv::dnn::blobFromImage(frame, blob, 1/255.0, cv::Size(frameWidth, frameHeight),\
 							cv::Scalar(0,0,0), true, false);
 	net.setInput(blob);
 	std::vector<cv::Mat> preds;
@@ -63,7 +63,7 @@ std::vector<cv::Rect> Yolo::predict(cv::Mat frame) {
 	return prediction_boxes;
 }
 
-void Yolo::postProcess(cv::Mat& frame, const std::vector<cv::Mat>& preds, \
+void cleanup::Yolo::postProcess(cv::Mat& frame, const std::vector<cv::Mat>& preds, \
 	                std::vector<int> class_ids, std::vector<float> confidences,\
 	                std::vector<int> indices) {
 	for (size_t i = 0; i < preds.size(); ++i) {
@@ -92,24 +92,24 @@ void Yolo::postProcess(cv::Mat& frame, const std::vector<cv::Mat>& preds, \
 	}
 	cv::dnn::NMSBoxes(prediction_boxes, confidences, confidenceThreshold, nmsThreshold,\
 		             indices);
-	for (size_t i = 0; i < indices.size(); ++i) {
-		int idx = indices[i];
-		cv::Rect box = prediction_boxes[idx];
+	// for (size_t i = 0; i < indices.size(); ++i) {
+	// 	int idx = indices[i];
+	// 	std::vector<cv::Rect> box = prediction_boxes[idx];
 		// std::cout << "Box " << idx << ":" <<  box.x << " " << box.y << " " << box.x \
 		             + box.width << " " << box.y + box.height << std::endl;
 	
-	}
+	// }
 }
 
-int getObjectCount() {
+int cleanup::Yolo::getObjectCount() {
 	return objectCount;
 }
 
-int getnumClasses() {
-	return int (classLabels.size/classLabels[0].size)
+int cleanup::Yolo::getnumClasses() {
+	return int (classLabels.size()/classLabels[0].size());
 }
 
-std::vector<std::string> getclassLabels() {
+std::vector<std::string> cleanup::Yolo::getclassLabels() {
 	return classLabels;
 }
 

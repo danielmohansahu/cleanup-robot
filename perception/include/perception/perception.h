@@ -51,6 +51,7 @@ class Perception {
   ros::NodeHandle nh;
   image_transport::ImageTransport it_;
   image_transport::Subscriber image_sub;
+  image_transport::Subscriber depth_image_sub;
   ros::Publisher objectFound;
   ros::Publisher bboxes;
 
@@ -65,8 +66,11 @@ class Perception {
   darknet_ros::bbox_array bboxResults;
   double frameWidth;
   double frameHeight;
+  std::vector<std::vector<double>> pose;
+  int u,v;
 
   cv::Mat image_to_detect;
+  int depth;
 
   std::vector<std::pair<int, geometry_msgs::PoseStamped>> objects;
 };

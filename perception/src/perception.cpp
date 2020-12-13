@@ -1,4 +1,5 @@
 #include <perception/perception.h>
+#include <perception/matrixf.hpp>
 #include <ros/ros.h>
 #include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
@@ -27,6 +28,7 @@ Perception::Perception() : it_(nh) {
 	}
 
 	image_sub = it_.subscribe("/camera/rgb/image_raw", 1,  &Perception::imageCallback, this);
+	dpeth_image_sub = it_.subscribe("/camera/depth/image_raw", 1,  &Perception::depthCallback, this);
 	objectFound = nh.advertise<std_msgs::Int8>("found_object", 1);
     bboxes = nh.advertise<darknet_ros::bbox_array>("YOLO_bboxes", 1);
 
@@ -39,6 +41,53 @@ geometry_msgs::PoseStamped Perception::getObjectPose() {
 
 Perception::~Perception() {
 	cv::destroyWindow(OPENCV_WINDOW);
+}
+
+void Perception::getpose() {
+	std::vector<std::vector<double>> intrinsic {
+		{463.889, 0.0, 320.0},
+		{0.0, 463.889, 240.0},
+		{0.0, 0.0, 1.0}
+	};
+	std::vector<std::vector<double>> intrinsic_i;
+
+	intrinsic_i = getInverse(intrinsic);
+	
+	std::vector<std::vector<double>> im_cood {
+		{u}, {v}, {1}
+	};
+	std::vector<std::vector<double>> translation {
+		{1}, {1}, {1}
+	};
+	std::vector<std::vector<double>> rotation {
+		{1,0,0}, {0,1,0}, {0,0,1}
+	};
+
+	pose = req_multipy(intrinsic_i, im_cood, translation, rotation);
+}
+
+void Perception::depthCallback(const sensor_msgs::ImageConstPtr& depth_msg) {
+	cv_bridge::CvImagePtr cv_depth_ptr;
+
+	if ("16UC1" == depth_msg->encoding) {
+		try {
+		    cv_depth_ptr = cv_bridge::toCvCopy(depth_msg, sensor_msgs::image_encodings::TYPE_16UC1);
+		}
+		catch (cv_bridge::Exception& e) {
+		    ROS_ERROR("cv_bridge exception: %s", e.what());
+		    return false;
+		}
+    }
+	else if ("32FC1" == depth_msg->encoding) {
+	    try {
+	        cv_depth_ptr = cv_bridge::toCvCopy(depth_msg, sensor_msgs::image_encodings::TYPE_32FC1);
+	    }
+	    catch (cv_bridge::Exception& e) {
+	        ROS_ERROR("cv_bridge exception: %s", e.what());
+	        return false;
+	    }
+	}
+    depth = cv_ptr->image.at<short int>(cv::Point(u,v));
 }
 
 void Perception::imageCallback(const sensor_msgs::ImageConstPtr& msg) {
@@ -56,10 +105,11 @@ void Perception::imageCallback(const sensor_msgs::ImageConstPtr& msg) {
     	image_to_detect = camImage->image.clone();
     	runVisionAlgo(image_to_detect);
     }
+ 
     return;
 }
 
-void Perception::drawBBoxes(cv::Mat &input_frame, std::vector<cv::Rect> &classBboxes,\
+void Perception::drawBBoxes(cv::Mat &input_frame, PredBox &classBboxes,\
         int &classObjCount, cv::Scalar &bboxColor, const std::string &classLabels) {
 	darknet_ros::bbox bbox_result;
 
@@ -68,6 +118,9 @@ void Perception::drawBBoxes(cv::Mat &input_frame, std::vector<cv::Rect> &classBb
     	int ymin = (classBboxes[i].y - classBboxes[i].height/2)*frameHeight;
     	int xmax = (classBboxes[i].x + classBboxes[i].width/2)*frameWidth;
     	int ymax = (classBboxes[i].y + classBboxes[i].height/2)*frameHeight;
+
+    	u = (xmin + xmax)/2;
+    	v = (ymin + ymax)/2;
 
     	bbox_result.Class = classLabels;
     	bbox_result.xmin = xmin;
@@ -82,16 +135,16 @@ void Perception::drawBBoxes(cv::Mat &input_frame, std::vector<cv::Rect> &classBb
 	    cv::rectangle(input_frame, topLeftCorner, botRightCorner, bboxColor, 2);
         cv::putText(input_frame, classLabels, cv::Point(xmin, ymax+15), cv::FONT_HERSHEY_PLAIN,\
         	1.0, bboxColor, 2.0);
-      }
+    }
 }
 
 void Perception::runVisionAlgo(cv::Mat &frame) {
 	cv::Mat inputFrame = frame.clone();
-	std::vector< std::vector<cv::Rect> > classBboxes(numClasses);
+	std::vector< std::vector<PredBox> > classBboxes(numClasses);
     std::vector<int> classObjCount(numClasses, 0);
 
 	// Run Yolo and get prediction boxes
-    auto pred_boxes = od.predict(inputFrame);
+    cv::Rect pred_boxes = od.predict(inputFrame);
 
     int num = od.getObjectCount();
 
@@ -102,9 +155,10 @@ void Perception::runVisionAlgo(cv::Mat &frame) {
 		// split bounding boxes by class
 		for (int i = 0; i < num; i++) {
 			for (int j = 0; j < numClasses; j++) {
-				//
-				classBboxes[j].push_back(_boxes[i]);
+				// if (pred_boxes[i].Class == j) {
+				classBboxes[j].push_back(pred_boxes[i]);
 				classObjCount[j]++;
+				// }
             }
         }
 
