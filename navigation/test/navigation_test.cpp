@@ -77,6 +77,10 @@ TEST(NavigationTest_gotoServiceStarts, should_pass) {
   EXPECT_EQ(nav->getCurrNavMode(),2);
 }
 
+TEST(NavigationTest_exploreLoop, should_pass) {
+  EXPECT_TRUE(false);
+}
+
 int main(int argc, char **argv){
   ros::init(argc,argv, "navigation_test");
   nh.reset(new ros::NodeHandle);
