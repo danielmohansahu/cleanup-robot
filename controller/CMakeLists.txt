@@ -96,6 +96,7 @@ if(CATKIN_ENABLE_TESTING)
   controller_test
   test/controller_test.launch
   test/controller_test.cpp
+  src/controller.cpp
   )
 
   target_link_libraries(

@@ -8,3 +8,4 @@ uint32[] objects
 ---
 # feedback
 uint32[] objects
+string current_mode

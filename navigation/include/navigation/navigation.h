@@ -1,6 +1,6 @@
 /* @file navigation.h
  * @brief Header of the Navigation class for basic navigation.
- * 
+ *
  * @copyright [2020] <Daniel Sahu, Spencer Elyard, Santosh Kesani>
  */
 
@@ -32,10 +32,8 @@ class Navigation {
   /* @brief Destructor */
   ~Navigation();
 
- private:
-
   /* @brief Explore the given area, avoiding obstacles.
-   * 
+   *
    * The basic implementation is just to move in straight lines
    * until an obstacle is encountered, then rotate until the
    * way ahead is clear.
@@ -50,6 +48,12 @@ class Navigation {
   /* @brief Get current robot position. */
   geometry_msgs::Pose getRobotPose();
 
+  /* @brief get stop_ value */
+  int getCurrNavMode();
+
+  private:
+
+  int currNavMode_ {0};
 
   // action client to move_base navigation manager
   std::unique_ptr<actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>> goto_client_;

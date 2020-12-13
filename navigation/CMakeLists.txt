@@ -78,6 +78,7 @@ if(CATKIN_ENABLE_TESTING)
   navigation_test
   test/navigation_test.launch
   test/navigation_test.cpp
+  src/navigation.cpp
   )
   target_link_libraries(
   navigation_test

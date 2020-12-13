@@ -1,6 +1,6 @@
 /* @file navigation.cpp
  * @brief Implementation of the Navigation class for basic navigation.
- * 
+ *
  * @copyright [2020] <Daniel Sahu, Spencer Elyard, Santosh Kesani>
  */
 
@@ -19,7 +19,7 @@ Navigation::Navigation() : stop_ {false} {
 
   // Construct actionlib client (to send navigation goals)
   goto_client_ = std::make_unique<actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>>(server_name_, true);
-  while (!goto_client_->waitForServer(ros::Duration(5.0)))
+  while (ros::ok() && !goto_client_->waitForServer(ros::Duration(5.0)))
     ROS_WARN_STREAM("Waiting for action server " << server_name_);
 
   // a handy type for constructing services
@@ -30,46 +30,54 @@ Navigation::Navigation() : stop_ {false} {
   stop_service_ = pnh.advertiseService(
     "stop",
     TriggerCallback([this] (const auto& req, auto& res) {
+      this->currNavMode_ = 0;
       this->stop();
       res.success = true;
-      return true; 
+      return true;
     }));
 
   // construct explore service
   explore_service_ = pnh.advertiseService(
     "explore",
     TriggerCallback([this] (const auto& req, auto& res) {
+      this->currNavMode_ = 1;
       // first stop any execution
       this->stop();
+
 
       // then spin off exploration thread
       thread_handle_ = std::async(
         std::launch::async,
         [this]()->void {this->exploreLoop();});
 
+
       res.success = true;
-      return true; 
+      return true;
     }));
 
   // construct goto service
   goto_service_ = pnh.advertiseService(
     "goto",
     SetPoseCallback([this] (const auto& req, auto& res) {
+
       // sanity check that this is in the right frame
       if (req.pose.header.frame_id != map_frame_) {
         ROS_ERROR("Given a goTo pose in the wrong frame.");
         return false;
       }
 
+      this->currNavMode_ = 2;
       // first stop any execution
       this->stop();
 
       // then send this as a goal to the action server
       move_base_msgs::MoveBaseGoal goal;
       goal.target_pose = req.pose;
+
       goto_client_->sendGoal(goal);
 
-      return true; 
+
+      return true;
     }));
 }
 
@@ -94,10 +102,10 @@ void Navigation::exploreLoop() {
   // basic explore behavior is to send random goals a fixed distance away in a random direction
 
   // initialize loop variables
-  
+
   // execute until stopped or shutdown
   while (!stop_ && ros::ok()) {
-    // sleep at the top of the loop; this also ensures we 
+    // sleep at the top of the loop; this also ensures we
     //  don't interrupt running goals.
     if (goto_client_->getState().isDone()
         || goto_client_->waitForResult(ros::Duration(0.1))) {
@@ -119,6 +127,10 @@ void Navigation::exploreLoop() {
       goto_client_->sendGoal(goal);
     }
   }
+}
+
+int Navigation::getCurrNavMode() {
+  return this->currNavMode_;
 }
 
 geometry_msgs::Pose Navigation::getRobotPose() {

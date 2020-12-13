@@ -1,16 +1,17 @@
 /* @file controller.cpp
  * @brief Implementation of the Controller class for overall system management.
- * 
+ *
  * @copyright [2020] <Daniel Sahu, Spencer Elyard, Santosh Kesani>
  */
 
 #include <controller/controller.h>
+#include <actionlib/server/simple_action_server.h>
 
 namespace cleanup {
 
 Controller::Controller() {
   ros::NodeHandle pnh;
-  
+
   // construct service clients and wait for the servers to come up
   goto_client_ = pnh.serviceClient<navigation::SetPoseStamped>("navigation/goto");
   while (!goto_client_.waitForExistence(ros::Duration(5.0)))
@@ -52,10 +53,9 @@ void Controller::executeGoal(const controller::SetModeGoal::ConstPtr& goal) {
     as_->setAborted();
     return;
   }
-  
+
   // initialize loop variables
   ros::Rate r(10);
-  controller::SetModeFeedback feedback;
 
   // tell navigation to begin exploring
   std_srvs::Trigger srv;
@@ -63,6 +63,10 @@ void Controller::executeGoal(const controller::SetModeGoal::ConstPtr& goal) {
 
   // loop until we're canceled, preempted, or ros shuts down
   while (ros::ok() && as_->isActive()) {
+
+    // broadcast goal mode
+    //feedback_.current_mode = goal->mode;
+
     // check if we're preempted; if so, exit
     if (as_->isPreemptRequested()) {
       as_->setPreempted();
@@ -76,9 +80,8 @@ void Controller::executeGoal(const controller::SetModeGoal::ConstPtr& goal) {
     if (goal->mode == "clean") {
       // @TODO implement interface w / moveit
     }
-
     // publish feedback
-    as_->publishFeedback(feedback);
+    as_->publishFeedback(feedback_);
   }
 
   // perform cleanup / shutdown

@@ -1,6 +1,6 @@
 /* @file controller.h
  * @brief Header of the Controller class for overall system management.
- * 
+ *
  * @copyright [2020] <Daniel Sahu, Spencer Elyard, Santosh Kesani>
  */
 
@@ -17,10 +17,10 @@ class Controller {
  public:
   Controller();
 
- private: 
   /* @brief Callback for action server to set a cleanup mode. */
   void executeGoal(const controller::SetModeGoal::ConstPtr& goal);
 
+  private:
   // navigation service clients
   ros::ServiceClient goto_client_;
   ros::ServiceClient stop_client_;
@@ -32,6 +32,7 @@ class Controller {
 
   // action server handle
   std::unique_ptr<actionlib::SimpleActionServer<controller::SetModeAction>> as_;
+  controller::SetModeFeedback feedback_;
 };
 
 } // namespace cleanup
