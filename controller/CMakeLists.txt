@@ -97,7 +97,6 @@ if(CATKIN_ENABLE_TESTING)
   test/controller_test.launch
   test/controller_test.cpp
   src/controller.cpp
-  action/SetMode.action
   )
 
   target_link_libraries(
