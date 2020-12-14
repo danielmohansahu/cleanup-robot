@@ -12,20 +12,23 @@
 #include <controller/SetModeAction.h>
 #include <actionlib/client/simple_action_client.h>
 
+#include <move_base_msgs/MoveBaseAction.h>
+#include <geometry_msgs/PoseStamped.h>
+
 #include <thread>
 
 std::unique_ptr<cleanup::Controller> ctrl;
 std::shared_ptr<ros::NodeHandle> nh;
-// actionlib::SimpleActionClient<controller::SetModeAction> client_("controller/set_mode",true);
+actionlib::SimpleActionClient<controller::SetModeAction> client_("controller/set_mode",true);
 
 TEST(Controller_TestServicesExist, should_pass) {
 
-   // EXPECT_TRUE(ros::service::exists("navigation/goto",true));
-   // EXPECT_TRUE(ros::service::exists("navigation/stop",true));
-   // EXPECT_TRUE(ros::service::exists("navigation/explore",true));
+   EXPECT_TRUE(ros::service::exists("navigation/goto",true));
+   EXPECT_TRUE(ros::service::exists("navigation/stop",true));
+   EXPECT_TRUE(ros::service::exists("navigation/explore",true));
 }
 
-TEST(Controller_TestActionClient_BadGoal, should_fail) {
+TEST(Controller_TestActionClient_SetGoal, should_pass) {
    // send command to "blank"
    // TODO: make "goal" message
    // ctrl.executeGoal(controller::SetModeGoal::ConstPtr& goal);
@@ -34,6 +37,11 @@ TEST(Controller_TestActionClient_BadGoal, should_fail) {
    // controller::SetModeGoal goal;
    // goal.mode = "fail";
    // client_.sendGoal(goal);
+
+   move_base_msgs::MoveBaseGoal goal;
+   goal.target_pose.header.frame_id = "map";
+   goal.target_pose.header.stamp = ros::Time::now();
+   //goto_client_->sendGoal(goal);
 
 }
 
@@ -53,6 +61,7 @@ int main(int argc, char **argv) {
   ros::init(argc,argv, "controller_test");
   nh.reset(new ros::NodeHandle);
   ctrl.reset(new cleanup::Controller);
+
   testing::InitGoogleTest(&argc, argv);
 
   // spin of thread to process callbacks
