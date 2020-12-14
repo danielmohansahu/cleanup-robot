@@ -9,6 +9,7 @@
 
   <depend>roscpp</depend>
   <depend>libopencv-dev</depend>
+  <depend>darknet_ros_msgs</depend>
 
   <buildtool_depend>catkin</buildtool_depend>
 

@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 14)
 
 set(BUILD_DEPS
   roscpp
+  darknet_ros_msgs
 )
 
 find_package(
