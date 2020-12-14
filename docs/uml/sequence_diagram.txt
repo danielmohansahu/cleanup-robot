@@ -20,7 +20,7 @@ Sim -> Map : "Scan Data\n</scan>"
 Sim -> Motion : "Poses\n</tf>"
 
 activate User
-User -> Controller : explore() 
+User -> Controller : "rosservice /navigation/explore"
 
 activate Controller
 activate Nav

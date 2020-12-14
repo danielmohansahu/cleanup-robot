@@ -3,18 +3,17 @@
 package ProjectMaryPoppins {
 
   class Controller {
-    + void clean()
-    + void explore()
-    + void stop()
-    - void exploreThread()
-    - void cleanThread()
-    - Perception perception_
-    - Navigation navigation_
-    - Motion motion_
-    - vector<int> objects_
+    + void executeGoal()
+    - ros::ServiceClient goto_client_
+    - ros::ServiceClient stop_client_
+    - ros::ServiceClient explore_client_
+    - ros::ServiceClient detect_client_
+    - ros::ServiceClient get_pose_client_
+    - std::unique_ptr<actionlib::SimpleActionServer<controller::SetModeAction>> as_
+    - controller::SetModeFeedback feedback_
   }
 
-  class Perception {
+  class "Perception (MUST UPDATE)" {
     + vector<int> detectObjects()
     + Pose getObjectPose(int)
     - void imageCallback(Image)
@@ -22,18 +21,24 @@ package ProjectMaryPoppins {
     - vector<pair<id,Pose>> objects_
   }
 
-  class Mapping {
-    - void scanCallback(LaserScan)
-  }
-
   class Navigation {
-    + void goTo(Pose)
-    + void explore()
-    - mapCallback(OccupancyGrid)
-    - planner_
+    + void exploreLoop()
+    - int currNavMode_
+    - std::unique_ptr<actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>> goto_client_
+    - std::unique_ptr<tf2_ros::TransformListener> tfl_
+    - std::unique_ptr<tf2_ros::Buffer> tfb_
+    - ros::ServiceServer stop_service
+    - ros::ServiceServer explore_service_
+    - ros::ServiceServer goto_service_
+    - std::atomic<bool> stop_
+    - std::future<void> thread_handle_
+    - std::string base_frame_
+    - std::string map_frame_
+    - std::string server_name_
+    - double explore_step_
   }
     
-  class Motion {
+  class "Motion (Tentative)" {
     + bool pickUpObject(Pose)
     + void dropObject()
     - void getArmPos(current_arm_pos&)
@@ -44,10 +49,6 @@ package ProjectMaryPoppins {
   }
 
 }
-
-Controller <-- Perception
-Controller <-- Motion
-Controller <-- Navigation
 
 @enduml
 
