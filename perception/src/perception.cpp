@@ -1,5 +1,5 @@
 #include <perception/perception.h>
-// #include <darknet_ros/YoloObjectDetector.hpp>
+#include <darknet_ros/YoloObjectDetector.hpp>
 #include <darknet_ros_msgs/BoundingBoxes.h>
 #include <darknet_ros_msgs/BoundingBox.h>
 #include <perception/matrixf.hpp>
@@ -21,7 +21,7 @@ namespace cleanup {
 Perception::Perception():it_(nh) {
 	depth_image_sub_ = it_.subscribe("/camera/depth/image_raw", 1,  &Perception::depthCallback, this);
 	boudingBoxesSubcriber_ = nh.subscribe("/darknet_ros/bounding_boxes", 1, &Perception::boundingBoxesCallback, this);
-	objectCountSubcriber_ = nh.subscribe("publishers/object_detector/topic", 1, &Perception::objectCountCallback, this);
+	//objectCountSubcriber_ = nh.subscribe("publishers/object_detector/topic", 1, &Perception::objectCountCallback, this);
 	objectLocation = nh.advertise<perception::ObjectLocations>("objectLocationData",1);
 }
 
@@ -65,12 +65,14 @@ void Perception::objectCountCallback(const std_msgs::Int8& msg) {
 }
 
 void Perception::boundingBoxesCallback(const darknet_ros_msgs::BoundingBoxes& bboxes) {
-	for(int i=0;i<sizeof(bboxes.bounding_boxes);i++) {
-		bbox.xmin = bboxes.bounding_boxes[i].xmin;
+	int numBoxes = sizeof(bboxes.bounding_boxes);
+  ROS_INFO_STREAM("# Boxes: "<< numBoxes);
+	for(int i=0;i<numBoxes;i++) {
+		    bbox.xmin = bboxes.bounding_boxes[i].xmin;
         bbox.xmax = bboxes.bounding_boxes[i].xmax;
         bbox.ymin = bboxes.bounding_boxes[i].ymin;
         bbox.ymax = bboxes.bounding_boxes[i].ymax;
-
+			  ROS_INFO_STREAM("Found bounding box");
         if(bbox.xmin!=0 && bbox.xmax!=0) {
         	int x_center = (bbox.xmax+bbox.xmin)/2;
         	int y_center=(bbox.ymax+bbox.ymin)/2;
@@ -81,8 +83,10 @@ void Perception::boundingBoxesCallback(const darknet_ros_msgs::BoundingBoxes& bb
         	objL.p = getpose(u, v);
         	objL.d = depth;
 
-        	location_array.push_back(objL);
+        	// location_array.push_back(objL);
+					ROS_INFO_STREAM("Added bounding box");
         }
+
 	}
 	// @TODO Santosh need to convert from object_loc to perception/ObjectLocation
 	// objectLocation.publish(location_array);
@@ -94,6 +98,7 @@ void Perception::depthCallback(const sensor_msgs::ImageConstPtr& depth_msg) {
 	if ("16UC1" == depth_msg->encoding) {
 		try {
 		    cv_depth_ptr = cv_bridge::toCvCopy(depth_msg, sensor_msgs::image_encodings::TYPE_16UC1);
+				ROS_INFO_STREAM("cv_bridge::toCVCopy 16UC1");
 		}
 		catch (cv_bridge::Exception& e) {
 		    ROS_ERROR("cv_bridge exception: %s", e.what());
