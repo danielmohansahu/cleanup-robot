@@ -22,7 +22,7 @@ Perception::Perception():it_(nh) {
 	depth_image_sub_ = it_.subscribe("/camera/depth/image_raw", 1,  &Perception::depthCallback, this);
 	boudingBoxesSubcriber_ = nh.subscribe("publishers/bounding_boxes/topic", 1, &Perception::boundingBoxesCallback, this);
 	objectCountSubcriber_ = nh.subscribe("publishers/object_detector/topic", 1, &Perception::objectCountCallback, this);
-	objectLocation = nh.advertise<std::vector<object_loc>>("objectLocationData",1);
+	objectLocation = nh.advertise<perception::ObjectLocations>("objectLocationData",1);
 }
 
 // std::vector<int> Perception::detectObjects() {
@@ -84,7 +84,8 @@ void Perception::boundingBoxesCallback(const darknet_ros_msgs::BoundingBoxes& bb
         	location_array.push_back(objL);
         }
 	}
-	objectLocation.publish(location_array);
+	// @TODO Santosh need to convert from object_loc to perception/ObjectLocation
+	// objectLocation.publish(location_array);
 }
 
 void Perception::depthCallback(const sensor_msgs::ImageConstPtr& depth_msg) {

@@ -14,6 +14,7 @@
 #include <math.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <perception/matrixf.hpp>
+#include <perception/ObjectLocations.h>
 
 namespace cleanup {
 
