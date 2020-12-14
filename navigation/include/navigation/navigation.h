@@ -7,9 +7,6 @@
 
 #pragma once
 
-#include <atomic>
-#include <future>
-
 #include <ros/ros.h>
 #include <tf2/LinearMath/Transform.h>
 #include <tf2_ros/transform_listener.h>
@@ -21,6 +18,11 @@
 #include <geometry_msgs/PoseStamped.h>
 #include <std_srvs/Trigger.h>
 #include <navigation/SetPoseStamped.h>
+
+#include <atomic>
+#include <future>
+#include <memory>
+#include <string>
 
 /**
 * @brief Namespace for Cleanup Implementation
