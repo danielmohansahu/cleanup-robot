@@ -5,12 +5,16 @@
  * @copyright [2020] <Daniel Sahu, Spencer Elyard, Santosh Kesani>
  */
 
+#pragma once
+
 #include <ros/ros.h>
 #include <actionlib/server/simple_action_server.h>
 
 #include <std_srvs/Trigger.h>
 #include <navigation/SetPoseStamped.h>
 #include <controller/SetModeAction.h>
+
+#include <memory>
 
 /**
 * @brief Namespace for Cleanup Implementation

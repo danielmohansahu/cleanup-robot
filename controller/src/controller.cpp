@@ -1,4 +1,5 @@
-/* @file controller.cpp
+/**
+*  @file controller.cpp
  * @brief Implementation of the Controller class for overall system management.
  *
  * @copyright [2020] <Daniel Sahu, Spencer Elyard, Santosh Kesani>
@@ -65,7 +66,7 @@ void Controller::executeGoal(const controller::SetModeGoal::ConstPtr& goal) {
   while (ros::ok() && as_->isActive()) {
 
     // broadcast goal mode
-    //feedback_.current_mode = goal->mode;
+    // feedback_.current_mode = goal->mode;
 
     // check if we're preempted; if so, exit
     if (as_->isPreemptRequested()) {

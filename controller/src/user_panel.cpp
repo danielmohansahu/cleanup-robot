@@ -1,3 +1,10 @@
+/**
+*  @file user_panel.cpp
+ * @brief Implementation of custom RVIZ user panel for control
+ *
+ * @copyright [2020] <Daniel Sahu, Spencer Elyard, Santosh Kesani>
+ */
+
 /*
  * Copyright (c) 2011, Willow Garage, Inc.
  * All rights reserved.
@@ -27,7 +34,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "user_panel.h"
+
 #include <stdio.h>
+
+#include <geometry_msgs/Twist.h>
+
+// Tell pluginlib about this class.  Every class which should be
+// loadable by pluginlib::ClassLoader must have these two lines
+// compiled in its .cpp file, outside of any namespace scope.
+#include <pluginlib/class_list_macros.h>
+
+
 
 #include <QPainter>
 #include <QLineEdit>
@@ -36,13 +54,9 @@
 #include <QLabel>
 #include <QTimer>
 #include <QPushButton>
+#include <string>
 
-#include <geometry_msgs/Twist.h>
-
-#include "user_panel.h"
-
-namespace cleanup
-{
+namespace cleanup {
 
 // BEGIN_TUTORIAL
 // Here is the implementation of the TeleopPanel class.  TeleopPanel
@@ -56,30 +70,29 @@ namespace cleanup
 // passing the optional *parent* argument on to the superclass
 // constructor, and also zero-ing the velocities we will be
 // publishing.
-UserPanel::UserPanel( QWidget* parent )
-  : rviz::Panel( parent ),
-    client_("controller/set_mode")
-{
+UserPanel::UserPanel(QWidget* parent)
+  : rviz::Panel(parent),
+    client_("controller/set_mode") {
   // add buttons to send specific goals
   QHBoxLayout* button_layout = new QHBoxLayout;
-  button_layout->addWidget( new QLabel( "Behaviors:" ));
+  button_layout->addWidget( new QLabel("Behaviors:"));
 
   // explore behavior
   explore_button_ = new QPushButton("Explore");
-  button_layout->addWidget( explore_button_ );
+  button_layout->addWidget(explore_button_);
 
   // clean behavior
   clean_button_ = new QPushButton("Clean");
-  button_layout->addWidget( clean_button_ );
+  button_layout->addWidget(clean_button_);
 
   // stop behavior
   stop_button_ = new QPushButton("Stop");
-  button_layout->addWidget( stop_button_ );
+  button_layout->addWidget(stop_button_);
 
   // Lay out the topic field above the control widget.
   QVBoxLayout* layout = new QVBoxLayout;
-  layout->addLayout( button_layout );
-  setLayout( layout );
+  layout->addLayout(button_layout);
+  setLayout(layout);
 
   // Next we make signal/slot connections.
   connect(explore_button_, SIGNAL(clicked()), this, SLOT(explore()));
@@ -87,24 +100,20 @@ UserPanel::UserPanel( QWidget* parent )
   connect(stop_button_, SIGNAL(clicked()), this, SLOT(stop()));
 }
 
-void UserPanel::explore()
-{
+void UserPanel::explore() {
   sendGoal("explore");
 }
 
-void UserPanel::clean()
-{
+void UserPanel::clean() {
   sendGoal("clean");
 }
 
-void UserPanel::stop()
-{
+void UserPanel::stop() {
   client_.cancelAllGoals();
 }
 
 // Send a navigation goal.
-void UserPanel::sendGoal(const std::string& mode)
-{
+void UserPanel::sendGoal(const std::string& mode) {
   // construct goal object
   controller::SetModeGoal goal;
   goal.mode = mode;
@@ -113,8 +122,5 @@ void UserPanel::sendGoal(const std::string& mode)
 
 } // end namespace cleanup
 
-// Tell pluginlib about this class.  Every class which should be
-// loadable by pluginlib::ClassLoader must have these two lines
-// compiled in its .cpp file, outside of any namespace scope.
-#include <pluginlib/class_list_macros.h>
+
 PLUGINLIB_EXPORT_CLASS(cleanup::UserPanel, rviz::Panel)
