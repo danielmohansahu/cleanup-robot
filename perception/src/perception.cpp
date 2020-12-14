@@ -1,20 +1,4 @@
 #include <perception/perception.h>
-#include <darknet_ros/YoloObjectDetector.hpp>
-#include <darknet_ros_msgs/BoundingBoxes.h>
-#include <darknet_ros_msgs/BoundingBox.h>
-#include <perception/matrixf.hpp>
-
-#include <ros/ros.h>
-#include <image_transport/image_transport.h>
-#include <cv_bridge/cv_bridge.h>
-#include <sensor_msgs/image_encodings.h>
-#include <sensor_msgs/Image.h>
-#include <geometry_msgs/Point.h>
-#include <vector>
-#include <iostream>
-#include <pthread.h>
-#include <std_msgs/Int8.h>
-#include <math.h>
 
 namespace cleanup {
 

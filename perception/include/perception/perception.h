@@ -1,9 +1,7 @@
 #include <ros/ros.h>
-#include <darknet_ros/YoloObjectDetector.hpp>
 #include <darknet_ros_msgs/BoundingBoxes.h>
-#include <darknet_ros_msgs/BoundingBox.h>
-#include <ros/ros.h>
 #include <image_transport/image_transport.h>
+
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
 #include <sensor_msgs/Image.h>
@@ -51,8 +49,6 @@ class Perception {
   image_transport::ImageTransport it_;
   image_transport::Subscriber depth_image_sub_;
   ros::Subscriber boudingBoxesSubcriber_;
-
-  darknet_ros::YoloObjectDetector yolo;
 
   std::vector<std::pair<int, geometry_msgs::PoseStamped>> objects;
   darknet_ros_msgs::BoundingBox bbox;
