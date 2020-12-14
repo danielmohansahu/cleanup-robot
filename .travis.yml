@@ -10,7 +10,8 @@ before_install:
   - gem install coveralls-lcov
 
 after_success:
-  - coveralls --root .. --build-root . --verbose
+  - lcov --directory . --capture --output-file coverage.info
+  - coveralls-lcov coverage.info  
 
 env:
   global:
