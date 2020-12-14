@@ -1,3 +1,10 @@
+/**
+*  @file user_panel.h
+ * @brief Implementation of custom RVIZ user panel for control
+ *
+ * @copyright [2020] <Daniel Sahu, Spencer Elyard, Santosh Kesani>
+ */
+
 /*
  * Copyright (c) 2011, Willow Garage, Inc.
  * All rights reserved.
@@ -26,8 +33,11 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef USER_PANEL_H
-#define USER_PANEL_H
+
+#pragma once
+
+#ifndef CONTROLLER_SRC_USER_PANEL_H
+#define CONTROLLER_SRC_USER_PANEL_H
 
 #ifndef Q_MOC_RUN
 # include <ros/ros.h>
@@ -38,10 +48,14 @@
 # include <controller/SetModeAction.h>
 #endif
 
+#include <string>
+
 class QPushButton;
 
-namespace cleanup
-{
+/**
+* @brief Namespace for Cleanup Implementation
+*/
+namespace cleanup {
 
 // BEGIN_TUTORIAL
 // Here we declare our new subclass of rviz::Panel.  Every panel which
@@ -51,8 +65,11 @@ namespace cleanup
 // TeleopPanel will show a text-entry field to set the output topic
 // and a 2D control area.  The 2D control area is implemented by the
 // DriveWidget class, and is described there.
-class UserPanel: public rviz::Panel
-{
+
+/**
+* @brief Implementation for a custom user panel in RVIZ
+*/
+class UserPanel: public rviz::Panel {
 // This class uses Qt slots and is a subclass of QObject, so it needs
 // the Q_OBJECT macro.
 Q_OBJECT
@@ -64,11 +81,26 @@ public:
   // a default of 0 lets the default constructor work and also lets
   // someone using the class for something else to pass in a parent
   // widget as they normally would with Qt.
-  UserPanel( QWidget* parent = 0 );
+
+  /**
+  * @brief Constructor
+  */
+  explicit UserPanel(QWidget* parent = 0);
 
 public Q_SLOTS:
+  /**
+  * @brief Call Explore function
+  */
   void explore();
+
+  /**
+  * @brief Call Clean function
+  */
   void clean();
+
+  /**
+  * @brief Call Stop function
+  */
   void stop();
 
 protected:
@@ -87,4 +119,4 @@ protected:
 
 } // end namespace cleanup
 
-#endif // USER_PANEL_H
+#endif // CONTROLLER_SRC_USER_PANEL_H

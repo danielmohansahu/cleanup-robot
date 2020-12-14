@@ -1,4 +1,12 @@
-#include <thread>
+/**
+*  @file navigation_test.cpp
+ * @brief Implementation of the Navigation test
+ *
+ * @copyright [2020] <Daniel Sahu, Spencer Elyard, Santosh Kesani>
+ */
+
+#pragma once
+
 #include <ros/ros.h>
 #include <ros/service_client.h>
 #include <navigation/navigation.h>
@@ -6,10 +14,11 @@
 
 #include <std_srvs/Trigger.h>
 
-#include <cmath>
-
 #include <navigation/SetPoseStamped.h>
 #include <move_base_msgs/MoveBaseAction.h>
+
+#include <cmath>
+#include <thread>
 
 std::unique_ptr<cleanup::Navigation> nav;
 std::shared_ptr<ros::NodeHandle> nh;
@@ -37,7 +46,7 @@ TEST(NavigationTest_stopServiceStarts, should_pass) {
 
   std_srvs::Trigger srv;
   EXPECT_TRUE(client.call(srv));
-  //ros::Duration(1.0).sleep();
+  // ros::Duration(1.0).sleep();
   EXPECT_EQ(nav->getCurrNavMode(),0);
 }
 
@@ -49,7 +58,7 @@ TEST(NavigationTest_exploreServiceStarts, should_pass) {
 
   std_srvs::Trigger srv;
   EXPECT_TRUE(client.call(srv));
-  //ros::Duration(1.0).sleep();
+  // ros::Duration(1.0).sleep();
   EXPECT_EQ(nav->getCurrNavMode(),1);
 }
 
@@ -76,7 +85,7 @@ TEST(NavigationTest_exploreLoop, should_pass) {
   EXPECT_TRUE(true);
 }
 
-int main(int argc, char **argv){
+int main(int argc, char **argv) {
   ros::init(argc,argv, "navigation_test");
   nh.reset(new ros::NodeHandle);
   nav.reset(new cleanup::Navigation);

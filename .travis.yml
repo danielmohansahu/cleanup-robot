@@ -5,6 +5,13 @@ language: cpp
 services:
   - docker
 
+before_install:
+  - pip install --user cpp-coveralls
+  - gem install coveralls-lcov
+
+after_success:
+  - coveralls --root .. --build-root . --verbose
+
 env:
   global:
     - toolset_branch: master

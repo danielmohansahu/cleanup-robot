@@ -1,0 +1,82 @@
+\hypertarget{classcleanup_1_1_user_panel}{}\section{cleanup\+:\+:User\+Panel Class Reference}
+\label{classcleanup_1_1_user_panel}\index{cleanup\+::\+User\+Panel@{cleanup\+::\+User\+Panel}}
+
+
+Implementation for a custom user panel in R\+V\+IZ.  
+
+
+
+
+{\ttfamily \#include $<$user\+\_\+panel.\+h$>$}
+
+
+
+Inheritance diagram for cleanup\+:\+:User\+Panel\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=182pt]{classcleanup_1_1_user_panel__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for cleanup\+:\+:User\+Panel\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=182pt]{classcleanup_1_1_user_panel__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classcleanup_1_1_user_panel_a66a9e5c66aea653517d628c8b9ecc854}\label{classcleanup_1_1_user_panel_a66a9e5c66aea653517d628c8b9ecc854}} 
+void \hyperlink{classcleanup_1_1_user_panel_a66a9e5c66aea653517d628c8b9ecc854}{explore} ()
+\begin{DoxyCompactList}\small\item\em Call Explore function. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classcleanup_1_1_user_panel_aba5df97a2ea3e7b56eb4df3291103053}\label{classcleanup_1_1_user_panel_aba5df97a2ea3e7b56eb4df3291103053}} 
+void \hyperlink{classcleanup_1_1_user_panel_aba5df97a2ea3e7b56eb4df3291103053}{clean} ()
+\begin{DoxyCompactList}\small\item\em Call Clean function. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classcleanup_1_1_user_panel_aebd2aebbe8a8e87ad2d8c7618d286f58}\label{classcleanup_1_1_user_panel_aebd2aebbe8a8e87ad2d8c7618d286f58}} 
+void \hyperlink{classcleanup_1_1_user_panel_aebd2aebbe8a8e87ad2d8c7618d286f58}{stop} ()
+\begin{DoxyCompactList}\small\item\em Call Stop function. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classcleanup_1_1_user_panel_a728e7c90ec9c6e9714c0660615d705fc}\label{classcleanup_1_1_user_panel_a728e7c90ec9c6e9714c0660615d705fc}} 
+\hyperlink{classcleanup_1_1_user_panel_a728e7c90ec9c6e9714c0660615d705fc}{User\+Panel} (Q\+Widget $\ast$parent=0)
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classcleanup_1_1_user_panel_a02f7e7b8a4e28ffb92f1acb79087079e}\label{classcleanup_1_1_user_panel_a02f7e7b8a4e28ffb92f1acb79087079e}} 
+void {\bfseries send\+Goal} (const std\+::string \&mode)
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classcleanup_1_1_user_panel_a718b588057cc72b9edbfc1f9c2f0c084}\label{classcleanup_1_1_user_panel_a718b588057cc72b9edbfc1f9c2f0c084}} 
+Q\+Push\+Button $\ast$ {\bfseries explore\+\_\+button\+\_\+}
+\item 
+\mbox{\Hypertarget{classcleanup_1_1_user_panel_a898a0f77d79438ee266e119303613606}\label{classcleanup_1_1_user_panel_a898a0f77d79438ee266e119303613606}} 
+Q\+Push\+Button $\ast$ {\bfseries clean\+\_\+button\+\_\+}
+\item 
+\mbox{\Hypertarget{classcleanup_1_1_user_panel_a9cb1f405edd75371c1a14a5dcd4fa038}\label{classcleanup_1_1_user_panel_a9cb1f405edd75371c1a14a5dcd4fa038}} 
+Q\+Push\+Button $\ast$ {\bfseries stop\+\_\+button\+\_\+}
+\item 
+\mbox{\Hypertarget{classcleanup_1_1_user_panel_aa4b3efececbc9296c40f180e94dee7c7}\label{classcleanup_1_1_user_panel_aa4b3efececbc9296c40f180e94dee7c7}} 
+ros\+::\+Node\+Handle {\bfseries nh\+\_\+}
+\item 
+\mbox{\Hypertarget{classcleanup_1_1_user_panel_a09cc36d63b054e7dd0a849de9d921be8}\label{classcleanup_1_1_user_panel_a09cc36d63b054e7dd0a849de9d921be8}} 
+actionlib\+::\+Simple\+Action\+Client$<$ controller\+::\+Set\+Mode\+Action $>$ {\bfseries client\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Implementation for a custom user panel in R\+V\+IZ. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+controller/src/\hyperlink{user__panel_8h}{user\+\_\+panel.\+h}\item 
+controller/src/\hyperlink{user__panel_8cpp}{user\+\_\+panel.\+cpp}\end{DoxyCompactItemize}

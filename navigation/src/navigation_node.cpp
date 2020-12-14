@@ -1,6 +1,7 @@
-/* @file navigation_node.cpp
+/**
+*  @file navigation_node.cpp
  * @brief ROS Node instantiation fo Navigation
- * 
+ *
  * @copyright [2020] <Daniel Sahu, Spencer Elyard, Santosh Kesani>
  */
 
@@ -10,14 +11,14 @@
 
 int main(int argc, char** argv) {
   // seed random numbers
-  srand( time( NULL ) );
+  srand(time(NULL));
 
   // start ros node
   ros::init(argc, argv, "navigation_node");
 
   // instantiate Navigation class
   cleanup::Navigation nav;
-  
+
   // spin until shutdown
   ros::spin();
 
