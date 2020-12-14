@@ -20,7 +20,7 @@ namespace cleanup {
 
 Perception::Perception():it_(nh) {
 	depth_image_sub_ = it_.subscribe("/camera/depth/image_raw", 1,  &Perception::depthCallback, this);
-	boudingBoxesSubcriber_ = nh.subscribe("publishers/bounding_boxes/topic", 1, &Perception::boundingBoxesCallback, this);
+	boudingBoxesSubcriber_ = nh.subscribe("/darknet_ros/bounding_boxes", 1, &Perception::boundingBoxesCallback, this);
 	objectCountSubcriber_ = nh.subscribe("publishers/object_detector/topic", 1, &Perception::objectCountCallback, this);
 	objectLocation = nh.advertise<perception::ObjectLocations>("objectLocationData",1);
 }
@@ -44,7 +44,7 @@ std::vector<std::vector<double>> Perception::getpose(const double& u, const doub
 		{0.0, 0.00215, -0.51736},
 		{0.0, 0.0, 1.0}
 	};
-	
+
 	std::vector<std::vector<double>> im_cood {
 		{u}, {v}, {1}
 	};

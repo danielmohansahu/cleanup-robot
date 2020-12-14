@@ -3,7 +3,8 @@
 #include <ros/ros.h>
 #include <geometry_msgs/PoseStamped.h>
 
-//Perception::Perception() p;
+std::unique_ptr<cleanup::Perception> p;
+std::shared_ptr<ros::NodeHandle> nh;
 //cv::Mat test_img;
 
 TEST(PerceptionTest_TestGetOutputsNames, should_pass) {
@@ -38,6 +39,18 @@ TEST(PerceptionTest_TestRunVisionAlgo, should_pass) {
 }
 
 int main(int argc, char **argv){
+
+   ros::init(argc,argv, "perception_)test");
+   nh.reset(new ros::NodeHandle);
+   p.reset(new cleanup::Perception);
    testing::InitGoogleTest(&argc, argv);
-   return RUN_ALL_TESTS();
+
+   // spin of thread to process callbacks
+   auto spin_thread = std::thread([](){ros::spin();});
+
+   auto result = RUN_ALL_TESTS();
+   ros::shutdown();
+   spin_thread.join();
+
+   return result;
 }

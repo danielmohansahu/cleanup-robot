@@ -1,4 +1,8 @@
 <launch>
   <node pkg="perception" name="perception_node_totest"  type="perception_node" />
   <test pkg="perception" test-name="perception_test_function" type="perception_test" />
+
+  <!-- launch darknet -->
+  <include file="$(find perception)/launch/darknet.launch" />
+  
 </launch>
