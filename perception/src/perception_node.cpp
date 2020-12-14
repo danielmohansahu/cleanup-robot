@@ -6,5 +6,7 @@ int main(int argc, char** argv) {
 	ros::init(argc, argv, "perception");
 	cleanup::Perception od;
 
+	ros::spin();
+
 	return 0;
 }
