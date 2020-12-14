@@ -6,6 +6,10 @@ set(CMAKE_CXX_STANDARD 14)
 set(BUILD_DEPS
   roscpp
   darknet_ros_msgs
+  message_generation
+  message_runtime
+  cv_bridge
+  image_transport
 )
 
 find_package(
@@ -16,9 +20,20 @@ find_package(
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
-################################################
-## Declare ROS messages, services and actions ##
-################################################
+########################
+## message generation ##
+########################
+
+add_message_files(
+  FILES
+  ObjectLocation.msg
+  ObjectLocations.msg
+)
+
+generate_messages(
+  DEPENDENCIES
+  geometry_msgs
+)
 
 ###################################
 ## catkin specific configuration ##
