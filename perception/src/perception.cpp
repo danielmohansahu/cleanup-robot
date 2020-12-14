@@ -1,5 +1,5 @@
 #include <perception/perception.h>
-#include <darknet_ros/YoloObjectDetector.hpp>
+// #include <darknet_ros/YoloObjectDetector.hpp>
 #include <darknet_ros_msgs/BoundingBoxes.h>
 #include <darknet_ros_msgs/BoundingBox.h>
 #include <perception/matrixf.hpp>
@@ -33,7 +33,7 @@ Perception::Perception():it_(nh) {
 
 // }
 
-std::vector<std::vector<double>> Perception::getpose(const double& u, const double& v) {
+geometry_msgs::PoseStamped Perception::getpose(const double& u, const double& v) {
 	std::vector<std::vector<double>> intrinsic {
 		{463.889, 0.0, 320.0},
 		{0.0, 463.889, 240.0},
@@ -57,7 +57,11 @@ std::vector<std::vector<double>> Perception::getpose(const double& u, const doub
 
 	pose = mf.req_multiply(intrinsic_i, im_cood, translation, rotation);
 
-	return pose;
+	objectPose.pose.position.x = pose[0][0];
+	objectPose.pose.position.y = pose[1][0];
+	objectPose.pose.position.z = pose[2][0];
+
+	return objectPose;
 }
 
 void Perception::objectCountCallback(const std_msgs::Int8& msg) {
@@ -66,7 +70,7 @@ void Perception::objectCountCallback(const std_msgs::Int8& msg) {
 
 void Perception::boundingBoxesCallback(const darknet_ros_msgs::BoundingBoxes& bboxes) {
 	int numBoxes = sizeof(bboxes.bounding_boxes);
-  ROS_INFO_STREAM("# Boxes: "<< numBoxes);
+    ROS_INFO_STREAM("# Boxes: "<< numBoxes);
 	for(int i=0;i<numBoxes;i++) {
 		    bbox.xmin = bboxes.bounding_boxes[i].xmin;
         bbox.xmax = bboxes.bounding_boxes[i].xmax;
@@ -80,16 +84,15 @@ void Perception::boundingBoxesCallback(const darknet_ros_msgs::BoundingBoxes& bb
         	v = y_center;
 
         	objL.id = bboxes.bounding_boxes[i].id;
-        	objL.p = getpose(u, v);
+        	objL.pose = getpose(u, v);
         	objL.d = depth;
 
-        	// location_array.push_back(objL);
-					ROS_INFO_STREAM("Added bounding box");
+        	location_array.data[i] = objL;
+			ROS_INFO_STREAM("Added bounding box");
         }
 
 	}
-	// @TODO Santosh need to convert from object_loc to perception/ObjectLocation
-	// objectLocation.publish(location_array);
+	objectLocation.publish(location_array);
 }
 
 void Perception::depthCallback(const sensor_msgs::ImageConstPtr& depth_msg) {

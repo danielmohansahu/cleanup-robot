@@ -15,6 +15,7 @@
 #include <geometry_msgs/PoseStamped.h>
 #include <perception/matrixf.hpp>
 #include <perception/ObjectLocations.h>
+#include <perception/ObjectLocation.h>
 
 namespace cleanup {
 
@@ -44,7 +45,7 @@ class Perception {
    */
   // geometry_msgs::PoseStamped getObjectPose();
 
-  std::vector<std::vector<double>> getpose(const double& u, const double& v);
+  geometry_msgs::PoseStamped getpose(const double& u, const double& v);
   /**
    * @brief      Image callback Function
    */
@@ -70,11 +71,13 @@ class Perception {
   int u,v;
   MatrixF mf;
   std_msgs::Int8 objectCount;
-  std::vector<object_loc> location_array;
-  object_loc objL;
+  // std::vector<object_loc> location_array;
+  perception::ObjectLocation objL;
+  perception::ObjectLocations location_array;
+  // object_loc objL;
 
   std::vector<std::vector<double>> pose;
-  std::vector<std::pair<int, geometry_msgs::PoseStamped>> objects;
+  geometry_msgs::PoseStamped objectPose;
   darknet_ros_msgs::BoundingBox bbox;
 };
 
