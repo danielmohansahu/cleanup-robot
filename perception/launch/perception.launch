@@ -2,7 +2,7 @@
 <launch>
 
   <!-- launch perception node -->
-  <!-- @TODO -->
+  <node name="perception" pkg="perception" type="perception_node" required="true" output="screen" />
 
   <!-- launch darknet -->
   <include file="$(find perception)/launch/darknet.launch" />
