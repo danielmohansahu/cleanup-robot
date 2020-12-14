@@ -1,0 +1,50 @@
+\hypertarget{classcleanup_1_1_perception}{}\section{cleanup\+:\+:Perception Class Reference}
+\label{classcleanup_1_1_perception}\index{cleanup\+::\+Perception@{cleanup\+::\+Perception}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ int $>$ \hyperlink{classcleanup_1_1_perception_a8928e5e59df7651a833505aec0cd7e4f}{detect\+Objects} ()
+\begin{DoxyCompactList}\small\item\em Function to store the detected objects. \end{DoxyCompactList}\item 
+geometry\+\_\+msgs\+::\+Pose\+Stamped \hyperlink{classcleanup_1_1_perception_a602ed7efc2ca9d418daa2aed25f4e3ba}{get\+Object\+Pose} ()
+\begin{DoxyCompactList}\small\item\em Function to known the object\textquotesingle{}s pose. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classcleanup_1_1_perception_aef837fda07b38e8746776d35925e36e4}\label{classcleanup_1_1_perception_aef837fda07b38e8746776d35925e36e4}} 
+void \hyperlink{classcleanup_1_1_perception_aef837fda07b38e8746776d35925e36e4}{image\+Callback} ()
+\begin{DoxyCompactList}\small\item\em Image callback Function. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classcleanup_1_1_perception_aa2406cbc9ac17c40c5bcdfc9b98f369d}\label{classcleanup_1_1_perception_aa2406cbc9ac17c40c5bcdfc9b98f369d}} 
+void \hyperlink{classcleanup_1_1_perception_aa2406cbc9ac17c40c5bcdfc9b98f369d}{run\+Vision\+Algo} ()
+\begin{DoxyCompactList}\small\item\em Robust vision algorithm to detect objects and obstacles. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classcleanup_1_1_perception_a8928e5e59df7651a833505aec0cd7e4f}\label{classcleanup_1_1_perception_a8928e5e59df7651a833505aec0cd7e4f}} 
+\index{cleanup\+::\+Perception@{cleanup\+::\+Perception}!detect\+Objects@{detect\+Objects}}
+\index{detect\+Objects@{detect\+Objects}!cleanup\+::\+Perception@{cleanup\+::\+Perception}}
+\subsubsection{\texorpdfstring{detect\+Objects()}{detectObjects()}}
+{\footnotesize\ttfamily std\+::vector$<$ int $>$ cleanup\+::\+Perception\+::detect\+Objects (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Function to store the detected objects. 
+
+\begin{DoxyReturn}{Returns}
+vector of ids 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classcleanup_1_1_perception_a602ed7efc2ca9d418daa2aed25f4e3ba}\label{classcleanup_1_1_perception_a602ed7efc2ca9d418daa2aed25f4e3ba}} 
+\index{cleanup\+::\+Perception@{cleanup\+::\+Perception}!get\+Object\+Pose@{get\+Object\+Pose}}
+\index{get\+Object\+Pose@{get\+Object\+Pose}!cleanup\+::\+Perception@{cleanup\+::\+Perception}}
+\subsubsection{\texorpdfstring{get\+Object\+Pose()}{getObjectPose()}}
+{\footnotesize\ttfamily geometry\+\_\+msgs\+::\+Pose\+Stamped cleanup\+::\+Perception\+::get\+Object\+Pose (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Function to known the object\textquotesingle{}s pose. 
+
+\begin{DoxyReturn}{Returns}
+The object pose. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+perception/include/perception/perception.\+h\item 
+perception/src/perception.\+cpp\end{DoxyCompactItemize}
