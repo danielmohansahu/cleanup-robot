@@ -1,22 +1,39 @@
 #include <perception/perception.h>
+// #include <darknet_ros/YoloObjectDetector.hpp>
+#include <darknet_ros_msgs/BoundingBoxes.h>
+#include <darknet_ros_msgs/BoundingBox.h>
+#include <perception/matrixf.hpp>
+
+#include <ros/ros.h>
+#include <image_transport/image_transport.h>
+#include <cv_bridge/cv_bridge.h>
+#include <sensor_msgs/image_encodings.h>
+#include <sensor_msgs/Image.h>
+#include <geometry_msgs/Point.h>
+#include <vector>
+#include <iostream>
+#include <pthread.h>
+#include <std_msgs/Int8.h>
+#include <math.h>
 
 namespace cleanup {
 
 Perception::Perception():it_(nh) {
 	depth_image_sub_ = it_.subscribe("/camera/depth/image_raw", 1,  &Perception::depthCallback, this);
 	boudingBoxesSubcriber_ = nh.subscribe("publishers/bounding_boxes/topic", 1, &Perception::boundingBoxesCallback, this);
-	objectLocation = nh.advertise<geometry_msgs::PoseStamped>("objectLocationData",1);
+	objectCountSubcriber_ = nh.subscribe("publishers/object_detector/topic", 1, &Perception::objectCountCallback, this);
+	objectLocation = nh.advertise<std::vector<object_loc>>("objectLocationData",1);
 }
 
-std::vector<int> Perception::detectObjects() {
+// std::vector<int> Perception::detectObjects() {
 
-}
+// }
 
 // geometry_msgs::PoseStamped Perception::getObjectPose() {
 
 // }
 
-void cleanup::Perception::getpose(int& u, int& v) {
+std::vector<std::vector<double>> Perception::getpose(const double& u, const double& v) {
 	std::vector<std::vector<double>> intrinsic {
 		{463.889, 0.0, 320.0},
 		{0.0, 463.889, 240.0},
@@ -38,23 +55,36 @@ void cleanup::Perception::getpose(int& u, int& v) {
 		{1,0,0}, {0,1,0}, {0,0,1}
 	};
 
-	pose = mf.req_multipy(intrinsic_i, im_cood, translation, rotation);
+	pose = mf.req_multiply(intrinsic_i, im_cood, translation, rotation);
+
+	return pose;
+}
+
+void Perception::objectCountCallback(const std_msgs::Int8& msg) {
+	objectCount = msg;
 }
 
 void Perception::boundingBoxesCallback(const darknet_ros_msgs::BoundingBoxes& bboxes) {
-	for(box:bboxes) {
-		bbox.xmin = box.xmin;
-        bbox.xmax = box.xmax;
-        bbox.ymin = box.ymin;
-        bbox.ymax = box.ymax;
+	for(int i=0;i<sizeof(bboxes.bounding_boxes);i++) {
+		bbox.xmin = bboxes.bounding_boxes[i].xmin;
+        bbox.xmax = bboxes.bounding_boxes[i].xmax;
+        bbox.ymin = bboxes.bounding_boxes[i].ymin;
+        bbox.ymax = bboxes.bounding_boxes[i].ymax;
 
         if(bbox.xmin!=0 && bbox.xmax!=0) {
-        	x_center = (bbox.xmax+bbox.xmin)/2;
-        	y_center=(bbox.ymax+bbox.ymin)/2;
-        	getpose(x_center, y_center);
+        	int x_center = (bbox.xmax+bbox.xmin)/2;
+        	int y_center=(bbox.ymax+bbox.ymin)/2;
+        	u = x_center;
+        	v = y_center;
+
+        	objL.id = bboxes.bounding_boxes[i].id;
+        	objL.p = getpose(u, v);
+        	objL.d = depth;
+
+        	location_array.push_back(objL);
         }
-        
 	}
+	objectLocation.publish(location_array);
 }
 
 void Perception::depthCallback(const sensor_msgs::ImageConstPtr& depth_msg) {
