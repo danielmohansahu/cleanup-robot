@@ -30,10 +30,12 @@ In addition to these, you may also require Turtlebot3, Gazebo, RViz, gmapping an
 To build the package on Ubuntu 18.04, run the following from a terminal. This will create a catkin worskpace in your current directory and clone our repository into it.
 
 ```bash
+sudo apt update && apt upgrade
 mkdir catkin_ws/src -p && cd catkin_ws/src
 git clone https://github.com/danielmohansahu/cleanup-robot.git --recursive
-git submodule init && git submodule update --init --recursive
-cd .. && catkin_make
+cd ..
+rosdep update && rosdep install --from-paths src/ -iy
+catkin_make
 ```
 
 ### Demonstration Instructions
@@ -63,22 +65,16 @@ Sprint planning notes and reviews [can be found here](https://docs.google.com/do
 
 An overview of the classes used and their dependencies is shown in the following UML diagram:
 
-![class diagram](docs/uml/class_diagram.png)
+![class diagram](docs/uml/revised/class_diagram.png)
 
 ## Sequence Diagram
 
 A sequence diagram for the full program is shown in the following UML diagram:
 
-![sequence diagram](docs/uml/sequence_diagram.png)
+![sequence diagram](docs/uml/revised/sequence_diagram.png)
 
 ## Activity Diagram for Explore Behavior
 
 The top level logic for the default "explore" behavior is given in the following diagram. This represents telling the robot to traverse a region and save the locations of all the objects within it.
 
-![explore behavior](docs/uml/explore_behavior.png)
-
-## Activity Diagram for Clean Behavior
-
-The top level logic for the "clean" behavior is given in the following diagram. This represents telling the robot to traverse a region and collect any objects it encounters.
-
-![clean behavior](docs/uml/clean_behavior.png)
+![explore behavior](docs/uml/revised/explore_behavior.png)

@@ -1,0 +1,25 @@
+@startuml
+
+(*) --> [explore] "checkForStop()"
+--> if [stop?]; then
+	-->[true] (*)
+else
+  -->[false] ===B1===
+	--> "perception->detectObjects()"
+	--> if "object found?"; then
+	  -->[true] "storeObject()"
+		--> "navigation->explore()"	
+	else
+		--> "navigation->explore()"	
+	endif
+
+	--> "navigation->explore()"	
+	--> ===B2===
+
+  ===B1=== --> "updateMapping()"
+	--> ===B2===
+	
+	===B2=== --> "checkForStop()"
+endif
+
+@enduml
