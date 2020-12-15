@@ -68,14 +68,14 @@ void Perception::objectCountCallback(const std_msgs::Int8& msg) {
 	objectCount = msg;
 }
 
-void Perception::boundingBoxesCallback(const darknet_ros_msgs::BoundingBoxes& bboxes) {
-	int numBoxes = sizeof(bboxes.bounding_boxes);
+void Perception::boundingBoxesCallback(const darknet_ros_msgs::BoundingBoxes::ConstPtr& bboxes) {
+	int numBoxes = sizeof(bboxes->bounding_boxes);
     ROS_INFO_STREAM("# Boxes: "<< numBoxes);
 	for(int i=0;i<numBoxes;i++) {
-		    bbox.xmin = bboxes.bounding_boxes[i].xmin;
-        bbox.xmax = bboxes.bounding_boxes[i].xmax;
-        bbox.ymin = bboxes.bounding_boxes[i].ymin;
-        bbox.ymax = bboxes.bounding_boxes[i].ymax;
+		bbox.xmin = bboxes->bounding_boxes[i].xmin;
+        bbox.xmax = bboxes->bounding_boxes[i].xmax;
+        bbox.ymin = bboxes->bounding_boxes[i].ymin;
+        bbox.ymax = bboxes->bounding_boxes[i].ymax;
 			  ROS_INFO_STREAM("Found bounding box");
         if(bbox.xmin!=0 && bbox.xmax!=0) {
         	int x_center = (bbox.xmax+bbox.xmin)/2;
@@ -83,7 +83,7 @@ void Perception::boundingBoxesCallback(const darknet_ros_msgs::BoundingBoxes& bb
         	u = x_center;
         	v = y_center;
 
-        	objL.id = bboxes.bounding_boxes[i].id;
+        	objL.id = bboxes->bounding_boxes[i].id;
         	objL.pose = getpose(u, v);
         	objL.d = depth;
 
@@ -118,6 +118,7 @@ void Perception::depthCallback(const sensor_msgs::ImageConstPtr& depth_msg) {
 	    }
 	}
     depth = cv_depth_ptr->image.at<short int>(cv::Point(u,v));
+    ROS_INFO_STREAM("Depth="<<depth);
 }
 
 void Perception::runVisionAlgo() {

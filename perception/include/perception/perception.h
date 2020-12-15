@@ -56,7 +56,7 @@ class Perception {
    */
   void runVisionAlgo();
 
-  void boundingBoxesCallback(const darknet_ros_msgs::BoundingBoxes& bboxes);
+  void boundingBoxesCallback(const darknet_ros_msgs::BoundingBoxes::ConstPtr& bboxes);
 
   void objectCountCallback(const std_msgs::Int8& msg);
 
