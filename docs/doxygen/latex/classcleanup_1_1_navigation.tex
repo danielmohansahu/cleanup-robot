@@ -1,0 +1,67 @@
+\hypertarget{classcleanup_1_1_navigation}{}\section{cleanup\+:\+:Navigation Class Reference}
+\label{classcleanup_1_1_navigation}\index{cleanup\+::\+Navigation@{cleanup\+::\+Navigation}}
+
+
+Implementation for navigation routines in R\+OS to command a turtlebot rover.  
+
+
+
+
+{\ttfamily \#include $<$navigation.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classcleanup_1_1_navigation_ae4f3e6facf6e48e4286cf751a8be6fb1}\label{classcleanup_1_1_navigation_ae4f3e6facf6e48e4286cf751a8be6fb1}} 
+\hyperlink{classcleanup_1_1_navigation_ae4f3e6facf6e48e4286cf751a8be6fb1}{Navigation} ()
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classcleanup_1_1_navigation_ab6e850bcac11ad0a06f371053844cddc}\label{classcleanup_1_1_navigation_ab6e850bcac11ad0a06f371053844cddc}} 
+\hyperlink{classcleanup_1_1_navigation_ab6e850bcac11ad0a06f371053844cddc}{$\sim$\+Navigation} ()
+\begin{DoxyCompactList}\small\item\em Destructor. \end{DoxyCompactList}\item 
+void \hyperlink{classcleanup_1_1_navigation_a4990de9c7d80e4bd64dbb40f7bac596e}{explore\+Loop} ()
+\begin{DoxyCompactList}\small\item\em Explore the given area, avoiding obstacles. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classcleanup_1_1_navigation_aa95c5e9bef0d4780c828ee5952964f8f}\label{classcleanup_1_1_navigation_aa95c5e9bef0d4780c828ee5952964f8f}} 
+void \hyperlink{classcleanup_1_1_navigation_aa95c5e9bef0d4780c828ee5952964f8f}{stop} ()
+\begin{DoxyCompactList}\small\item\em Stop any running threads and navigation goals. \end{DoxyCompactList}\item 
+geometry\+\_\+msgs\+::\+Pose \hyperlink{classcleanup_1_1_navigation_a4b39246f07e511da75444ca2ed655326}{get\+Robot\+Pose} ()
+\begin{DoxyCompactList}\small\item\em Get current robot position. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classcleanup_1_1_navigation_abde0f634a0a8bee3603c16ae921c772a}\label{classcleanup_1_1_navigation_abde0f634a0a8bee3603c16ae921c772a}} 
+int \hyperlink{classcleanup_1_1_navigation_abde0f634a0a8bee3603c16ae921c772a}{get\+Curr\+Nav\+Mode} ()
+\begin{DoxyCompactList}\small\item\em Get integer related to current Set\+Mode\+Goal. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Implementation for navigation routines in R\+OS to command a turtlebot rover. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classcleanup_1_1_navigation_a4990de9c7d80e4bd64dbb40f7bac596e}\label{classcleanup_1_1_navigation_a4990de9c7d80e4bd64dbb40f7bac596e}} 
+\index{cleanup\+::\+Navigation@{cleanup\+::\+Navigation}!explore\+Loop@{explore\+Loop}}
+\index{explore\+Loop@{explore\+Loop}!cleanup\+::\+Navigation@{cleanup\+::\+Navigation}}
+\subsubsection{\texorpdfstring{explore\+Loop()}{exploreLoop()}}
+{\footnotesize\ttfamily void cleanup\+::\+Navigation\+::explore\+Loop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Explore the given area, avoiding obstacles. 
+
+The basic implementation is just to move in straight lines until an obstacle is encountered, then rotate until the way ahead is clear.
+
+This calls \hyperlink{classcleanup_1_1_navigation_aa95c5e9bef0d4780c828ee5952964f8f}{stop()} implictly. \mbox{\Hypertarget{classcleanup_1_1_navigation_a4b39246f07e511da75444ca2ed655326}\label{classcleanup_1_1_navigation_a4b39246f07e511da75444ca2ed655326}} 
+\index{cleanup\+::\+Navigation@{cleanup\+::\+Navigation}!get\+Robot\+Pose@{get\+Robot\+Pose}}
+\index{get\+Robot\+Pose@{get\+Robot\+Pose}!cleanup\+::\+Navigation@{cleanup\+::\+Navigation}}
+\subsubsection{\texorpdfstring{get\+Robot\+Pose()}{getRobotPose()}}
+{\footnotesize\ttfamily geometry\+\_\+msgs\+::\+Pose cleanup\+::\+Navigation\+::get\+Robot\+Pose (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Get current robot position. 
+
+\begin{DoxyReturn}{Returns}
+Current pose of robot (world position, world rotation) 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+navigation/include/navigation/\hyperlink{navigation_8h}{navigation.\+h}\item 
+navigation/src/\hyperlink{navigation_8cpp}{navigation.\+cpp}\end{DoxyCompactItemize}

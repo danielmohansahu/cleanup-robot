@@ -1,0 +1,56 @@
+\hypertarget{controller__test_8cpp}{}\section{controller/test/controller\+\_\+test.cpp File Reference}
+\label{controller__test_8cpp}\index{controller/test/controller\+\_\+test.\+cpp@{controller/test/controller\+\_\+test.\+cpp}}
+
+
+Implementation of the Controller test.  
+
+
+{\ttfamily \#include $<$ros/ros.\+h$>$}\newline
+{\ttfamily \#include $<$controller/controller.\+h$>$}\newline
+{\ttfamily \#include $<$gtest/gtest.\+h$>$}\newline
+{\ttfamily \#include $<$controller/\+Set\+Mode\+Action.\+h$>$}\newline
+{\ttfamily \#include $<$actionlib/client/simple\+\_\+action\+\_\+client.\+h$>$}\newline
+{\ttfamily \#include $<$thread$>$}\newline
+Include dependency graph for controller\+\_\+test.\+cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{controller__test_8cpp__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{controller__test_8cpp_a5df6b5c1f9569aeae5a5a61aa79235c1}\label{controller__test_8cpp_a5df6b5c1f9569aeae5a5a61aa79235c1}} 
+{\bfseries T\+E\+ST} (Controller\+\_\+\+Test\+Services\+Exist, should\+\_\+pass)
+\item 
+\mbox{\Hypertarget{controller__test_8cpp_a35e9425ef4ff8ca09af4d66c9e7e839d}\label{controller__test_8cpp_a35e9425ef4ff8ca09af4d66c9e7e839d}} 
+{\bfseries T\+E\+ST} (Controller\+\_\+\+Test\+Action\+Client\+\_\+\+Bad\+Goal, should\+\_\+fail)
+\item 
+\mbox{\Hypertarget{controller__test_8cpp_a58b52bfdec32a14cfa9315be9d70bf3b}\label{controller__test_8cpp_a58b52bfdec32a14cfa9315be9d70bf3b}} 
+{\bfseries T\+E\+ST} (Controller\+\_\+\+Test\+Execute\+\_\+\+Clean\+Goal, should\+\_\+pass)
+\item 
+\mbox{\Hypertarget{controller__test_8cpp_aa92425a61876bc963bb7c2edaafd691c}\label{controller__test_8cpp_aa92425a61876bc963bb7c2edaafd691c}} 
+{\bfseries T\+E\+ST} (Controller\+\_\+\+Test\+Execute\+\_\+\+Explore\+Goal, should\+\_\+pass)
+\item 
+\mbox{\Hypertarget{controller__test_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}\label{controller__test_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}} 
+int {\bfseries main} (int argc, char $\ast$$\ast$argv)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{controller__test_8cpp_a5100c270de053238ccc5696857cec6f3}\label{controller__test_8cpp_a5100c270de053238ccc5696857cec6f3}} 
+std\+::unique\+\_\+ptr$<$ \hyperlink{classcleanup_1_1_controller}{cleanup\+::\+Controller} $>$ {\bfseries ctrl}
+\item 
+\mbox{\Hypertarget{controller__test_8cpp_a7d6d3de9ddf4963eb3ea112920944a87}\label{controller__test_8cpp_a7d6d3de9ddf4963eb3ea112920944a87}} 
+std\+::shared\+\_\+ptr$<$ ros\+::\+Node\+Handle $>$ {\bfseries nh}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Implementation of the Controller test. 
+
+\begin{DoxyCopyright}{Copyright}
+\mbox{[}2020\mbox{]} $<$Daniel Sahu, Spencer Elyard, Santosh Kesani$>$ 
+\end{DoxyCopyright}

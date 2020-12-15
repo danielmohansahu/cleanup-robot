@@ -1,63 +1,102 @@
+/**
+*  @file navigation_test.cpp
+ * @brief Implementation of the Navigation test
+ *
+ * @copyright [2020] <Daniel Sahu, Spencer Elyard, Santosh Kesani>
+ */
+
+#pragma once
+
+#include <ros/ros.h>
+#include <ros/service_client.h>
 #include <navigation/navigation.h>
 #include <gtest/gtest.h>
-#include <cmath>
 
-//cleanup::Navigation nav;
+#include <std_srvs/Trigger.h>
+
+#include <navigation/SetPoseStamped.h>
+#include <move_base_msgs/MoveBaseAction.h>
+
+#include <cmath>
+#include <thread>
+
+std::unique_ptr<cleanup::Navigation> nav;
+std::shared_ptr<ros::NodeHandle> nh;
+
+TEST(NavigationTest_getNavModeDefault, should_pass) {;
+  EXPECT_EQ(nav->getCurrNavMode(),0);
+}
 
 TEST(NavigationTest_GetPose, should_pass) {
-    /*
-    // expect to initialize to initial position, initial orientation
-    geometry_msgs::Pose curr_pose = getRobotPose();
-    EXPECT_FLOAT_EQ(curr_pose.position.x,0);
-    EXPECT_FLOAT_EQ(curr_pose.position.y,0);
-    EXPECT_FLOAT_EQ(curr_pose.position.z,0);
-    EXPECT_FLOAT_EQ(curr_pose.orientation.x,0);
-    EXPECT_FLOAT_EQ(curr_pose.orientation.y,0);
-    EXPECT_FLOAT_EQ(curr_pose.orientation.z,0);
-    EXPECT_FLOAT_EQ(curr_pose.orientation.w,1);
-    */
+   geometry_msgs::Pose curr_pose = nav->getRobotPose();
+   EXPECT_NEAR(curr_pose.position.x,0,1E-5);
+   EXPECT_NEAR(curr_pose.position.y,0,1E-5);
+   EXPECT_NEAR(curr_pose.position.z,0.01,1E-5);
+   EXPECT_NEAR(curr_pose.orientation.x,0,1E-5);
+   EXPECT_NEAR(curr_pose.orientation.y,0,1E-5);
+   EXPECT_NEAR(curr_pose.orientation.z,0,1E-5);
+   EXPECT_NEAR(curr_pose.orientation.w,1,1E-5);
 }
 
-TEST(NavigationTest_TestExplore, should_pass) {
-   /*
-    // expect move in straight line; in empty world will continue indefinitely
-    geometry_msgs::Pose init_pose = nav.getRobotPose();
-    // command to explore
-    nav.exploreLoop();
-    // let move
-    ros::Duration(2.0).sleep();
+TEST(NavigationTest_stopServiceStarts, should_pass) {
+  ros::ServiceClient client = nh->serviceClient<std_srvs::Trigger>("/navigation/stop");
 
-    // expect to be in a different position than before
-    float new_pos_dist_travel = sqrt(
-      pow(init_pose.position.x - nav.getRobotPose().position.x,2) +
-      pow(init_pose.position.y - nav.getRobotPose().position.y,2));
-    // should have moved
-    EXPECT_TRUE(new_pos_dist_travel > 0);
-    */
+  // wait for service to become available
+  EXPECT_TRUE(client.waitForExistence(ros::Duration(5.0)));
+
+  std_srvs::Trigger srv;
+  EXPECT_TRUE(client.call(srv));
+  // ros::Duration(1.0).sleep();
+  EXPECT_EQ(nav->getCurrNavMode(),0);
 }
 
+TEST(NavigationTest_exploreServiceStarts, should_pass) {
+  ros::ServiceClient client = nh->serviceClient<std_srvs::Trigger>("/navigation/explore");
 
-TEST(NavigationTest_TestStop, should_pass) {
-  /*
-  nav.exploreLoop();
-  // let move
-  ros::Duration(2.0).sleep();
-  // record current position
-  geometry_msgs::Pose init_pose = nav.getRobotPose();
-  // command to stop
-  nav.stop();
-  // sleep to ensure robot stopped
-  ros::Duration(1.0).sleep();
-  /// compare new position to old position
-  float new_pos_dist_travel = sqrt(
-    pow((init_pose.position.x - nav.getRobotPose().position.x),2) +
-    pow((init_pose.position.y - nav.getRobotPose().position.y),2));
-  // should not have moved
-  EXPECT_FLOAT_EQ(new_pos_dist_travel,0);
-  */
+  // wait for service to become available
+  EXPECT_TRUE(client.waitForExistence(ros::Duration(5.0)));
+
+  std_srvs::Trigger srv;
+  EXPECT_TRUE(client.call(srv));
+  // ros::Duration(1.0).sleep();
+  EXPECT_EQ(nav->getCurrNavMode(),1);
 }
 
-int main(int argc, char **argv){
-   testing::InitGoogleTest(&argc, argv);
-   return RUN_ALL_TESTS();
+TEST(NavigationTest_gotoServiceStarts, should_pass) {
+
+  ros::ServiceClient client = nh->serviceClient<navigation::SetPoseStamped>("/navigation/goto");
+  // wait for service to become available
+  EXPECT_TRUE(client.waitForExistence(ros::Duration(5.0)));
+
+  navigation::SetPoseStamped srv;
+
+  // send goal
+  srv.request.pose.header.frame_id = "map";
+  srv.request.pose.pose = nav->getRobotPose();
+
+  EXPECT_TRUE(client.call(srv));
+  client.call(srv);
+
+  EXPECT_EQ(nav->getCurrNavMode(),2);
+}
+
+TEST(NavigationTest_exploreLoop, should_pass) {
+  // dummy test
+  EXPECT_TRUE(true);
+}
+
+int main(int argc, char **argv) {
+  ros::init(argc,argv, "navigation_test");
+  nh.reset(new ros::NodeHandle);
+  nav.reset(new cleanup::Navigation);
+  testing::InitGoogleTest(&argc, argv);
+
+  // spin of thread to process callbacks
+  auto spin_thread = std::thread([](){ros::spin();});
+
+  auto result = RUN_ALL_TESTS();
+  ros::shutdown();
+  spin_thread.join();
+
+  return result;
 }

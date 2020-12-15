@@ -30,14 +30,22 @@ In addition to these, you may also require Turtlebot3, Gazebo, RViz, gmapping an
 To build the package on Ubuntu 18.04, run the following from a terminal. This will create a catkin worskpace in your current directory and clone our repository into it.
 
 ```bash
+sudo apt update && apt upgrade
 mkdir catkin_ws/src -p && cd catkin_ws/src
 git clone https://github.com/danielmohansahu/cleanup-robot.git --recursive
-cd .. && catkin_make
+cd ..
+rosdep update && rosdep install --from-paths src/ -iy
+catkin_make
 ```
 
 ### Demonstration Instructions
 
-TODO: After working on demonstration
+The full demonstration (Gazebo and Rviz required) is launched via the following:
+
+```bash
+source devel/setup.bash
+roslaunch controller cleanup.launch
+```
 
 ### Testing Instructions
 TODO: After working on testing the files
@@ -57,27 +65,22 @@ Details on the status of our Agile Iterative Process (AIP) [can be found here](h
 
 Sprint planning notes and reviews [can be found here](https://docs.google.com/document/d/13lss_TF4PRS_DDrdaZ5CRLbK3B5L25zNxDn5uLROZu4/edit?usp=sharing).
 
+Final Presentation [slides](https://docs.google.com/presentation/d/18v54o_jkNd7eZvSBHKtq4ymZj2J1PrO97aqxEOOuSuU/edit?usp=sharing) and [video](https://youtu.be/xhFu7io_70A) are also available.
 
 ## Class Diagram
 
 An overview of the classes used and their dependencies is shown in the following UML diagram:
 
-![class diagram](docs/uml/class_diagram.png)
+![class diagram](docs/uml/revised/class_diagram.png)
 
 ## Sequence Diagram
 
 A sequence diagram for the full program is shown in the following UML diagram:
 
-![sequence diagram](docs/uml/sequence_diagram.png)
+![sequence diagram](docs/uml/revised/sequence_diagram.png)
 
 ## Activity Diagram for Explore Behavior
 
 The top level logic for the default "explore" behavior is given in the following diagram. This represents telling the robot to traverse a region and save the locations of all the objects within it.
 
-![explore behavior](docs/uml/explore_behavior.png)
-
-## Activity Diagram for Clean Behavior
-
-The top level logic for the "clean" behavior is given in the following diagram. This represents telling the robot to traverse a region and collect any objects it encounters.
-
-![clean behavior](docs/uml/clean_behavior.png)
+![explore behavior](docs/uml/revised/explore_behavior.png)

@@ -1,13 +1,11 @@
-/* @file navigation.h
+/**
+ * @file navigation.h
  * @brief Header of the Navigation class for basic navigation.
- * 
+ *
  * @copyright [2020] <Daniel Sahu, Spencer Elyard, Santosh Kesani>
  */
 
 #pragma once
-
-#include <atomic>
-#include <future>
 
 #include <ros/ros.h>
 #include <tf2/LinearMath/Transform.h>
@@ -21,21 +19,35 @@
 #include <std_srvs/Trigger.h>
 #include <navigation/SetPoseStamped.h>
 
+#include <atomic>
+#include <future>
+#include <memory>
+#include <string>
+
+/**
+* @brief Namespace for Cleanup Implementation
+*/
 namespace cleanup {
 
+  /**
+  * @brief Implementation for navigation routines in ROS to command a turtlebot rover
+  */
 class Navigation {
  public:
 
-  /* @brief Constructor */
+   /**
+   * @brief Constructor
+   */
   Navigation();
 
-  /* @brief Destructor */
+  /**
+  * @brief Destructor
+  */
   ~Navigation();
 
- private:
-
-  /* @brief Explore the given area, avoiding obstacles.
-   * 
+  /**
+   * @brief Explore the given area, avoiding obstacles.
+   *
    * The basic implementation is just to move in straight lines
    * until an obstacle is encountered, then rotate until the
    * way ahead is clear.
@@ -44,33 +56,87 @@ class Navigation {
    */
   void exploreLoop();
 
-  /* @brief Stop any running threads and navigation goals. */
+  /**
+  * @brief Stop any running threads and navigation goals.
+  */
   void stop();
 
-  /* @brief Get current robot position. */
+  /**
+  * @brief Get current robot position.
+  * @return Current pose of robot (world position, world rotation)
+  */
   geometry_msgs::Pose getRobotPose();
 
+  /**
+  * @brief Get integer related to current SetModeGoal
+  */
+  int getCurrNavMode();
 
-  // action client to move_base navigation manager
+  private:
+
+    /**
+    * @brief Integer related to current SetModeGoal
+    */
+  int currNavMode_ {0};
+
+  /**
+  * @brief Action client to move_base navigation manager
+  */
   std::unique_ptr<actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>> goto_client_;
 
-  // tf objects (for accessing current robot position)
+  /**
+  * @brief Listen for current robot position
+  */
   std::unique_ptr<tf2_ros::TransformListener> tfl_;
+
+  /**
+  * @brief Buffer for current robot position
+  */
   std::unique_ptr<tf2_ros::Buffer> tfb_;
 
-  // service handles
+  /**
+  * @brief "Stop" service - stop the rover at current position
+  */
   ros::ServiceServer stop_service_;
+
+  /**
+  * @brief "Explore" navigation service - wander the area
+  */
   ros::ServiceServer explore_service_;
+
+  /**
+  * @brief "GoTo" navigation service - command to a goal position
+  */
   ros::ServiceServer goto_service_;
 
-  // thread handling
+  /**
+  * @brief Stop handle for thread handling
+  */
   std::atomic<bool> stop_;
+
+  /**
+  * @brief Thread handling variable
+  */
   std::future<void> thread_handle_;
 
-  // other variables
+  /**
+  * @brief String for base frame (ROS)
+  */
   const std::string base_frame_ {"base_link"};
+
+  /**
+  * @brief String for map frame (ROS)
+  */
   const std::string map_frame_ {"map"};
+
+  /**
+  * @brief String for server name (ROS)
+  */
   const std::string server_name_ {"move_base"};
+
+  /**
+  * @brief Double for explore step size
+  */
   const double explore_step_ {2.0};
 };
 

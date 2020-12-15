@@ -1,0 +1,65 @@
+\hypertarget{navigation__test_8cpp}{}\section{navigation/test/navigation\+\_\+test.cpp File Reference}
+\label{navigation__test_8cpp}\index{navigation/test/navigation\+\_\+test.\+cpp@{navigation/test/navigation\+\_\+test.\+cpp}}
+
+
+Implementation of the Navigation test.  
+
+
+{\ttfamily \#include $<$ros/ros.\+h$>$}\newline
+{\ttfamily \#include $<$ros/service\+\_\+client.\+h$>$}\newline
+{\ttfamily \#include $<$navigation/navigation.\+h$>$}\newline
+{\ttfamily \#include $<$gtest/gtest.\+h$>$}\newline
+{\ttfamily \#include $<$std\+\_\+srvs/\+Trigger.\+h$>$}\newline
+{\ttfamily \#include $<$navigation/\+Set\+Pose\+Stamped.\+h$>$}\newline
+{\ttfamily \#include $<$move\+\_\+base\+\_\+msgs/\+Move\+Base\+Action.\+h$>$}\newline
+{\ttfamily \#include $<$cmath$>$}\newline
+{\ttfamily \#include $<$thread$>$}\newline
+Include dependency graph for navigation\+\_\+test.\+cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{navigation__test_8cpp__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{navigation__test_8cpp_a9c245c814904f0faaf5912cb96a13ab5}\label{navigation__test_8cpp_a9c245c814904f0faaf5912cb96a13ab5}} 
+{\bfseries T\+E\+ST} (Navigation\+Test\+\_\+get\+Nav\+Mode\+Default, should\+\_\+pass)
+\item 
+\mbox{\Hypertarget{navigation__test_8cpp_a883c9c72a00edc06d599792cb0aa4e5a}\label{navigation__test_8cpp_a883c9c72a00edc06d599792cb0aa4e5a}} 
+{\bfseries T\+E\+ST} (Navigation\+Test\+\_\+\+Get\+Pose, should\+\_\+pass)
+\item 
+\mbox{\Hypertarget{navigation__test_8cpp_a489e9a489f49982de3b9388302866a5d}\label{navigation__test_8cpp_a489e9a489f49982de3b9388302866a5d}} 
+{\bfseries T\+E\+ST} (Navigation\+Test\+\_\+stop\+Service\+Starts, should\+\_\+pass)
+\item 
+\mbox{\Hypertarget{navigation__test_8cpp_ab66a777c3d7fd8c8b69d36633d39734e}\label{navigation__test_8cpp_ab66a777c3d7fd8c8b69d36633d39734e}} 
+{\bfseries T\+E\+ST} (Navigation\+Test\+\_\+explore\+Service\+Starts, should\+\_\+pass)
+\item 
+\mbox{\Hypertarget{navigation__test_8cpp_a017e91e56a4f99111f02fc4fcb94cc5f}\label{navigation__test_8cpp_a017e91e56a4f99111f02fc4fcb94cc5f}} 
+{\bfseries T\+E\+ST} (Navigation\+Test\+\_\+goto\+Service\+Starts, should\+\_\+pass)
+\item 
+\mbox{\Hypertarget{navigation__test_8cpp_a7f467d26ce8f595582fd83985463e3ee}\label{navigation__test_8cpp_a7f467d26ce8f595582fd83985463e3ee}} 
+{\bfseries T\+E\+ST} (Navigation\+Test\+\_\+explore\+Loop, should\+\_\+pass)
+\item 
+\mbox{\Hypertarget{navigation__test_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}\label{navigation__test_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}} 
+int {\bfseries main} (int argc, char $\ast$$\ast$argv)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{navigation__test_8cpp_a75205abae44efc7d1f0da03b3650a45a}\label{navigation__test_8cpp_a75205abae44efc7d1f0da03b3650a45a}} 
+std\+::unique\+\_\+ptr$<$ \hyperlink{classcleanup_1_1_navigation}{cleanup\+::\+Navigation} $>$ {\bfseries nav}
+\item 
+\mbox{\Hypertarget{navigation__test_8cpp_a7d6d3de9ddf4963eb3ea112920944a87}\label{navigation__test_8cpp_a7d6d3de9ddf4963eb3ea112920944a87}} 
+std\+::shared\+\_\+ptr$<$ ros\+::\+Node\+Handle $>$ {\bfseries nh}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Implementation of the Navigation test. 
+
+\begin{DoxyCopyright}{Copyright}
+\mbox{[}2020\mbox{]} $<$Daniel Sahu, Spencer Elyard, Santosh Kesani$>$ 
+\end{DoxyCopyright}

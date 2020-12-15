@@ -1,0 +1,54 @@
+@startuml
+
+package ProjectMaryPoppins {
+
+  class Controller {
+    + void executeGoal()
+    - ros::ServiceClient goto_client_
+    - ros::ServiceClient stop_client_
+    - ros::ServiceClient explore_client_
+    - ros::ServiceClient detect_client_
+    - ros::ServiceClient get_pose_client_
+    - std::unique_ptr<actionlib::SimpleActionServer<controller::SetModeAction>> as_
+    - controller::SetModeFeedback feedback_
+  }
+
+  class "Perception (MUST UPDATE)" {
+    + vector<int> detectObjects()
+    + Pose getObjectPose(int)
+    - void imageCallback(Image)
+    - void runComputerVisionAlgo()
+    - vector<pair<id,Pose>> objects_
+  }
+
+  class Navigation {
+    + void exploreLoop()
+    - int currNavMode_
+    - std::unique_ptr<actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>> goto_client_
+    - std::unique_ptr<tf2_ros::TransformListener> tfl_
+    - std::unique_ptr<tf2_ros::Buffer> tfb_
+    - ros::ServiceServer stop_service
+    - ros::ServiceServer explore_service_
+    - ros::ServiceServer goto_service_
+    - std::atomic<bool> stop_
+    - std::future<void> thread_handle_
+    - std::string base_frame_
+    - std::string map_frame_
+    - std::string server_name_
+    - double explore_step_
+  }
+    
+  class "Motion (Tentative)" {
+    + bool pickUpObject(Pose)
+    + void dropObject()
+    - void getArmPos(current_arm_pos&)
+    - void setArmGoal(desired_arm_pos)
+    - void moveArm()
+    - current_arm_pos
+    - desired_arm_pos
+  }
+
+}
+
+@enduml
+

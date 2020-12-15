@@ -1,0 +1,83 @@
+@startuml
+
+participant "GUI (Rviz)" as User
+participant "Controller"
+participant "Simulation\n(Gazebo)" as Sim
+participant "Perception\n(openCV)" as Perception
+participant "Mapping\n(gmapping)" as Map
+participant "Navigation\n(navigation)" as Nav
+
+activate Map
+Map -> Map : updateMapping()
+Map -> Nav : "Localization Data\n</map>"
+
+activate Perception
+Perception -> Perception : processImages()
+
+Sim -> Perception : "2x RGB Camera\n</camera>"
+Sim -> Map : "Scan Data\n</scan>"
+
+activate User
+User -> Controller : "explore (ROS Service)"
+
+activate Controller
+activate Nav
+
+Controller -> Nav : "explore (ROS Service)"
+
+Nav -> Nav : "sendRandomGoal (ROS Action Goal)"
+
+Controller -> Controller : "while (!stop)"
+activate Controller
+
+Controller -> Perception : "detectObects (ROS Service)"
+Perception -> Controller : "objects"
+Controller -> Controller : "storeObjects(objects)"
+
+"User" -> "Controller" : stop (ROS Service)
+
+Controller -> Nav : "stop (ROS Service)"
+
+"Controller" -> "User"
+
+deactivate Controller
+deactivate Nav
+
+@enduml
+
+
+
+activate "Simulated Robot\n(Gazebo)"
+
+"Simulated Robot\n(Gazebo)" -> "Vision Stack\n(openCV)": 2x RGB Camera\n</camera>
+activate "Vision Stack\n(openCV)"
+
+"Vision Stack\n(openCV)" -> "Navigation Stack\n(navigation)": Target locations in camera RF\n</targets_camRF>
+deactivate "Vision Stack\n(openCV)"
+activate "Navigation Stack\n(navigation)"
+
+"Navigation Stack\n(navigation)" -> "Command Stack\n(Custom)": Target locations in robot RF\n</targets_roverRF>
+
+
+activate "Command Stack\n(Custom)"
+"Simulated Robot\n(Gazebo)" -> "Mapping Stack\n(gmapping)": Scan Data\n</scan>
+activate "Mapping Stack\n(gmapping)"
+"Mapping Stack\n(gmapping)" -> "Navigation Stack\n(navigation)":  Localization Data\n</map>
+deactivate "Mapping Stack\n(gmapping)"
+
+"Navigation Stack\n(navigation)" -> "Command Stack\n(Custom)": Desired path\n</nav_msgs>
+deactivate "Navigation Stack\n(navigation)"
+
+"Command Stack\n(Custom)" -> "Interaction Stack\n(MoveIt)": Desired Arm Position\n</arm_pos_desired>
+activate "Interaction Stack\n(MoveIt)"
+
+
+"Command Stack\n(Custom)" -> "Simulated Robot\n(Gazebo)": Driving Commands\n</cmd_vel>
+
+deactivate "Command Stack\n(Custom)"
+
+"Interaction Stack\n(MoveIt)" -> "Simulated Robot\n(Gazebo)": Arm Commands\n</moveit_msgs>
+deactivate "Interaction Stack\n(MoveIt)"
+
+deactivate "Simulated Robot\n(Gazebo)"
+
