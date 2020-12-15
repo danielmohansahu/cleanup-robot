@@ -40,7 +40,12 @@ catkin_make
 
 ### Demonstration Instructions
 
-TODO: After working on demonstration
+The full demonstration (Gazebo and Rviz required) is launched via the following:
+
+```bash
+source devel/setup.bash
+roslaunch controller cleanup.launch
+```
 
 ### Testing Instructions
 TODO: After working on testing the files
@@ -60,6 +65,7 @@ Details on the status of our Agile Iterative Process (AIP) [can be found here](h
 
 Sprint planning notes and reviews [can be found here](https://docs.google.com/document/d/13lss_TF4PRS_DDrdaZ5CRLbK3B5L25zNxDn5uLROZu4/edit?usp=sharing).
 
+Final Presentation [slides](https://docs.google.com/presentation/d/18v54o_jkNd7eZvSBHKtq4ymZj2J1PrO97aqxEOOuSuU/edit?usp=sharing) and [video](https://youtu.be/xhFu7io_70A) are also available.
 
 ## Class Diagram
 
