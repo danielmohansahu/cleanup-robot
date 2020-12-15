@@ -23,11 +23,15 @@
 std::unique_ptr<cleanup::Navigation> nav;
 std::shared_ptr<ros::NodeHandle> nh;
 
-TEST(NavigationTest_getNavModeDefault, should_pass) {;
+TEST(Navigation_Test,getNavModeDefault) {;
   EXPECT_EQ(nav->getCurrNavMode(),0);
 }
 
-TEST(NavigationTest_GetPose, should_pass) {
+/**
+* @brief Check to ensure the getRobotPose() command works with the launch values
+* Note Z height difference from robot config file
+*/
+TEST(Navigation_Test,GetPose) {
    geometry_msgs::Pose curr_pose = nav->getRobotPose();
    EXPECT_NEAR(curr_pose.position.x,0,1E-5);
    EXPECT_NEAR(curr_pose.position.y,0,1E-5);
@@ -38,7 +42,11 @@ TEST(NavigationTest_GetPose, should_pass) {
    EXPECT_NEAR(curr_pose.orientation.w,1,1E-5);
 }
 
-TEST(NavigationTest_stopServiceStarts, should_pass) {
+/**
+* @brief Check to ensure the "Stop" service starts and triggers correct
+* nav mode.
+*/
+TEST(Navigation_Test,stopServiceStarts) {
   ros::ServiceClient client = nh->serviceClient<std_srvs::Trigger>("/navigation/stop");
 
   // wait for service to become available
@@ -50,7 +58,11 @@ TEST(NavigationTest_stopServiceStarts, should_pass) {
   EXPECT_EQ(nav->getCurrNavMode(),0);
 }
 
-TEST(NavigationTest_exploreServiceStarts, should_pass) {
+/**
+* @brief Check to ensure the "Explore" service starts and triggers correct
+* nav mode.
+*/
+TEST(Navigation_Test,exploreServiceStarts) {
   ros::ServiceClient client = nh->serviceClient<std_srvs::Trigger>("/navigation/explore");
 
   // wait for service to become available
@@ -62,7 +74,11 @@ TEST(NavigationTest_exploreServiceStarts, should_pass) {
   EXPECT_EQ(nav->getCurrNavMode(),1);
 }
 
-TEST(NavigationTest_gotoServiceStarts, should_pass) {
+/**
+* @brief Check to ensure the "GoTo" service starts and triggers correct
+* nav mode.
+*/
+TEST(Navigation_Test,gotoServiceStarts) {
 
   ros::ServiceClient client = nh->serviceClient<navigation::SetPoseStamped>("/navigation/goto");
   // wait for service to become available
@@ -80,11 +96,18 @@ TEST(NavigationTest_gotoServiceStarts, should_pass) {
   EXPECT_EQ(nav->getCurrNavMode(),2);
 }
 
-TEST(NavigationTest_exploreLoop, should_pass) {
-  // dummy test
+/**
+* @brief Check to ensure the "Explore Loop" starts correctly
+*/
+TEST(Navigation_Test, exploreLoop) {
+  // dummy test - TODO
+  // Expect return that exploreLoop is running
   EXPECT_TRUE(true);
 }
 
+/**
+* @brief Main
+*/
 int main(int argc, char **argv) {
   ros::init(argc,argv, "navigation_test");
   nh.reset(new ros::NodeHandle);
