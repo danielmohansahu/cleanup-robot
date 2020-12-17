@@ -1,20 +1,22 @@
-image: ros:melodic-ros-core
-sudo: required
+dist: bionic
+sudo: true
 
-cache:
-  paths:
-    - ccache/
+# Install system dependencies, namely a very barebones ROS setup.
+before_install:
+  - sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu bionic main" > /etc/apt/sources.list.d/ros-latest.list'
+  - sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+  - sudo apt-get update -qq
+  - sudo apt install ros-melodic-ros-base
+  - source /opt/ros/$ROS_DISTRO/setup.bash
+  - sudo rosdep init
+  - rosdep update
 
-before_script:
-  - apt update >/dev/null && apt install -y git >/dev/null
-  - mkdir /catkin_ws/src -p && cd /catkin_ws/src
+install:
+  - mkdir ~/catkin_ws/src -p && cd ~/catkin_ws/src
   - git clone https://github.com/danielmohansahu/cleanup-robot.git --recursive
-  - cd .. && rosdep update && rosdep install --from-paths src/ -iy
+  - cd .. && rosdep install --from-paths src/ -iy
   - pip install --user cpp-coveralls
   - gem install coveralls-lcov
-
-after_success:
-  - coveralls --root .. --build-root . --verbose
 
 catkin_make:
   stage: build
@@ -22,3 +24,6 @@ catkin_make:
     - cd /catkin_ws
     - catkin_make
     - catkin_make run_tests
+
+after_success:
+  - coveralls --root .. --build-root . --verbose
