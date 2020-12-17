@@ -8,7 +8,7 @@ before_install:
   - sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
   - sudo apt-get update -qq
   - sudo apt install ros-melodic-ros-base
-  - source /opt/ros/$ROS_DISTRO/setup.bash
+  - source /opt/ros/melodic/setup.bash
   - sudo rosdep init
   - rosdep update
 
@@ -24,6 +24,7 @@ jobs:
     stage: build
     script:
       - cd /catkin_ws
+      - source /opt/ros/melodic/setup.bash
       - catkin_make
       - catkin_make run_tests
 
