@@ -1,4 +1,5 @@
 image: ros:melodic-ros-core
+sudo: required
 
 cache:
   paths:
