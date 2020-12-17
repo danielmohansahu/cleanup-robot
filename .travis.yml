@@ -26,7 +26,7 @@ jobs:
       - cd /catkin_ws
       - source /opt/ros/melodic/setup.bash
       - catkin_make
-      - catkin_make run_tests
+      - catkin_make run_tests -j1
 
 after_success:
   - coveralls --root .. --build-root . --verbose
