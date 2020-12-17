@@ -1,5 +1,6 @@
+os: linux
 dist: bionic
-sudo: true
+language: cpp
 
 # Install system dependencies, namely a very barebones ROS setup.
 before_install:
@@ -18,12 +19,13 @@ install:
   - pip install --user cpp-coveralls
   - gem install coveralls-lcov
 
-catkin_make:
-  stage: build
-  script:
-    - cd /catkin_ws
-    - catkin_make
-    - catkin_make run_tests
+jobs:
+  include:
+    stage: build
+    script:
+      - cd /catkin_ws
+      - catkin_make
+      - catkin_make run_tests
 
 after_success:
   - coveralls --root .. --build-root . --verbose
