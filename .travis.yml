@@ -5,7 +5,6 @@ cache:
     - ccache/
 
 before_script:
-  - apt update >/dev/null && apt install -y git >/dev/null
   - mkdir /catkin_ws/src -p && cd /catkin_ws/src
   - git clone https://github.com/danielmohansahu/cleanup-robot.git --recursive
   - cd .. && rosdep update && rosdep install --from-paths src/ -iy
