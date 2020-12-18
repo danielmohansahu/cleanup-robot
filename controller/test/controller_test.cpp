@@ -12,47 +12,68 @@
 #include <controller/SetModeAction.h>
 #include <actionlib/client/simple_action_client.h>
 
+#include <move_base_msgs/MoveBaseAction.h>
+#include <geometry_msgs/PoseStamped.h>
+
 #include <thread>
 
 std::unique_ptr<cleanup::Controller> ctrl;
 std::shared_ptr<ros::NodeHandle> nh;
-// actionlib::SimpleActionClient<controller::SetModeAction> client_("controller/set_mode",true);
 
-TEST(Controller_TestServicesExist, should_pass) {
+/**
+* @brief Check to ensure the goto, stop, and explore services exist
+*/
+TEST(Controller_Test, CheckServicesExist) {
 
-   // EXPECT_TRUE(ros::service::exists("navigation/goto",true));
-   // EXPECT_TRUE(ros::service::exists("navigation/stop",true));
-   // EXPECT_TRUE(ros::service::exists("navigation/explore",true));
+   EXPECT_TRUE(ros::service::exists("navigation/goto",true));
+   EXPECT_TRUE(ros::service::exists("navigation/stop",true));
+   EXPECT_TRUE(ros::service::exists("navigation/explore",true));
 }
 
-TEST(Controller_TestActionClient_BadGoal, should_fail) {
+/**
+* @brief Check to ensure a bad goal does not get set
+*/
+TEST(Controller_Test, Execute_BadGoal) {
    // send command to "blank"
-   // TODO: make "goal" message
-   // ctrl.executeGoal(controller::SetModeGoal::ConstPtr& goal);
-
-   // construct goal object
-   // controller::SetModeGoal goal;
-   // goal.mode = "fail";
-   // client_.sendGoal(goal);
-
+   controller::SetModeGoal goal;
+   goal.mode = "fail";
+   //ctrl->executeGoal(goal);
+   EXPECT_FALSE(false); // placeholder
+   //expect result that shows the controller mode is not set
 }
 
-TEST(Controller_TestExecute_CleanGoal, should_pass) {
+/**
+* @brief Check to ensure the "clean" goal gets set
+*/
+TEST(Controller_Test, Execute_CleanGoal) {
    // send command to "clean"
-   // make "goal" message
-   // ctrl.executeGoal(controller::SetModeGoal::ConstPtr& goal);
+   controller::SetModeGoal goal;
+   goal.mode = "clean";
+   //ctrl->executeGoal(goal);
+   EXPECT_TRUE(true); // placeholder
+   //expect result that shows the controller is in clean mode
 }
-TEST(Controller_TestExecute_ExploreGoal, should_pass) {
+
+/**
+* @brief Check to ensure the "explore" goal gets set
+*/
+TEST(Controller_Test, Execute_ExploreGoal) {
    // send command to "explore"
-   // make "goal" message
-   // ctrl.executeGoal(controller::SetModeGoal::ConstPtr& goal);
+   controller::SetModeGoal goal;
+   goal.mode = "explore";
+   //ctrl->executeGoal(goal);
+   EXPECT_TRUE(true); // placeholder
+   //expect result that shows the controller is in exploration mode
 }
 
-
+/**
+* @brief Main loop to call tests
+*/
 int main(int argc, char **argv) {
   ros::init(argc,argv, "controller_test");
   nh.reset(new ros::NodeHandle);
   ctrl.reset(new cleanup::Controller);
+
   testing::InitGoogleTest(&argc, argv);
 
   // spin of thread to process callbacks
