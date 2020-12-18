@@ -23,6 +23,9 @@
 std::unique_ptr<cleanup::Navigation> nav;
 std::shared_ptr<ros::NodeHandle> nh;
 
+/**
+* @brief Check to ensure able to get current nav mode (default = 0)
+*/
 TEST(Navigation_Test,getNavModeDefault) {;
   EXPECT_EQ(nav->getCurrNavMode(),0);
 }
@@ -106,7 +109,16 @@ TEST(Navigation_Test, exploreLoop) {
 }
 
 /**
-* @brief Main
+* @brief Check to ensure the "Stop" function calls correctly
+*/
+TEST(Navigation_Test, stopCommand) {
+  // dummy test - TODO
+  // Expect return that vehicle has stopped
+  EXPECT_TRUE(true);
+}
+
+/**
+* @brief Main loop
 */
 int main(int argc, char **argv) {
   ros::init(argc,argv, "navigation_test");
