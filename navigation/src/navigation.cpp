@@ -31,9 +31,13 @@ Navigation::Navigation() : stop_ {false} {
   stop_service_ = pnh.advertiseService(
     "stop",
     TriggerCallback([this] (const auto& req, auto& res) {
+      ROS_INFO("Navigation received 'stop' command.");
+
       this->currNavMode_ = 0;
       this->stop();
       res.success = true;
+
+      ROS_INFO("Navigation completed 'stop' command.");
       return true;
     }));
 
@@ -41,6 +45,8 @@ Navigation::Navigation() : stop_ {false} {
   explore_service_ = pnh.advertiseService(
     "explore",
     TriggerCallback([this] (const auto& req, auto& res) {
+      ROS_INFO("Navigation received 'explore' command.");
+
       this->currNavMode_ = 1;
       // first stop any execution
       this->stop();
@@ -53,6 +59,7 @@ Navigation::Navigation() : stop_ {false} {
 
 
       res.success = true;
+      ROS_INFO("Navigation completed 'explore' command.");
       return true;
     }));
 
@@ -60,6 +67,7 @@ Navigation::Navigation() : stop_ {false} {
   goto_service_ = pnh.advertiseService(
     "goto",
     SetPoseCallback([this] (const auto& req, auto& res) {
+      ROS_INFO("Navigation received 'goto' command.");
 
       // sanity check that this is in the right frame
       if (req.pose.header.frame_id != map_frame_) {
@@ -77,7 +85,7 @@ Navigation::Navigation() : stop_ {false} {
 
       goto_client_->sendGoal(goal);
 
-
+      ROS_INFO("Navigation completed 'goto' command.");
       return true;
     }));
 }
