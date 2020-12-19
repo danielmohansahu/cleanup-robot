@@ -23,7 +23,7 @@ jobs:
   include:
     stage: build
     script:
-      - cd /catkin_ws
+      - cd ~/catkin_ws
       - source /opt/ros/melodic/setup.bash
       - catkin_make
       - catkin_make run_tests -j1
