@@ -77,6 +77,8 @@ $(function() {
 <code>#include &lt;gtest/gtest.h&gt;</code><br />
 <code>#include &lt;controller/SetModeAction.h&gt;</code><br />
 <code>#include &lt;actionlib/client/simple_action_client.h&gt;</code><br />
+<code>#include &lt;move_base_msgs/MoveBaseAction.h&gt;</code><br />
+<code>#include &lt;geometry_msgs/PoseStamped.h&gt;</code><br />
 <code>#include &lt;thread&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for controller_test.cpp:</div>
@@ -89,20 +91,25 @@ Include dependency graph for controller_test.cpp:</div>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a5df6b5c1f9569aeae5a5a61aa79235c1"><td class="memItemLeft" align="right" valign="top"><a id="a5df6b5c1f9569aeae5a5a61aa79235c1"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>TEST</b> (Controller_TestServicesExist, should_pass)</td></tr>
-<tr class="separator:a5df6b5c1f9569aeae5a5a61aa79235c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35e9425ef4ff8ca09af4d66c9e7e839d"><td class="memItemLeft" align="right" valign="top"><a id="a35e9425ef4ff8ca09af4d66c9e7e839d"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>TEST</b> (Controller_TestActionClient_BadGoal, should_fail)</td></tr>
-<tr class="separator:a35e9425ef4ff8ca09af4d66c9e7e839d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a58b52bfdec32a14cfa9315be9d70bf3b"><td class="memItemLeft" align="right" valign="top"><a id="a58b52bfdec32a14cfa9315be9d70bf3b"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>TEST</b> (Controller_TestExecute_CleanGoal, should_pass)</td></tr>
-<tr class="separator:a58b52bfdec32a14cfa9315be9d70bf3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa92425a61876bc963bb7c2edaafd691c"><td class="memItemLeft" align="right" valign="top"><a id="aa92425a61876bc963bb7c2edaafd691c"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>TEST</b> (Controller_TestExecute_ExploreGoal, should_pass)</td></tr>
-<tr class="separator:aa92425a61876bc963bb7c2edaafd691c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add436ae2cd95b09dbb72aec87d40f58e"><td class="memItemLeft" align="right" valign="top"><a id="add436ae2cd95b09dbb72aec87d40f58e"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller__test_8cpp.html#add436ae2cd95b09dbb72aec87d40f58e">TEST</a> (Controller_Test, CheckServicesExist)</td></tr>
+<tr class="memdesc:add436ae2cd95b09dbb72aec87d40f58e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check to ensure the goto, stop, and explore services exist. <br /></td></tr>
+<tr class="separator:add436ae2cd95b09dbb72aec87d40f58e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc8b081a396f66c5494a0c96655edbe9"><td class="memItemLeft" align="right" valign="top"><a id="afc8b081a396f66c5494a0c96655edbe9"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller__test_8cpp.html#afc8b081a396f66c5494a0c96655edbe9">TEST</a> (Controller_Test, Execute_BadGoal)</td></tr>
+<tr class="memdesc:afc8b081a396f66c5494a0c96655edbe9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check to ensure a bad goal does not get set. <br /></td></tr>
+<tr class="separator:afc8b081a396f66c5494a0c96655edbe9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57263536d1a364374216f473b9beb29d"><td class="memItemLeft" align="right" valign="top"><a id="a57263536d1a364374216f473b9beb29d"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller__test_8cpp.html#a57263536d1a364374216f473b9beb29d">TEST</a> (Controller_Test, Execute_CleanGoal)</td></tr>
+<tr class="memdesc:a57263536d1a364374216f473b9beb29d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check to ensure the "clean" goal gets set. <br /></td></tr>
+<tr class="separator:a57263536d1a364374216f473b9beb29d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6b2c0f53cac50edf3a4a646f10824bb"><td class="memItemLeft" align="right" valign="top"><a id="ae6b2c0f53cac50edf3a4a646f10824bb"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller__test_8cpp.html#ae6b2c0f53cac50edf3a4a646f10824bb">TEST</a> (Controller_Test, Execute_ExploreGoal)</td></tr>
+<tr class="memdesc:ae6b2c0f53cac50edf3a4a646f10824bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check to ensure the "explore" goal gets set. <br /></td></tr>
+<tr class="separator:ae6b2c0f53cac50edf3a4a646f10824bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c04138a5bfe5d72780bb7e82a18e627"><td class="memItemLeft" align="right" valign="top"><a id="a3c04138a5bfe5d72780bb7e82a18e627"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>main</b> (int argc, char **argv)</td></tr>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="controller__test_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a> (int argc, char **argv)</td></tr>
+<tr class="memdesc:a3c04138a5bfe5d72780bb7e82a18e627"><td class="mdescLeft">&#160;</td><td class="mdescRight">Main loop to call tests. <br /></td></tr>
 <tr class="separator:a3c04138a5bfe5d72780bb7e82a18e627"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>

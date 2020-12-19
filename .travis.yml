@@ -1,26 +1,32 @@
-sudo: required
-
+os: linux
+dist: bionic
 language: cpp
 
-services:
-  - docker
-
+# Install system dependencies, namely a very barebones ROS setup.
 before_install:
+  - sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu bionic main" > /etc/apt/sources.list.d/ros-latest.list'
+  - sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+  - sudo apt-get update -qq
+  - sudo apt install ros-melodic-ros-base python-rosdep
+  - source /opt/ros/melodic/setup.bash
+  - sudo rosdep init
+  - rosdep update
+
+install:
+  - mkdir ~/catkin_ws/src -p && cd ~/catkin_ws/src
+  - git clone https://github.com/danielmohansahu/cleanup-robot.git --recursive
+  - cd .. && rosdep install --from-paths src/ -iy
   - pip install --user cpp-coveralls
   - gem install coveralls-lcov
 
-after_success:
-  - coveralls --root .. --build-root . --verbose
+jobs:
+  include:
+    stage: build
+    script:
+      - cd ~/catkin_ws
+      - source /opt/ros/melodic/setup.bash
+      - catkin_make
+      - catkin_make run_tests -j1
 
-env:
-  global:
-    - toolset_branch: master
-    - server_type: travis
-    - ros_release_name: melodic
-    - ubuntu_version_name: bionic
-    - used_modules: check_cache,check_build,check_install,code_coverage
-    - remote_shell_script: 'https://raw.githubusercontent.com/shadow-robot/sr-build-tools/$toolset_branch/bin/sr-run-ci-build.sh'
-
-script:
-  - curl -s "$( echo "$remote_shell_script" | sed 's/#/%23/g' )" | bash -x /dev/stdin "$toolset_branch" $server_type $used_modules
-
+# after_success:
+# - coveralls --root .. --build-root . --verbose
