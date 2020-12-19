@@ -28,5 +28,5 @@ jobs:
       - catkin_make
       - catkin_make run_tests -j1
 
-after_success:
-  - coveralls --root .. --build-root . --verbose
+# after_success:
+# - coveralls --root .. --build-root . --verbose
