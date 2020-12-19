@@ -92,26 +92,37 @@ Include dependency graph for navigation_test.cpp:</div>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a9c245c814904f0faaf5912cb96a13ab5"><td class="memItemLeft" align="right" valign="top"><a id="a9c245c814904f0faaf5912cb96a13ab5"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>TEST</b> (NavigationTest_getNavModeDefault, should_pass)</td></tr>
-<tr class="separator:a9c245c814904f0faaf5912cb96a13ab5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a883c9c72a00edc06d599792cb0aa4e5a"><td class="memItemLeft" align="right" valign="top"><a id="a883c9c72a00edc06d599792cb0aa4e5a"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>TEST</b> (NavigationTest_GetPose, should_pass)</td></tr>
-<tr class="separator:a883c9c72a00edc06d599792cb0aa4e5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a489e9a489f49982de3b9388302866a5d"><td class="memItemLeft" align="right" valign="top"><a id="a489e9a489f49982de3b9388302866a5d"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>TEST</b> (NavigationTest_stopServiceStarts, should_pass)</td></tr>
-<tr class="separator:a489e9a489f49982de3b9388302866a5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab66a777c3d7fd8c8b69d36633d39734e"><td class="memItemLeft" align="right" valign="top"><a id="ab66a777c3d7fd8c8b69d36633d39734e"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>TEST</b> (NavigationTest_exploreServiceStarts, should_pass)</td></tr>
-<tr class="separator:ab66a777c3d7fd8c8b69d36633d39734e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a017e91e56a4f99111f02fc4fcb94cc5f"><td class="memItemLeft" align="right" valign="top"><a id="a017e91e56a4f99111f02fc4fcb94cc5f"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>TEST</b> (NavigationTest_gotoServiceStarts, should_pass)</td></tr>
-<tr class="separator:a017e91e56a4f99111f02fc4fcb94cc5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7f467d26ce8f595582fd83985463e3ee"><td class="memItemLeft" align="right" valign="top"><a id="a7f467d26ce8f595582fd83985463e3ee"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>TEST</b> (NavigationTest_exploreLoop, should_pass)</td></tr>
-<tr class="separator:a7f467d26ce8f595582fd83985463e3ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a467037c72fb6b412a518c596fde1680e"><td class="memItemLeft" align="right" valign="top"><a id="a467037c72fb6b412a518c596fde1680e"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="navigation__test_8cpp.html#a467037c72fb6b412a518c596fde1680e">TEST</a> (Navigation_Test, getNavModeDefault)</td></tr>
+<tr class="memdesc:a467037c72fb6b412a518c596fde1680e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check to ensure able to get current nav mode (default = 0) <br /></td></tr>
+<tr class="separator:a467037c72fb6b412a518c596fde1680e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9404d72b3f2daeb180a6828166fa1a13"><td class="memItemLeft" align="right" valign="top"><a id="a9404d72b3f2daeb180a6828166fa1a13"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="navigation__test_8cpp.html#a9404d72b3f2daeb180a6828166fa1a13">TEST</a> (Navigation_Test, GetPose)</td></tr>
+<tr class="memdesc:a9404d72b3f2daeb180a6828166fa1a13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check to ensure the getRobotPose() command works with the launch values Note Z height difference from robot config file. <br /></td></tr>
+<tr class="separator:a9404d72b3f2daeb180a6828166fa1a13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85c9218cda8800a6d8022116611c7153"><td class="memItemLeft" align="right" valign="top"><a id="a85c9218cda8800a6d8022116611c7153"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="navigation__test_8cpp.html#a85c9218cda8800a6d8022116611c7153">TEST</a> (Navigation_Test, stopServiceStarts)</td></tr>
+<tr class="memdesc:a85c9218cda8800a6d8022116611c7153"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check to ensure the "Stop" service starts and triggers correct nav mode. <br /></td></tr>
+<tr class="separator:a85c9218cda8800a6d8022116611c7153"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08cf090894a2ea5461dec4f093a3fa13"><td class="memItemLeft" align="right" valign="top"><a id="a08cf090894a2ea5461dec4f093a3fa13"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="navigation__test_8cpp.html#a08cf090894a2ea5461dec4f093a3fa13">TEST</a> (Navigation_Test, exploreServiceStarts)</td></tr>
+<tr class="memdesc:a08cf090894a2ea5461dec4f093a3fa13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check to ensure the "Explore" service starts and triggers correct nav mode. <br /></td></tr>
+<tr class="separator:a08cf090894a2ea5461dec4f093a3fa13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2477ea0f0f5cb5e91764dd888d03f5c7"><td class="memItemLeft" align="right" valign="top"><a id="a2477ea0f0f5cb5e91764dd888d03f5c7"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="navigation__test_8cpp.html#a2477ea0f0f5cb5e91764dd888d03f5c7">TEST</a> (Navigation_Test, gotoServiceStarts)</td></tr>
+<tr class="memdesc:a2477ea0f0f5cb5e91764dd888d03f5c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check to ensure the "GoTo" service starts and triggers correct nav mode. <br /></td></tr>
+<tr class="separator:a2477ea0f0f5cb5e91764dd888d03f5c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52f0baf04248458a54fdc41c4c1c4977"><td class="memItemLeft" align="right" valign="top"><a id="a52f0baf04248458a54fdc41c4c1c4977"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="navigation__test_8cpp.html#a52f0baf04248458a54fdc41c4c1c4977">TEST</a> (Navigation_Test, exploreLoop)</td></tr>
+<tr class="memdesc:a52f0baf04248458a54fdc41c4c1c4977"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check to ensure the "Explore Loop" starts correctly. <br /></td></tr>
+<tr class="separator:a52f0baf04248458a54fdc41c4c1c4977"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae02285d0ca4206028fdfd3a632047caa"><td class="memItemLeft" align="right" valign="top"><a id="ae02285d0ca4206028fdfd3a632047caa"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="navigation__test_8cpp.html#ae02285d0ca4206028fdfd3a632047caa">TEST</a> (Navigation_Test, stopCommand)</td></tr>
+<tr class="memdesc:ae02285d0ca4206028fdfd3a632047caa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check to ensure the "Stop" function calls correctly. <br /></td></tr>
+<tr class="separator:ae02285d0ca4206028fdfd3a632047caa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c04138a5bfe5d72780bb7e82a18e627"><td class="memItemLeft" align="right" valign="top"><a id="a3c04138a5bfe5d72780bb7e82a18e627"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>main</b> (int argc, char **argv)</td></tr>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="navigation__test_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a> (int argc, char **argv)</td></tr>
+<tr class="memdesc:a3c04138a5bfe5d72780bb7e82a18e627"><td class="mdescLeft">&#160;</td><td class="mdescRight">Main loop. <br /></td></tr>
 <tr class="separator:a3c04138a5bfe5d72780bb7e82a18e627"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>

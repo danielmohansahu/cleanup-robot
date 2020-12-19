@@ -10,6 +10,8 @@ Implementation of the Controller test.
 {\ttfamily \#include $<$gtest/gtest.\+h$>$}\newline
 {\ttfamily \#include $<$controller/\+Set\+Mode\+Action.\+h$>$}\newline
 {\ttfamily \#include $<$actionlib/client/simple\+\_\+action\+\_\+client.\+h$>$}\newline
+{\ttfamily \#include $<$move\+\_\+base\+\_\+msgs/\+Move\+Base\+Action.\+h$>$}\newline
+{\ttfamily \#include $<$geometry\+\_\+msgs/\+Pose\+Stamped.\+h$>$}\newline
 {\ttfamily \#include $<$thread$>$}\newline
 Include dependency graph for controller\+\_\+test.\+cpp\+:
 \nopagebreak
@@ -22,21 +24,21 @@ Include dependency graph for controller\+\_\+test.\+cpp\+:
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{controller__test_8cpp_a5df6b5c1f9569aeae5a5a61aa79235c1}\label{controller__test_8cpp_a5df6b5c1f9569aeae5a5a61aa79235c1}} 
-{\bfseries T\+E\+ST} (Controller\+\_\+\+Test\+Services\+Exist, should\+\_\+pass)
-\item 
-\mbox{\Hypertarget{controller__test_8cpp_a35e9425ef4ff8ca09af4d66c9e7e839d}\label{controller__test_8cpp_a35e9425ef4ff8ca09af4d66c9e7e839d}} 
-{\bfseries T\+E\+ST} (Controller\+\_\+\+Test\+Action\+Client\+\_\+\+Bad\+Goal, should\+\_\+fail)
-\item 
-\mbox{\Hypertarget{controller__test_8cpp_a58b52bfdec32a14cfa9315be9d70bf3b}\label{controller__test_8cpp_a58b52bfdec32a14cfa9315be9d70bf3b}} 
-{\bfseries T\+E\+ST} (Controller\+\_\+\+Test\+Execute\+\_\+\+Clean\+Goal, should\+\_\+pass)
-\item 
-\mbox{\Hypertarget{controller__test_8cpp_aa92425a61876bc963bb7c2edaafd691c}\label{controller__test_8cpp_aa92425a61876bc963bb7c2edaafd691c}} 
-{\bfseries T\+E\+ST} (Controller\+\_\+\+Test\+Execute\+\_\+\+Explore\+Goal, should\+\_\+pass)
-\item 
+\mbox{\Hypertarget{controller__test_8cpp_add436ae2cd95b09dbb72aec87d40f58e}\label{controller__test_8cpp_add436ae2cd95b09dbb72aec87d40f58e}} 
+\hyperlink{controller__test_8cpp_add436ae2cd95b09dbb72aec87d40f58e}{T\+E\+ST} (Controller\+\_\+\+Test, Check\+Services\+Exist)
+\begin{DoxyCompactList}\small\item\em Check to ensure the goto, stop, and explore services exist. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{controller__test_8cpp_afc8b081a396f66c5494a0c96655edbe9}\label{controller__test_8cpp_afc8b081a396f66c5494a0c96655edbe9}} 
+\hyperlink{controller__test_8cpp_afc8b081a396f66c5494a0c96655edbe9}{T\+E\+ST} (Controller\+\_\+\+Test, Execute\+\_\+\+Bad\+Goal)
+\begin{DoxyCompactList}\small\item\em Check to ensure a bad goal does not get set. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{controller__test_8cpp_a57263536d1a364374216f473b9beb29d}\label{controller__test_8cpp_a57263536d1a364374216f473b9beb29d}} 
+\hyperlink{controller__test_8cpp_a57263536d1a364374216f473b9beb29d}{T\+E\+ST} (Controller\+\_\+\+Test, Execute\+\_\+\+Clean\+Goal)
+\begin{DoxyCompactList}\small\item\em Check to ensure the \char`\"{}clean\char`\"{} goal gets set. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{controller__test_8cpp_ae6b2c0f53cac50edf3a4a646f10824bb}\label{controller__test_8cpp_ae6b2c0f53cac50edf3a4a646f10824bb}} 
+\hyperlink{controller__test_8cpp_ae6b2c0f53cac50edf3a4a646f10824bb}{T\+E\+ST} (Controller\+\_\+\+Test, Execute\+\_\+\+Explore\+Goal)
+\begin{DoxyCompactList}\small\item\em Check to ensure the \char`\"{}explore\char`\"{} goal gets set. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{controller__test_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}\label{controller__test_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}} 
-int {\bfseries main} (int argc, char $\ast$$\ast$argv)
-\end{DoxyCompactItemize}
+int \hyperlink{controller__test_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}{main} (int argc, char $\ast$$\ast$argv)
+\begin{DoxyCompactList}\small\item\em Main loop to call tests. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
