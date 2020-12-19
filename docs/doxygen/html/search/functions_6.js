@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['runvisionalgo',['runVisionAlgo',['../classcleanup_1_1_perception.html#aa2406cbc9ac17c40c5bcdfc9b98f369d',1,'cleanup::Perception']]]
+  ['navigation',['Navigation',['../classcleanup_1_1_navigation.html#ae4f3e6facf6e48e4286cf751a8be6fb1',1,'cleanup::Navigation']]]
 ];
